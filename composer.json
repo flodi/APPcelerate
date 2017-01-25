@@ -18,7 +18,7 @@
     ],
  	"autoload": {
 		"classmap": [
-			"appcelerate.php"
+			"src/appcelerate.php"
 		]
 	},
    "minimum-stability": "dev"
