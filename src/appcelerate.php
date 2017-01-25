@@ -6,8 +6,6 @@
  * with this source code in the file LICENSE.
  */
 
-namespace flodi\appcelerate;
-
 class APPcelerate
 {
     public function say($toSay = "Nothing given")
