@@ -7,7 +7,7 @@
         "monolog/monolog": "*",
         "phpoption/phpoption": "*",
         "php-console/php-console": "*",
-        "elmarculino/tinybutstrong": "*",
+        "tinybutstrong/tinybutstrong": "*",
         "altorouter/altorouter": "*"
     },
     "authors": [
@@ -18,7 +18,7 @@
     ],
  	"autoload": {
 		"classmap": [
-			"tbs_class.php"
+			"appcelerate.php"
 		]
 	},
    "minimum-stability": "dev"
