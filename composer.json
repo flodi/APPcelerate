@@ -7,7 +7,7 @@
         "monolog/monolog": "*",
         "phpoption/phpoption": "*",
         "php-console/php-console": "*",
-        "tinybutstrong/tinybutstrong": "*",
+        "elmarculino/tinybutstrong": "*",
         "altorouter/altorouter": "*"
     },
     "authors": [
