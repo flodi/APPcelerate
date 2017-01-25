@@ -1,0 +1,18 @@
+		</div>
+		<script src="[base_url]/include/js/jquery-2.2.0.min.js"></script>
+		<script src="[base_url]/include/js/jquery-ui.min.js"></script>
+		<script src="[base_url]/include/js/bootstrap.min.js"></script>
+		<script src="[base_url]/include/js/jquery.bdt.min.js"></script>
+		<script src="[base_url]/include/js/parsley.min.js"></script>
+		<script src="[base_url]/include/js/i18n/it.js"></script>
+		[app;onformat='genJsInclude';strconv=no]
+		[section;onformat='genJsInclude';strconv=no]
+		<script>
+			$(document).ready(function () {
+				if(window.location.href.indexOf("/login/") > -1) {
+					$(".nologin").hide();
+				}
+			});
+		</script>
+	</body>
+</html>

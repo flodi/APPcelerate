@@ -1,0 +1,25 @@
+{
+    "name": "flodi/appcelerate",
+    "description": "PHP Application Framework",
+    "type": "library",
+    "require": {
+        "vlucas/phpdotenv": "*",
+        "monolog/monolog": "*",
+        "phpoption/phpoption": "*",
+        "php-console/php-console": "*",
+        "tinybutstrong/tinybutstrong": "3.8.1",
+        "altorouter/altorouter": "*"
+    },
+    "authors": [
+        {
+            "name": "Fabrizio Lodi",
+            "email": "flodi@e-scientia.eu"
+        }
+    ],
+ 	"autoload": {
+		"classmap": [
+			"tbs_class.php"
+		]
+	},
+   "minimum-stability": "dev"
+}
