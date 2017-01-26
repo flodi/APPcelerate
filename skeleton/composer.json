@@ -9,8 +9,6 @@
 		"phpoption/phpoption":"*",
 		"altorouter/altorouter":"*",
 		"tinybutstrong/tinybutstrong":"*",
-		"dompdf/dompdf":"0.7.x@beta",
-		"daniel-zahariev/php-aws-ses":"*",
 		"sentry/sentry":"*"
   }
 }
