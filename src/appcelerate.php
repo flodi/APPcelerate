@@ -142,4 +142,129 @@ class APPcelerate {
 
 	}
 
+	public function sqlError($recordset,$query) {
+		global $app;
+		
+		if (!$recordset) {
+			doLog("Failed SQL query - Query => $query, Error => ".$app["db_".$app["name"]]->error);
+			die("Database error, please contact support\n");
+		}
+	}
+	
+	public function destroySession() {
+		$_SESSION = array();
+		
+		if (ini_get("session.use_cookies")) {
+		    $params = session_get_cookie_params();
+		    setcookie(session_name(), '', time() - 42000,
+		        $params["path"], $params["domain"],
+		        $params["secure"], $params["httponly"]
+		    );
+		}
+	
+		session_destroy();
+	
+		return;
+	}
+	
+	public function fetchAll ($recordset) {
+		$data = [];
+		while ($row = $recordset->fetch_array(MYSQLI_NUM)) {
+	    	$data[] = $row;
+		}
+		return $data;
+	}
+	public function fetchAllAssoc ($recordset) {
+		$data = [];
+		while ($row = $recordset->fetch_array(MYSQLI_ASSOC)) {
+	    	$data[] = $row;
+		}
+		return $data;
+	}
+	
+	public function getString($token) {
+		global $app;
+	
+	
+		foreach ($app["apps"] as $app_name) {
+			$sql="select string from strings where token='$token' and id_language=(select id from languages where locale='".$app["locale"]."')";
+			$rs=$app["db_".$app_name]->query($sql);
+			if (!$rs) {
+				sqlError($rs,$sql);
+			}
+			if ($rs->num_rows!=0) {
+				return (utf8_encode($rs->fetch_array()[0]));
+			}
+		}
+		return($token);
+	
+	}
+	
+	public function getInclude($type,$params) {
+		global $app;
+		$mode=$params["mode"];
+		$file="/include/";
+		
+		switch($type) {
+			case "js":
+				$file.="js/";
+				break;
+			case "css":
+				$file.="css/";
+				break;
+		}
+		
+		switch($mode) {
+			case "app":
+				$file.=$app["name"];
+				break;
+			case "section":
+				$file.=$app["name"]."_".$app["section"];
+				break;
+		}
+	
+		switch($type) {
+			case "js":
+				$file.=".js";
+				break;
+			case "css":
+				$file.=".css";
+				break;
+		}
+		
+		$include="";
+			
+		if (file_exists($app["base_path"].$file)) {
+			
+			switch($type) {
+				case "js":
+					$include="<script src=\"".$app["base_url"].$file."\"></script>";
+					break;
+				case "css":
+					$include="<link rel=\"stylesheet\" href=\"".$app["base_url"].$file."\">";
+					break;
+			}
+			
+		}
+	
+		return($include);
+		
+	}
+	
+	public function errRoute() {
+		global $app;
+	
+		doLog("Route Error, restarting ".$_SERVER["REQUEST_URI"]);
+		
+		header("Location: ".$app["base_url"]."/");
+	
+	}
+	
+	public function stringForHTML($field,&$value) {
+		global $app;
+	
+		$value=utf8_encode($value);
+	}
+
+
 }
