@@ -124,6 +124,22 @@ class APPcelerate {
 			$this->app[$app_name."_logger"]->pushHandler($this->app[$app_name."_ravenh"]);
 		}
 		
+		//
+		// DB Connection Init
+		//
+		$db_address=getenv('DB_ADDRESS');
+		$db_user=getenv('DB_USER');
+		$db_password=getenv('DB_PASSWORD');
+		
+		foreach ($this->app["apps"] as $app_name) {
+			$db_name=getenv('DB_NAME_'.$app_name);
+			$this->app["db_".$app_name] = new mysqli($db_address, $db_user, $db_password, $db_name);
+			if ($this->app["db_".$app_name]->connect_error) {
+			    die("Failed to connect to MySQL: doing new mysqli($db_address, $db_user, $db_password, $db_name) (".$this->app["db_".$app_name]->connect_errno.") ".$this->app["db_".$app_name]->connect_error);
+			}
+			$this->app["db_".$app_name]->set_charset("utf8");
+		}
+
 	}
 
 }
