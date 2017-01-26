@@ -340,5 +340,185 @@ class APPcelerate {
 		}
 
 	}
+	
+	public function doApp() {
+
+		doLog("Instance Started");
+		
+		$this->app["TBS"] = new clsTinyButStrong;
+		
+		$router = new AltoRouter();
+		if (!empty($this->app["base_app"]) or $this->app["base_app"]!=="") {
+			$router->setBasePath($this->app["base_app"]);
+		}
+		
+		include_once("routes.php");
+		
+		$match = $router->match();
+		
+		doLog("App Start - ".json_encode($match));
+		
+		if ($match) {
+			//
+			// If no Section specified, error
+			//
+			if (!array_key_exists(1, explode("#",$match["target"])) or empty(explode("#",$match["target"]))) {
+				die("Error in routes definition: missing section");		
+			}
+			$this->app["name"]=explode("#",$match["target"])[0];
+			$this->app["section"]=explode("#",$match["target"])[1];
+			$this->app["params"]=$match["params"];
+		
+			doLog("=====> Routing for  ".json_encode($match));
+			doLog("=====> Starting ".$this->app["name"]."/".$this->app["section"]." (".json_encode($this->app["params"]).")");
+		
+			//
+			// If no App specified, go to default one
+			//
+			if ($this->app["name"]==="init") {
+				header("Location: ".$this->app["base_url"]."/".$this->app["default_app"]."/");
+				die();
+			}
+		
+			//
+			// Check app name. must be one of defined apps
+			//
+			if (!in_array($this->app["name"],$this->app["apps"])) {
+				die("Error in routes definition: unauthorized app ".$this->app["name"]);
+			}
+				
+			//
+			// Security
+			//
+			doLog("Doing Security ".json_encode($_SESSION));
+			include_once("security.php");
+		
+			//
+			// Init app
+			//
+			doLog("Initializing app ".$this->app["name"]);
+			include_once($this->app["name"]."/init.php");
+			$this->app["tplfolder"]=$this->app["templates_path"].$this->app["name"]."/".$this->app["section"]."/";
+			$this->app["apptplfolder"]=$this->app["templates_path"].$this->app["name"]."/";
+			$base_url=$this->app["base_url"];
+			$templates_path=$this->app["templates_path"];
+			$app_name=$this->app["name"];
+			$section_name=$this->app["section"];
+			
+			//
+			// Init section (if exists)
+			//
+			if (stream_resolve_include_path($this->app["name"]."/".$this->app["section"]."/init.php")) {
+				doLog("Initializing section ".$this->app["section"]);
+				include_once($this->app["name"]."/".$this->app["section"]."/init.php");
+			}
+		
+			if (!$this->app["skipui"]) {
+		
+				//
+				// Include app header template
+				//
+				doLog("Loading HEAD template for ".$this->app["name"]);
+				$this->app["TBS"]->LoadTemplate($this->app["apptplfolder"]."head.htm");
+				
+				//
+				// Include section header template (if exists)
+				//
+				doLog("Loading HEAD template for ".$this->app["name"]."/".$this->app["section"]);
+				if (stream_resolve_include_path($this->app["tplfolder"]."head.htm")) {
+					$this->app["TBS"]->LoadTemplate($this->app["tplfolder"]."head.htm","+");
+				}
+				else {
+					doLog("HEAD template not found for ".$this->app["name"]."/".$this->app["section"]);
+				}
+		
+				//
+				// Include section template (if exists)
+				//
+				doLog("Loading MAIN template for ".$this->app["name"]."/".$this->app["section"]);
+				if (stream_resolve_include_path($this->app["tplfolder"]."main.htm")) {
+					$this->app["TBS"]->LoadTemplate($this->app["tplfolder"]."main.htm","+");
+				}
+				else {
+					doLog("MAIN template not found for ".$this->app["name"]."/".$this->app["section"]);
+				}
+		
+				//
+				// Include section tail template (if exists)
+				//
+				doLog("Loading TAIL template for ".$this->app["name"]."/".$this->app["section"]);
+				if (stream_resolve_include_path($this->app["tplfolder"]."tail.htm")) {
+					$this->app["TBS"]->LoadTemplate($this->app["tplfolder"]."tail.htm","+");
+				}
+				else {
+					doLog("TAIL template not found for ".$this->app["name"]."/".$this->app["section"]);
+				}
+		
+			}
+			
+			//
+			// Execute section (if exists)
+			//
+			if (stream_resolve_include_path($this->app["name"]."/".$this->app["section"]."/main.php")) {
+				doLog("Executing section ".$this->app["name"]."/".$this->app["section"]);
+				include_once($this->app["name"]."/".$this->app["section"]."/main.php");
+			}
+		
+			if (!$this->app["skipui"]) {
+		
+				//
+				// Include app tail template
+				//
+				doLog("Loading TAIL template for ".$this->app["name"]);
+				$this->app["TBS"]->LoadTemplate($this->app["apptplfolder"]."tail.htm","+");
+		
+				//
+				// Merge default variables
+				//
+				if (isset($this->app['uname'])) {
+					$this->app["TBS"]->MergeField('uname',$this->app['uname']);
+				}
+				else {
+					$this->app["TBS"]->MergeField('uname',"");
+				}
+				if (isset($this->app['uid'])) {
+					$this->app["TBS"]->MergeField('uid',$this->app['uid']);
+				}
+				else {
+					$this->app["TBS"]->MergeField('uid',"");
+				}
+				$this->app["TBS"]->MergeField('base_url',$this->app["base_url"]);
+				$this->app["TBS"]->MergeField('templates_path',$this->app["templates_path"]);
+				$this->app["TBS"]->MergeField('app',$this->app["name"]);
+				$this->app["TBS"]->MergeField('section',$this->app["section"]);
+		
+				if(array_key_exists("tail_blocks", $this->app)) {
+					foreach($this->app["tail_blocks"] as $block_name => $block_data) {
+						$this->app["TBS"]->MergeBlock("$block_name",$block_data);
+					}
+				}
+		
+				if(array_key_exists("tail_fields", $this->app)) {
+					foreach($this->app["tail_fields"] as $field_name => $field_data) {
+						$this->app["TBS"]->MergeField("$field_name",$field_data);
+					}
+				}
+		
+				$this->app["TBS"]->MergeField('tokens','getString',true);
+				$this->app["TBS"]->MergeField('include','getInclude',true);
+		
+				$this->app["TBS"]->SetOption('render',TBS_OUTPUT);
+				$this->app["TBS"]->Show();
+			}
+		
+			doLog("<===== Ending ".$this->app["name"]."/".$this->app["section"]." (".json_encode($this->app["params"]).")");
+		}
+		else {
+			errRoute();
+		}
+		
+		doLog("<===== Routed for  ".json_encode($match));
+
+	}
 
 }
