@@ -17,7 +17,7 @@ class APPcelerate {
 		
 			if ($e['type']) {
 				$msg=sprintf("Type %u File %s Line %u Message %s",$e["type"],$e["file"],$e["line"],$e["message"]);
-				doLog($msg);
+				$this->doLog($msg);
 			}
 		});
 
@@ -100,6 +100,30 @@ class APPcelerate {
 		define ("L_ALERT",550);
 		define ("L_EMERCENCY",600);
 
+	}
+
+	public function doLog($msg,$level=L_DEBUG) {
+		global $app;
+	
+		if (array_key_exists("name", $app) and $app["name"]!=="init") {
+			$app_name=$app["name"];
+		}
+		else {
+			$app_name="main";
+		}
+		
+		if (array_key_exists("section",$app)) {
+			$context=array($app["section"]);
+		}
+		else {
+			$context=array("main");
+		}
+	
+		switch($level) {
+			default:
+				$app[$app_name."_logger"]->addRecord($level,$msg,$context);
+		}
+		
 	}
 
 }
