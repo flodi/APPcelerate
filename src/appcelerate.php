@@ -10,7 +10,16 @@ class APPcelerate {
 	
 	public $app;
 	
-	public function doLog($msg,$level=L_DEBUG) {
+	const L_DEBUG="100";
+	const L_INFO="200";
+	const L_NOTICE="250";
+	const L_WARNING="300";
+	const L_ERROR="400";
+	const L_CRITICAL="500";
+	const L_ALERT="550";
+	const L_EMERCENCY="600";
+	
+	public function doLog($msg,$level=APPcelerate::L_DEBUG) {
 		global $app;
 	
 		if (array_key_exists("name", $app) and $app["name"]!=="init") {
@@ -115,15 +124,6 @@ class APPcelerate {
 			$this->app[$app_name."_logger"]->pushHandler($this->app[$app_name."_ravenh"]);
 		}
 		
-		define ("L_DEBUG",100);
-		define ("L_INFO",200);
-		define ("L_NOTICE",250);
-		define ("L_WARNING",300);
-		define ("L_ERROR",400);
-		define ("L_CRITICAL",500);
-		define ("L_ALERT",550);
-		define ("L_EMERCENCY",600);
-
 	}
 
 }
