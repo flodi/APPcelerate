@@ -264,7 +264,81 @@ class APPcelerate {
 		global $app;
 	
 		$value=utf8_encode($value);
+
 	}
 
+	public function addMerge($type,$field,$var) {
+		global $app;
+		
+		switch ($type) {
+			case "block":
+					if (array_key_exists("bmerge", $app)) {
+						$app["bmerge"].="|$field;$var";
+					}
+					else {
+						$app["bmerge"]="$field;$var";
+					}
+				break;
+			case "field":
+					if (array_key_exists("merge", $app)) {
+						$app["merge"].="|$field;$var";
+					}
+					else {
+						$app["merge"]="$field;$var";
+					}
+				break;
+			default:
+				die("addMerge called with wrong type - $type");
+		}
+	}
+	
+	public function doSecurity() {
+
+		if (!empty($_SESSION[$this->app["name"]."_ap_uid"])) {
+			$$this->app['uid']=$_SESSION[$this->app["name"]."_ap_uid"];
+			$this->app['uname']=$_SESSION[$this->app["name"]."_ap_uname"];
+			if(array_key_exists($this->app["name"]."_ap_locale", $_SESSION)) {
+				$this->app['locale']=$_SESSION[$$this->app["name"]."_ap_locale"];
+			}
+		}
+		else {
+			if (!empty($_REQUEST["login"]) and !empty($_REQUEST["password"])) {
+				$sql="select id from users where app='". $this->app["name"] ."' and login='" . $_REQUEST["login"] . "' and pwd='" . $_REQUEST["password"] . "'";
+				$rs=$this->app["db_".$this->app["name"]]->query($sql);
+				sqlError($rs,$sql);
+				switch ($rs->num_rows) {
+					case 1:
+						$row=$rs->fetch_row();
+						$this->app['uid']=$row[0];
+						$this->app['uname']=$_REQUEST["login"];
+						$_SESSION[$this->app["name"]."_ap_uid"]=$this->app['uid'];
+						$_SESSION[$this->app["name"]."_ap_uname"]=$this->app['uname'];
+						$sql="select locale from languages where id=(select id_language from users where id=".$this->app["uid"].")";
+						$rs1=$$this->app["db_".$this->app["name"]]->query($sql);
+						$this->sqlError($rs1,$sql);
+						if ($rs1->num_rows!=0) {
+							$this->app["locale"]=$rs1->fetch_row()[0];
+							$_SESSION[$this->app["name"]."_ap_locale"]=$this->app['locale'];
+						}
+						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/");
+						break;
+					case 0:
+						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
+						break;
+					default:
+						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?multi");
+						break;
+				}
+			}
+			else {
+				unset($this->app['uid']);
+				unset($$this->app['uname']);
+				if (!(strpos($_SERVER['REQUEST_URI'],"/login/")) and !(strpos($_SERVER['REQUEST_URI'],"/logout/"))) {
+					header("Location: " . $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
+				}
+			}
+		}
+
+	}
 
 }
