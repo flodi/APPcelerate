@@ -6,207 +6,102 @@
  * with this source code in the file LICENSE.
  */
 
-class APPcelerate
-{
-    public function say($toSay = "Nothing given")
-    {
-        return $toSay;
-    }
-}
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-function logCrash() {
-	$e=error_get_last();
-
-	if ($e['type']) {
-		$msg=sprintf("Type %u File %s Line %u Message %s",$e["type"],$e["file"],$e["line"],$e["message"]);
-		doLog($msg);
-	}
-}
-
-register_shutdown_function('logCrash');
-
-global $app;
-
-include_once("include/init.php");
-
-doLog("Instance Started");
-
-$app["TBS"] = new clsTinyButStrong;
-
-$router = new AltoRouter();
-if (!empty($app["base_app"]) or $app["base_app"]!=="") {
-	$router->setBasePath($app["base_app"]);
-}
-
-include_once("routes.php");
-
-$match = $router->match();
-
-doLog("App Start - ".json_encode($match));
-
-if ($match) {
-	//
-	// If no Section specified, error
-	//
-	if (!array_key_exists(1, explode("#",$match["target"])) or empty(explode("#",$match["target"]))) {
-		die("Error in routes definition: missing section");		
-	}
-	$app["name"]=explode("#",$match["target"])[0];
-	$app["section"]=explode("#",$match["target"])[1];
-	$app["params"]=$match["params"];
-
-	doLog("=====> Routing for  ".json_encode($match));
-	doLog("=====> Starting ".$app["name"]."/".$app["section"]." (".json_encode($app["params"]).")");
-
-	//
-	// If no App specified, go to default one
-	//
-	if ($app["name"]==="init") {
-		header("Location: ".$app["base_url"]."/".$app["default_app"]."/");
-		die();
-	}
-
-	//
-	// Check app name. must be one of defined apps
-	//
-	if (!in_array($app["name"],$app["apps"])) {
-		die("Error in routes definition: unauthorized app ".$app["name"]);
-	}
-		
-	//
-	// Security
-	//
-	doLog("Doing Security ".json_encode($_SESSION));
-	include_once("security.php");
-
-	//
-	// Init app
-	//
-	doLog("Initializing app ".$app["name"]);
-	include_once($app["name"]."/init.php");
-	$app["tplfolder"]=$app["templates_path"].$app["name"]."/".$app["section"]."/";
-	$app["apptplfolder"]=$app["templates_path"].$app["name"]."/";
-	$base_url=$app["base_url"];
-	$templates_path=$app["templates_path"];
-	$app_name=$app["name"];
-	$section_name=$app["section"];
+class APPcelerate {
 	
-	//
-	// Init section (if exists)
-	//
-	if (stream_resolve_include_path($app["name"]."/".$app["section"]."/init.php")) {
-		doLog("Initializing section ".$app["section"]);
-		include_once($app["name"]."/".$app["section"]."/init.php");
-	}
-
-	if (!$app["skipui"]) {
-
-		//
-		// Include app header template
-		//
-		doLog("Loading HEAD template for ".$app["name"]);
-		$app["TBS"]->LoadTemplate($app["apptplfolder"]."head.htm");
-		
-		//
-		// Include section header template (if exists)
-		//
-		doLog("Loading HEAD template for ".$app["name"]."/".$app["section"]);
-		if (stream_resolve_include_path($app["tplfolder"]."head.htm")) {
-			$app["TBS"]->LoadTemplate($app["tplfolder"]."head.htm","+");
-		}
-		else {
-			doLog("HEAD template not found for ".$app["name"]."/".$app["section"]);
-		}
-
-		//
-		// Include section template (if exists)
-		//
-		doLog("Loading MAIN template for ".$app["name"]."/".$app["section"]);
-		if (stream_resolve_include_path($app["tplfolder"]."main.htm")) {
-			$app["TBS"]->LoadTemplate($app["tplfolder"]."main.htm","+");
-		}
-		else {
-			doLog("MAIN template not found for ".$app["name"]."/".$app["section"]);
-		}
-
-		//
-		// Include section tail template (if exists)
-		//
-		doLog("Loading TAIL template for ".$app["name"]."/".$app["section"]);
-		if (stream_resolve_include_path($app["tplfolder"]."tail.htm")) {
-			$app["TBS"]->LoadTemplate($app["tplfolder"]."tail.htm","+");
-		}
-		else {
-			doLog("TAIL template not found for ".$app["name"]."/".$app["section"]);
-		}
-
-	}
+	public $app;
 	
-	//
-	// Execute section (if exists)
-	//
-	if (stream_resolve_include_path($app["name"]."/".$app["section"]."/main.php")) {
-		doLog("Executing section ".$app["name"]."/".$app["section"]);
-		include_once($app["name"]."/".$app["section"]."/main.php");
-	}
+    public function __construct() {
+	    
+		register_shutdown_function('logCrash');
 
-	if (!$app["skipui"]) {
+		$base_path=$_SERVER["DOCUMENT_ROOT"];
+		
+		$fwpath=__DIR__;
 
-		//
-		// Include app tail template
-		//
-		doLog("Loading TAIL template for ".$app["name"]);
-		$app["TBS"]->LoadTemplate($app["apptplfolder"]."tail.htm","+");
+		$views_path=$base_path."/views";
+		$vendor_path=$base_path."/vendor";
+		$include_path=$base_path."/include";
 
-		//
-		// Merge default variables
-		//
-		if (isset($app['uname'])) {
-			$app["TBS"]->MergeField('uname',$app['uname']);
+		if (set_include_path(get_include_path().PATH_SEPARATOR.$include_path.PATH_SEPARATOR.$vendor_path.PATH_SEPARATOR.$views_path.PATH_SEPARATOR.$fwpath)==false) {
+			die("Cannot set include path.");
 		}
-		else {
-			$app["TBS"]->MergeField('uname',"");
-		}
-		if (isset($app['uid'])) {
-			$app["TBS"]->MergeField('uid',$app['uid']);
-		}
-		else {
-			$app["TBS"]->MergeField('uid',"");
-		}
-		$app["TBS"]->MergeField('base_url',$app["base_url"]);
-		$app["TBS"]->MergeField('templates_path',$app["templates_path"]);
-		$app["TBS"]->MergeField('app',$app["name"]);
-		$app["TBS"]->MergeField('section',$app["section"]);
 
-		if(array_key_exists("tail_blocks", $app)) {
-			foreach($app["tail_blocks"] as $block_name => $block_data) {
-				$app["TBS"]->MergeBlock("$block_name",$block_data);
+		include_once("tinybutstrong/tinybutstrong/plugins/tbs_plugin_html.php");
+
+		$this->app["skipui"]=false;
+	
+		$this->app["base_path"]=$base_path;
+		$dotenv = new Dotenv\Dotenv($this->app["base_path"], 'app.config');
+		$dotenv->load();
+	
+		$this->app["base_url"]=getenv('BASE_URL');
+	
+		$this->app["apps"]=explode("|",getenv('APPS'));
+	
+		$this->app["base_app"]=getenv('BASE_APP');
+		$this->app["default_app"]=getenv('DEFAULT_APP');
+	
+		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
+	
+		# Define Additional templates
+		foreach ($this->app["apps"] as $app_name) {
+			$add_tpl=getenv('ADD_TPL_'.$app_name);
+			if ($add_tpl==="Y") {
+				$this->app["addtemplates"][$app_name]=$app_name."_additional_template.htm";
 			}
 		}
 
-		if(array_key_exists("tail_fields", $app)) {
-			foreach($app["tail_fields"] as $field_name => $field_data) {
-				$app["TBS"]->MergeField("$field_name",$field_data);
-			}
+		//
+		// Init Log
+		//
+		//use Monolog\Logger;
+		//use Monolog\Formatter\LineFormatter;
+		//use Monolog\Handler\StreamHandler;
+		//use Monolog\Handler\RavenHandler;
+		
+		Raven_Autoloader::register();
+		
+		$this->app["main_logger"]=new Logger('appcelerate');
+		
+		$dateFormat = "d-m-Y G:i";
+		$output = "%datetime% ; %level_name% ; %message% ; %context%\n";
+		$formatter = new LineFormatter($output, $dateFormat);
+		
+		$mainstream=new StreamHandler($this->app["base_path"]."/logs/appcelerate.log", Logger::DEBUG);
+		$mainstream->setFormatter($formatter);
+		
+		$this->app["main_logger"]->pushHandler($mainstream);
+		
+		# Apps Log
+		foreach ($this->app["apps"] as $app_name) {
+			$this->app[$app_name."_ravenc"]=new Raven_Client('https://f2b7f556cda845cb83c8c7faa8de9134:9b0f361e29a74b89971d7f2486dff827@sentry.io/97912');
+			$this->app[$app_name."_ravenh"]= new RavenHandler($this->app[$app_name."_ravenc"]);
+			$this->app[$app_name."_ravenh"]->setFormatter(new LineFormatter("%message% %context% %extra%\n"));
+			$this->app[$app_name."_logger"]=new Logger($app_name);
+			$this->app[$app_name."_log_stream"]=new StreamHandler($this->app["base_path"]."/logs/".$app_name.".log", Logger::DEBUG);
+			$this->app[$app_name."_log_stream"]->setFormatter($formatter);
+			$this->app[$app_name."_logger"]->pushHandler($this->app[$app_name."_log_stream"]);
+			$this->app[$app_name."_logger"]->pushHandler($this->app[$app_name."_ravenh"]);
 		}
+		
+		define ("L_DEBUG",100);
+		define ("L_INFO",200);
+		define ("L_NOTICE",250);
+		define ("L_WARNING",300);
+		define ("L_ERROR",400);
+		define ("L_CRITICAL",500);
+		define ("L_ALERT",550);
+		define ("L_EMERCENCY",600);
 
-		$app["TBS"]->MergeField('tokens','getString',true);
-		$app["TBS"]->MergeField('include','getInclude',true);
-
-		$app["TBS"]->SetOption('render',TBS_OUTPUT);
-		$app["TBS"]->Show();
 	}
 
-	doLog("<===== Ending ".$app["name"]."/".$app["section"]." (".json_encode($app["params"]).")");
-}
-else {
-	errRoute();
-}
+	private function logCrash() {
+		$e=error_get_last();
+	
+		if ($e['type']) {
+			$msg=sprintf("Type %u File %s Line %u Message %s",$e["type"],$e["file"],$e["line"],$e["message"]);
+			doLog($msg);
+		}
+	}
 
-doLog("<===== Routed for  ".json_encode($match));
-
-?>
+}
