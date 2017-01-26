@@ -12,7 +12,14 @@ class APPcelerate {
 	
     public function __construct() {
 	    
-		register_shutdown_function('logCrash');
+		register_shutdown_function(function() {
+			$e=error_get_last();
+		
+			if ($e['type']) {
+				$msg=sprintf("Type %u File %s Line %u Message %s",$e["type"],$e["file"],$e["line"],$e["message"]);
+				doLog($msg);
+			}
+		});
 
 		$base_path=$_SERVER["DOCUMENT_ROOT"];
 		
@@ -93,15 +100,6 @@ class APPcelerate {
 		define ("L_ALERT",550);
 		define ("L_EMERCENCY",600);
 
-	}
-
-	private function logCrash() {
-		$e=error_get_last();
-	
-		if ($e['type']) {
-			$msg=sprintf("Type %u File %s Line %u Message %s",$e["type"],$e["file"],$e["line"],$e["message"]);
-			doLog($msg);
-		}
 	}
 
 }
