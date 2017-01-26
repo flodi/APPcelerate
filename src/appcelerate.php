@@ -10,6 +10,30 @@ class APPcelerate {
 	
 	public $app;
 	
+	public function doLog($msg,$level=L_DEBUG) {
+		global $app;
+	
+		if (array_key_exists("name", $app) and $app["name"]!=="init") {
+			$app_name=$app["name"];
+		}
+		else {
+			$app_name="main";
+		}
+		
+		if (array_key_exists("section",$app)) {
+			$context=array($app["section"]);
+		}
+		else {
+			$context=array("main");
+		}
+	
+		switch($level) {
+			default:
+				$app[$app_name."_logger"]->addRecord($level,$msg,$context);
+		}
+		
+	}
+
     public function __construct() {
 	    
 		register_shutdown_function(function() {
@@ -74,7 +98,7 @@ class APPcelerate {
 		$output = "%datetime% ; %level_name% ; %message% ; %context%\n";
 		$formatter = new Monolog\Formatter\LineFormatter($output, $dateFormat);
 		
-		$mainstream=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/appcelerate.log", Logger::DEBUG);
+		$mainstream=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/appcelerate.log", Monolog\Logger::DEBUG);
 		$mainstream->setFormatter($formatter);
 		
 		$this->app["main_logger"]->pushHandler($mainstream);
@@ -85,7 +109,7 @@ class APPcelerate {
 			$this->app[$app_name."_ravenh"]= new Monolog\Handler\RavenHandler($this->app[$app_name."_ravenc"]);
 			$this->app[$app_name."_ravenh"]->setFormatter(new Monolog\Formatter\LineFormatter("%message% %context% %extra%\n"));
 			$this->app[$app_name."_logger"]=new Monolog\Logger($app_name);
-			$this->app[$app_name."_log_stream"]=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/".$app_name.".log", Logger::DEBUG);
+			$this->app[$app_name."_log_stream"]=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/".$app_name.".log", Monolog\Logger::DEBUG);
 			$this->app[$app_name."_log_stream"]->setFormatter($formatter);
 			$this->app[$app_name."_logger"]->pushHandler($this->app[$app_name."_log_stream"]);
 			$this->app[$app_name."_logger"]->pushHandler($this->app[$app_name."_ravenh"]);
@@ -100,30 +124,6 @@ class APPcelerate {
 		define ("L_ALERT",550);
 		define ("L_EMERCENCY",600);
 
-	}
-
-	public function doLog($msg,$level=L_DEBUG) {
-		global $app;
-	
-		if (array_key_exists("name", $app) and $app["name"]!=="init") {
-			$app_name=$app["name"];
-		}
-		else {
-			$app_name="main";
-		}
-		
-		if (array_key_exists("section",$app)) {
-			$context=array($app["section"]);
-		}
-		else {
-			$context=array("main");
-		}
-	
-		switch($level) {
-			default:
-				$app[$app_name."_logger"]->addRecord($level,$msg,$context);
-		}
-		
 	}
 
 }
