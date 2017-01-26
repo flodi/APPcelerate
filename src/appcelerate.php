@@ -72,9 +72,9 @@ class APPcelerate {
 		
 		$dateFormat = "d-m-Y G:i";
 		$output = "%datetime% ; %level_name% ; %message% ; %context%\n";
-		$formatter = new LineFormatter($output, $dateFormat);
+		$formatter = new Monolog\Formatter\LineFormatter($output, $dateFormat);
 		
-		$mainstream=new StreamHandler($this->app["base_path"]."/logs/appcelerate.log", Logger::DEBUG);
+		$mainstream=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/appcelerate.log", Logger::DEBUG);
 		$mainstream->setFormatter($formatter);
 		
 		$this->app["main_logger"]->pushHandler($mainstream);
@@ -82,10 +82,10 @@ class APPcelerate {
 		# Apps Log
 		foreach ($this->app["apps"] as $app_name) {
 			$this->app[$app_name."_ravenc"]=new Raven_Client('https://f2b7f556cda845cb83c8c7faa8de9134:9b0f361e29a74b89971d7f2486dff827@sentry.io/97912');
-			$this->app[$app_name."_ravenh"]= new RavenHandler($this->app[$app_name."_ravenc"]);
-			$this->app[$app_name."_ravenh"]->setFormatter(new LineFormatter("%message% %context% %extra%\n"));
-			$this->app[$app_name."_logger"]=new Logger($app_name);
-			$this->app[$app_name."_log_stream"]=new StreamHandler($this->app["base_path"]."/logs/".$app_name.".log", Logger::DEBUG);
+			$this->app[$app_name."_ravenh"]= new Monolog\Handler\RavenHandler($this->app[$app_name."_ravenc"]);
+			$this->app[$app_name."_ravenh"]->setFormatter(new Monolog\Formatter\LineFormatter("%message% %context% %extra%\n"));
+			$this->app[$app_name."_logger"]=new Monolog\Logger($app_name);
+			$this->app[$app_name."_log_stream"]=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/".$app_name.".log", Logger::DEBUG);
 			$this->app[$app_name."_log_stream"]->setFormatter($formatter);
 			$this->app[$app_name."_logger"]->pushHandler($this->app[$app_name."_log_stream"]);
 			$this->app[$app_name."_logger"]->pushHandler($this->app[$app_name."_ravenh"]);
