@@ -8,7 +8,6 @@
 		"monolog/monolog":"*",
 		"phpoption/phpoption":"*",
 		"altorouter/altorouter":"*",
-		"php-console/php-console":"*",
 		"tinybutstrong/tinybutstrong":"*",
 		"dompdf/dompdf":"0.7.x@beta",
 		"daniel-zahariev/php-aws-ses":"*",
