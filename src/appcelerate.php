@@ -61,7 +61,7 @@ class APPcelerate {
 		
 		Raven_Autoloader::register();
 		
-		$this->app["main_logger"]=new Logger('appcelerate');
+		$this->app["main_logger"]=new Monolog\Logger('appcelerate');
 		
 		$dateFormat = "d-m-Y G:i";
 		$output = "%datetime% ; %level_name% ; %message% ; %context%\n";
