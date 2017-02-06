@@ -20,6 +20,5 @@
 		"classmap": [
 			"src/appcelerate.php"
 		]
-	},
-   "minimum-stability": "dev"
+	}
 }
