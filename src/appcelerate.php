@@ -342,7 +342,7 @@ class APPcelerate {
 	
 	public function doApp() {
 
-		doLog("Instance Started");
+		$this->doLog("Instance Started");
 		
 		$this->app["TBS"] = new clsTinyButStrong;
 		
