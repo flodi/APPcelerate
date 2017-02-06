@@ -411,7 +411,7 @@ class APPcelerate {
 			// Init section (if exists)
 			//
 			if (stream_resolve_include_path($sec_vws_path."init.php")) {
-				doLog("Initializing section ".$this->app["section"]);
+				$this->doLog("Initializing section ".$this->app["section"]);
 				include_once($sec_vws_path."init.php");
 			}
 		
