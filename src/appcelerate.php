@@ -402,11 +402,11 @@ class APPcelerate {
 
 			$base_url=$this->app["base_url"];
 
-			$app_tpl_path=$this->$app_base_path."templates/";
-			$sec_tpl_path=$this->$sec_base_path."templates/";
+			$app_tpl_path=$this->app_base_path."templates/";
+			$sec_tpl_path=$this->sec_base_path."templates/";
 
-			$app_vws_path=$this->$app_base_path."views/";
-			$sec_vws_path=$this->$sec_base_path."views/";
+			$app_vws_path=$this->app_base_path."views/";
+			$sec_vws_path=$this->sec_base_path."views/";
 
 			$app_name=$this->app["name"];
 
@@ -528,8 +528,8 @@ class APPcelerate {
 					}
 				}
 		
-				$this->app["TBS"]->MergeField('tokens','getString',true);
-				$this->app["TBS"]->MergeField('include','getInclude',true);
+				$this->app["TBS"]->MergeField('tokens','this->getString',true);
+				$this->app["TBS"]->MergeField('include','this->getInclude',true);
 		
 				$this->app["TBS"]->SetOption('render',TBS_OUTPUT);
 				$this->app["TBS"]->Show();
