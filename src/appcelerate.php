@@ -69,6 +69,8 @@ class APPcelerate {
 
 		$this->app["skipui"]=false;
 	
+		$this->app["apps_path"]=$base_path."/apps";
+
 		$this->app["base_path"]=$base_path;
 		$dotenv = new Dotenv\Dotenv($this->app["base_path"], 'app.config');
 		$dotenv->load();
@@ -93,10 +95,6 @@ class APPcelerate {
 		//
 		// Init Log
 		//
-		//use Monolog\Logger;
-		//use Monolog\Formatter\LineFormatter;
-		//use Monolog\Handler\StreamHandler;
-		//use Monolog\Handler\RavenHandler;
 		
 		Raven_Autoloader::register();
 		
@@ -394,42 +392,62 @@ class APPcelerate {
 			// Security
 			//
 			$this->doLog("Doing Security ".json_encode($_SESSION));
-			include_once("security.php");
+			//include_once("security.php");
 		
 			//
-			// Init app
+			// Init app variables
 			//
-			$this->doLog("Initializing app ".$this->app["name"]);
-			include_once($this->app["name"]."/init.php");
-			$this->app["tplfolder"]=$this->app["templates_path"].$this->app["name"]."/".$this->app["section"]."/";
-			$this->app["apptplfolder"]=$this->app["templates_path"].$this->app["name"]."/";
+			$app_base_path=$this->app["apps_path"]."/".$this->app["name"]."/";
+			$sec_base_path=$app_base_path.$this->app["section"]."/";
+
 			$base_url=$this->app["base_url"];
-			$templates_path=$this->app["templates_path"];
+
+			$app_tpl_path=$this->$app_base_path."templates/";
+			$sec_tpl_path=$this->$sec_base_path."templates/";
+
+			$app_vws_path=$this->$app_base_path."views/";
+			$sec_vws_path=$this->$sec_base_path."views/";
+
 			$app_name=$this->app["name"];
+
 			$section_name=$this->app["section"];
+			
+			//
+			// Init app (if exists)
+			//
+			if (stream_resolve_include_path($app_vws_path."init.php")) {
+				$this->doLog("Initializing app ".$this->app["name"]);
+				include_once($app_vws_path."init.php");
+			}
+			
 			
 			//
 			// Init section (if exists)
 			//
-			if (stream_resolve_include_path($this->app["name"]."/".$this->app["section"]."/init.php")) {
+			if (stream_resolve_include_path($sec_vws_path."init.php")) {
 				doLog("Initializing section ".$this->app["section"]);
-				include_once($this->app["name"]."/".$this->app["section"]."/init.php");
+				include_once($sec_vws_path."init.php");
 			}
 		
 			if (!$this->app["skipui"]) {
 		
 				//
-				// Include app header template
+				// Include app header template (if exists)
 				//
 				$this->doLog("Loading HEAD template for ".$this->app["name"]);
-				$this->app["TBS"]->LoadTemplate($this->app["apptplfolder"]."head.htm");
+				if (stream_resolve_include_path($app_tpl_path."head.htm")) {
+					$this->app["TBS"]->LoadTemplate($app_tpl_path."head.htm");
+				}
+				else {
+					$this->doLog("HEAD template not found for ".$this->app["name"]);
+				}
 				
 				//
 				// Include section header template (if exists)
 				//
 				$this->doLog("Loading HEAD template for ".$this->app["name"]."/".$this->app["section"]);
-				if (stream_resolve_include_path($this->app["tplfolder"]."head.htm")) {
-					$this->app["TBS"]->LoadTemplate($this->app["tplfolder"]."head.htm","+");
+				if (stream_resolve_include_path($sec_tpl_path."head.htm")) {
+					$this->app["TBS"]->LoadTemplate($sec_tpl_path."head.htm","+");
 				}
 				else {
 					$this->doLog("HEAD template not found for ".$this->app["name"]."/".$this->app["section"]);
@@ -439,8 +457,8 @@ class APPcelerate {
 				// Include section template (if exists)
 				//
 				$this->doLog("Loading MAIN template for ".$this->app["name"]."/".$this->app["section"]);
-				if (stream_resolve_include_path($this->app["tplfolder"]."main.htm")) {
-					$this->app["TBS"]->LoadTemplate($this->app["tplfolder"]."main.htm","+");
+				if (stream_resolve_include_path($sec_tpl_path."main.htm")) {
+					$this->app["TBS"]->LoadTemplate($sec_tpl_path."main.htm","+");
 				}
 				else {
 					$this->doLog("MAIN template not found for ".$this->app["name"]."/".$this->app["section"]);
@@ -450,8 +468,8 @@ class APPcelerate {
 				// Include section tail template (if exists)
 				//
 				$this->doLog("Loading TAIL template for ".$this->app["name"]."/".$this->app["section"]);
-				if (stream_resolve_include_path($this->app["tplfolder"]."tail.htm")) {
-					$this->app["TBS"]->LoadTemplate($this->app["tplfolder"]."tail.htm","+");
+				if (stream_resolve_include_path($sec_tpl_path."tail.htm")) {
+					$this->app["TBS"]->LoadTemplate($sec_tpl_path."tail.htm","+");
 				}
 				else {
 					$this->doLog("TAIL template not found for ".$this->app["name"]."/".$this->app["section"]);
@@ -462,19 +480,21 @@ class APPcelerate {
 			//
 			// Execute section (if exists)
 			//
-			if (stream_resolve_include_path($this->app["name"]."/".$this->app["section"]."/main.php")) {
+			if (stream_resolve_include_path($sec_vws_path."main.php")) {
 				$this->doLog("Executing section ".$this->app["name"]."/".$this->app["section"]);
-				include_once($this->app["name"]."/".$this->app["section"]."/main.php");
+				include_once($sec_vws_path."main.php");
 			}
 		
 			if (!$this->app["skipui"]) {
 		
 				//
-				// Include app tail template
+				// Include app tail template (if exists)
 				//
-				$this->doLog("Loading TAIL template for ".$this->app["name"]);
-				$this->app["TBS"]->LoadTemplate($this->app["apptplfolder"]."tail.htm","+");
-		
+				if (stream_resolve_include_path($app_tpl_path."tail.htm")) {
+					$this->doLog("Loading TAIL template for ".$this->app["name"]);
+					$this->app["TBS"]->LoadTemplate($app_tpl_path."tail.htm","+");
+				}
+				
 				//
 				// Merge default variables
 				//
