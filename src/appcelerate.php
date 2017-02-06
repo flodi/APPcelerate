@@ -329,7 +329,7 @@ class APPcelerate {
 			}
 			else {
 				unset($this->app['uid']);
-				unset($$this->app['uname']);
+				unset($this->app['uname']);
 				if (!(strpos($_SERVER['REQUEST_URI'],"/login/")) and !(strpos($_SERVER['REQUEST_URI'],"/logout/"))) {
 					header("Location: " . $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
 				}
