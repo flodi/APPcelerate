@@ -372,8 +372,8 @@ class APPcelerate {
 			$this->app["section"]=explode("#",$match["target"])[1];
 			$this->app["params"]=$match["params"];
 		
-			doLog("=====> Routing for  ".json_encode($match));
-			doLog("=====> Starting ".$this->app["name"]."/".$this->app["section"]." (".json_encode($this->app["params"]).")");
+			$this->doLog("=====> Routing for  ".json_encode($match));
+			$this->doLog("=====> Starting ".$this->app["name"]."/".$this->app["section"]." (".json_encode($this->app["params"]).")");
 		
 			//
 			// If no App specified, go to default one
@@ -393,13 +393,13 @@ class APPcelerate {
 			//
 			// Security
 			//
-			doLog("Doing Security ".json_encode($_SESSION));
+			$this->doLog("Doing Security ".json_encode($_SESSION));
 			include_once("security.php");
 		
 			//
 			// Init app
 			//
-			doLog("Initializing app ".$this->app["name"]);
+			$this->doLog("Initializing app ".$this->app["name"]);
 			include_once($this->app["name"]."/init.php");
 			$this->app["tplfolder"]=$this->app["templates_path"].$this->app["name"]."/".$this->app["section"]."/";
 			$this->app["apptplfolder"]=$this->app["templates_path"].$this->app["name"]."/";
@@ -421,40 +421,40 @@ class APPcelerate {
 				//
 				// Include app header template
 				//
-				doLog("Loading HEAD template for ".$this->app["name"]);
+				$this->doLog("Loading HEAD template for ".$this->app["name"]);
 				$this->app["TBS"]->LoadTemplate($this->app["apptplfolder"]."head.htm");
 				
 				//
 				// Include section header template (if exists)
 				//
-				doLog("Loading HEAD template for ".$this->app["name"]."/".$this->app["section"]);
+				$this->doLog("Loading HEAD template for ".$this->app["name"]."/".$this->app["section"]);
 				if (stream_resolve_include_path($this->app["tplfolder"]."head.htm")) {
 					$this->app["TBS"]->LoadTemplate($this->app["tplfolder"]."head.htm","+");
 				}
 				else {
-					doLog("HEAD template not found for ".$this->app["name"]."/".$this->app["section"]);
+					$this->doLog("HEAD template not found for ".$this->app["name"]."/".$this->app["section"]);
 				}
 		
 				//
 				// Include section template (if exists)
 				//
-				doLog("Loading MAIN template for ".$this->app["name"]."/".$this->app["section"]);
+				$this->doLog("Loading MAIN template for ".$this->app["name"]."/".$this->app["section"]);
 				if (stream_resolve_include_path($this->app["tplfolder"]."main.htm")) {
 					$this->app["TBS"]->LoadTemplate($this->app["tplfolder"]."main.htm","+");
 				}
 				else {
-					doLog("MAIN template not found for ".$this->app["name"]."/".$this->app["section"]);
+					$this->doLog("MAIN template not found for ".$this->app["name"]."/".$this->app["section"]);
 				}
 		
 				//
 				// Include section tail template (if exists)
 				//
-				doLog("Loading TAIL template for ".$this->app["name"]."/".$this->app["section"]);
+				$this->doLog("Loading TAIL template for ".$this->app["name"]."/".$this->app["section"]);
 				if (stream_resolve_include_path($this->app["tplfolder"]."tail.htm")) {
 					$this->app["TBS"]->LoadTemplate($this->app["tplfolder"]."tail.htm","+");
 				}
 				else {
-					doLog("TAIL template not found for ".$this->app["name"]."/".$this->app["section"]);
+					$this->doLog("TAIL template not found for ".$this->app["name"]."/".$this->app["section"]);
 				}
 		
 			}
@@ -463,7 +463,7 @@ class APPcelerate {
 			// Execute section (if exists)
 			//
 			if (stream_resolve_include_path($this->app["name"]."/".$this->app["section"]."/main.php")) {
-				doLog("Executing section ".$this->app["name"]."/".$this->app["section"]);
+				$this->doLog("Executing section ".$this->app["name"]."/".$this->app["section"]);
 				include_once($this->app["name"]."/".$this->app["section"]."/main.php");
 			}
 		
@@ -472,7 +472,7 @@ class APPcelerate {
 				//
 				// Include app tail template
 				//
-				doLog("Loading TAIL template for ".$this->app["name"]);
+				$this->doLog("Loading TAIL template for ".$this->app["name"]);
 				$this->app["TBS"]->LoadTemplate($this->app["apptplfolder"]."tail.htm","+");
 		
 				//
@@ -514,13 +514,13 @@ class APPcelerate {
 				$this->app["TBS"]->Show();
 			}
 		
-			doLog("<===== Ending ".$this->app["name"]."/".$this->app["section"]." (".json_encode($this->app["params"]).")");
+			$this->doLog("<===== Ending ".$this->app["name"]."/".$this->app["section"]." (".json_encode($this->app["params"]).")");
 		}
 		else {
-			errRoute();
+			$this->errRoute();
 		}
 		
-		doLog("<===== Routed for  ".json_encode($match));
+		$this->doLog("<===== Routed for  ".json_encode($match));
 
 	}
 
