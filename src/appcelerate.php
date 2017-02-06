@@ -340,6 +340,10 @@ class APPcelerate {
 
 	}
 	
+	public function map($method,$route,$name) {
+		$this->app["router"]->map($method,$route,$name);
+	}
+	
 	public function doApp() {
 
 		$this->doLog("Instance Started");
