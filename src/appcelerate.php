@@ -346,16 +346,16 @@ class APPcelerate {
 		
 		$this->app["TBS"] = new clsTinyButStrong;
 		
-		$router = new AltoRouter();
+		$this->app["router"] = new AltoRouter();
 		if (!empty($this->app["base_app"]) or $this->app["base_app"]!=="") {
-			$router->setBasePath($this->app["base_app"]);
+			$this->app["router"]->setBasePath($this->app["base_app"]);
 		}
 		
 		include_once("routes.php");
 		
-		$match = $router->match();
+		$match = $this->app["router"]->match();
 		
-		doLog("App Start - ".json_encode($match));
+		$this->doLog("App Start - ".json_encode($match));
 		
 		if ($match) {
 			//
