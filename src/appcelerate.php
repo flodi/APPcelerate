@@ -392,8 +392,8 @@ class APPcelerate {
 			// Security
 			//
 			$this->doLog("Doing Security ".json_encode($_SESSION));
-			//include_once("security.php");
-		
+			$this->doSecurity();
+			
 			//
 			// Init app variables
 			//
