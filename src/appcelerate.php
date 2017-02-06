@@ -247,6 +247,7 @@ class APPcelerate {
 	public function errRoute() {
 		$this->doLog("Route Error, restarting ".$_SERVER["REQUEST_URI"]);
 		header("Location: ".$this->app["base_url"]."/");
+		die();
 	}
 	
 	public function stringForHTML($field,&$value) {	
