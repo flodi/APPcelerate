@@ -53,10 +53,6 @@ class APPcelerate {
 			}
 		});
 
-		$this->app=array();
-
-		$this->doLog("APPCelerate created for http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
-
 		$base_path=$_SERVER["DOCUMENT_ROOT"];
 		
 		$fwpath=__DIR__;
@@ -140,6 +136,8 @@ class APPcelerate {
 			}
 			$this->app["db_".$app_name]->set_charset("utf8");
 		}
+		
+		$this->doLog("APPCelerate created for http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 
 	}
 
