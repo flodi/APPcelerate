@@ -140,10 +140,8 @@ class APPcelerate {
 	}
 
 	public function sqlError($recordset,$query) {
-		global $app;
-		
 		if (!$recordset) {
-			doLog("Failed SQL query - Query => $query, Error => ".$app["db_".$app["name"]]->error);
+			doLog("Failed SQL query - Query => $query, Error => ".$this->app["db_".$this->app["name"]]->error);
 			die("Database error, please contact support\n");
 		}
 	}
@@ -180,12 +178,9 @@ class APPcelerate {
 	}
 	
 	public function getString($token) {
-		global $app;
-	
-	
-		foreach ($app["apps"] as $app_name) {
+		foreach ($this->app["apps"] as $app_name) {
 			$sql="select string from strings where token='$token' and id_language=(select id from languages where locale='".$app["locale"]."')";
-			$rs=$app["db_".$app_name]->query($sql);
+			$rs=$this->app["db_".$app_name]->query($sql);
 			if (!$rs) {
 				sqlError($rs,$sql);
 			}
@@ -198,7 +193,6 @@ class APPcelerate {
 	}
 	
 	public function getInclude($type,$params) {
-		global $app;
 		$mode=$params["mode"];
 		$file="/include/";
 		
@@ -213,10 +207,10 @@ class APPcelerate {
 		
 		switch($mode) {
 			case "app":
-				$file.=$app["name"];
+				$file.=$this->app["name"];
 				break;
 			case "section":
-				$file.=$app["name"]."_".$app["section"];
+				$file.=$this->app["name"]."_".$this->app["section"];
 				break;
 		}
 	
@@ -231,14 +225,14 @@ class APPcelerate {
 		
 		$include="";
 			
-		if (file_exists($app["base_path"].$file)) {
+		if (file_exists($this->app["base_path"].$file)) {
 			
 			switch($type) {
 				case "js":
-					$include="<script src=\"".$app["base_url"].$file."\"></script>";
+					$include="<script src=\"".$this->app["base_url"].$file."\"></script>";
 					break;
 				case "css":
-					$include="<link rel=\"stylesheet\" href=\"".$app["base_url"].$file."\">";
+					$include="<link rel=\"stylesheet\" href=\"".$this->app["base_url"].$file."\">";
 					break;
 			}
 			
@@ -249,39 +243,30 @@ class APPcelerate {
 	}
 	
 	public function errRoute() {
-		global $app;
-	
-		doLog("Route Error, restarting ".$_SERVER["REQUEST_URI"]);
-		
+		$this->doLog("Route Error, restarting ".$_SERVER["REQUEST_URI"]);
 		header("Location: ".$app["base_url"]."/");
-	
 	}
 	
-	public function stringForHTML($field,&$value) {
-		global $app;
-	
+	public function stringForHTML($field,&$value) {	
 		$value=utf8_encode($value);
-
 	}
 
 	public function addMerge($type,$field,$var) {
-		global $app;
-		
 		switch ($type) {
 			case "block":
-					if (array_key_exists("bmerge", $app)) {
-						$app["bmerge"].="|$field;$var";
+					if (array_key_exists("bmerge", $this->app)) {
+						$this->app["bmerge"].="|$field;$var";
 					}
 					else {
-						$app["bmerge"]="$field;$var";
+						$this->app["bmerge"]="$field;$var";
 					}
 				break;
 			case "field":
-					if (array_key_exists("merge", $app)) {
-						$app["merge"].="|$field;$var";
+					if (array_key_exists("merge", $this->app)) {
+						$this->app["merge"].="|$field;$var";
 					}
 					else {
-						$app["merge"]="$field;$var";
+						$this->app["merge"]="$field;$var";
 					}
 				break;
 			default:
@@ -390,6 +375,7 @@ class APPcelerate {
 				
 			//
 			// Security
+			//
 			//
 			$this->doLog("Doing Security ".json_encode($_SESSION));
 			$this->doSecurity();
