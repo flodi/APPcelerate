@@ -511,7 +511,8 @@ class APPcelerate {
 					$this->app["TBS"]->MergeField('uid',"");
 				}
 				$this->app["TBS"]->MergeField('base_url',$this->app["base_url"]);
-				$this->app["TBS"]->MergeField('templates_path',$this->app["templates_path"]);
+				$this->app["TBS"]->MergeField('app_tpl_path',$app_tpl_path);
+				$this->app["TBS"]->MergeField('sec_tpl_path',$sec_tpl_path);
 				$this->app["TBS"]->MergeField('app',$this->app["name"]);
 				$this->app["TBS"]->MergeField('section',$this->app["section"]);
 		
