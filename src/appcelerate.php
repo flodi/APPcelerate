@@ -20,17 +20,16 @@ class APPcelerate {
 	const L_EMERCENCY="600";
 	
 	public function doLog($msg,$level=APPcelerate::L_DEBUG) {
-		global $app;
 	
-		if (array_key_exists("name", $app) and $app["name"]!=="init") {
-			$app_name=$app["name"];
+		if (array_key_exists("name", $this->app) and $this->app["name"]!=="init") {
+			$app_name=$this->app["name"];
 		}
 		else {
 			$app_name="main";
 		}
 		
-		if (array_key_exists("section",$app)) {
-			$context=array($app["section"]);
+		if (array_key_exists("section",$this->app)) {
+			$context=array($this->app["section"]);
 		}
 		else {
 			$context=array("main");
@@ -38,7 +37,7 @@ class APPcelerate {
 	
 		switch($level) {
 			default:
-				$app[$app_name."_logger"]->addRecord($level,$msg,$context);
+				$this->app[$app_name."_logger"]->addRecord($level,$msg,$context);
 		}
 		
 	}
