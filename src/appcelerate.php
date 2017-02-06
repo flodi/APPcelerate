@@ -53,7 +53,7 @@ class APPcelerate {
 			}
 		});
 		
-		$this->doLog("APPCelerate created for ".$_SERVER['HTTP_REFERER']);
+		$this->doLog("APPCelerate created for http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 
 		$base_path=$_SERVER["DOCUMENT_ROOT"];
 		
