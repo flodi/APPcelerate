@@ -2,6 +2,7 @@
     "name": "flodi/appcelerate",
     "description": "PHP Application Framework",
     "type": "library",
+    "license": "proprietary",
     "require": {
         "vlucas/phpdotenv": "*",
         "monolog/monolog": "*",
