@@ -516,9 +516,10 @@ class APPcelerate {
 						$this->app["TBS"]->MergeField("$field_name",$field_data);
 					}
 				}
-		
-				$this->app["TBS"]->MergeField('tokens','this->getString',true);
-				$this->app["TBS"]->MergeField('include','this->getInclude',true);
+				
+				$this->app["TBS"]->ObjectRef['my_obj'] = $this;
+				$this->app["TBS"]->MergeField('tokens', '~my_obj.getString', true);
+				$this->app["TBS"]->MergeField('include', '~my_obj.getInclude', true);
 		
 				$this->app["TBS"]->SetOption('render',TBS_OUTPUT);
 				$this->app["TBS"]->Show();
