@@ -181,10 +181,10 @@ class APPcelerate {
 	
 	public function getString($token) {
 		foreach ($this->app["apps"] as $app_name) {
-			$sql="select string from strings where token='$token' and id_language=(select id from languages where locale='".$app["locale"]."')";
+			$sql="select string from strings where token='$token' and id_language=(select id from languages where locale='".$thi->app["locale"]."')";
 			$rs=$this->app["db_".$app_name]->query($sql);
 			if (!$rs) {
-				sqlError($rs,$sql);
+				$this->sqlError($rs,$sql);
 			}
 			if ($rs->num_rows!=0) {
 				return (utf8_encode($rs->fetch_array()[0]));
