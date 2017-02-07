@@ -307,15 +307,15 @@ class APPcelerate {
 						}
 						$this->doLog("[SECURITY] redirecring to ".$this->app["base_url"]."/".$this->app["name"]."/");
 						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/");
-						break;
+						die();
 					case 0:
 						$this->doLog("[SECURITY] redirecring to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
 						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
-						break;
+						die();
 					default:
 						$this->doLog("[SECURITY] redirecring to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
 						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?multi");
-						break;
+						die();
 				}
 			}
 			else {
@@ -324,6 +324,7 @@ class APPcelerate {
 				if (!(strpos($_SERVER['REQUEST_URI'],"/login/")) and !(strpos($_SERVER['REQUEST_URI'],"/logout/"))) {
 					$this->doLog("[SECURITY] redirecring to ". $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
 					header("Location: " . $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
+					die();
 				}
 			}
 		}
