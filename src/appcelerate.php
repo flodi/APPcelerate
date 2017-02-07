@@ -305,15 +305,15 @@ class APPcelerate {
 							$this->app["locale"]=$rs1->fetch_row()[0];
 							$_SESSION[$this->app["name"]."_ap_locale"]=$this->app['locale'];
 						}
-						$this->doLog("[SECURITY] redirecring to ".$this->app["base_url"]."/".$this->app["name"]."/");
+						$this->doLog("[SECURITY] redirecting to ".$this->app["base_url"]."/".$this->app["name"]."/");
 						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/");
 						die();
 					case 0:
-						$this->doLog("[SECURITY] redirecring to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
+						$this->doLog("[SECURITY] redirecting to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
 						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
 						die();
 					default:
-						$this->doLog("[SECURITY] redirecring to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
+						$this->doLog("[SECURITY] redirecting to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
 						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?multi");
 						die();
 				}
@@ -322,7 +322,7 @@ class APPcelerate {
 				unset($this->app['uid']);
 				unset($this->app['uname']);
 				if (!(strpos($_SERVER['REQUEST_URI'],"/login/")) and !(strpos($_SERVER['REQUEST_URI'],"/logout/"))) {
-					$this->doLog("[SECURITY] redirecring to ". $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
+					$this->doLog("[SECURITY] redirecting to ". $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
 					header("Location: " . $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
 					die();
 				}
