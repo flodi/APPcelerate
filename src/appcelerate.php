@@ -143,7 +143,7 @@ class APPcelerate {
 
 	public function sqlError($recordset,$query) {
 		if (!$recordset) {
-			doLog("Failed SQL query - Query => $query, Error => ".$this->app["db_".$this->app["name"]]->error);
+			$this->doLog("Failed SQL query - Query => $query, Error => ".$this->app["db_".$this->app["name"]]->error);
 			die("Database error, please contact support\n");
 		}
 	}
@@ -181,7 +181,7 @@ class APPcelerate {
 	
 	public function getString($token) {
 		foreach ($this->app["apps"] as $app_name) {
-			$sql="select string from strings where token='$token' and id_language=(select id from languages where locale='".$thi->app["locale"]."')";
+			$sql="select string from strings where token='$token' and id_language=(select id from languages where locale='".$this->app["locale"]."')";
 			$rs=$this->app["db_".$app_name]->query($sql);
 			if (!$rs) {
 				$this->sqlError($rs,$sql);
