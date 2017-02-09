@@ -39,6 +39,8 @@ CREATE TABLE `users` (
   CONSTRAINT `fk_accessi` FOREIGN KEY (`id_language`) REFERENCES `languages` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=latin1;
 
-INSERT INTO `eventi`.`countries` (id, nome, locale) VALUES (0,"Italia","IT")
+SET SESSION SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 
-INSERT INTO `eventi`.`languages` (id_country, locale) VALUES (0,"IT")
+INSERT INTO `countries` (id, nome, locale) VALUES (0,"Italia","IT");
+
+INSERT INTO `languages` (id_country, locale) VALUES (0,"IT");
