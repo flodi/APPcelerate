@@ -84,6 +84,8 @@ class APPcelerate {
 	
 		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
 	
+		$this->app["accounts"]=getenv('ACCOUNTS');
+
 		# Define Additional templates
 		foreach ($this->app["apps"] as $app_name) {
 			$add_tpl=getenv('ADD_TPL_'.$app_name);
@@ -284,7 +286,7 @@ class APPcelerate {
 	public function doSecurity() {
 
 		if (!empty($_SESSION[$this->app["name"]."_ap_uid"])) {
-			doLog("Session uid not empty");
+			$this->doLog("Session uid not empty");
 			$this->app['uid']=$_SESSION[$this->app["name"]."_ap_uid"];
 			$this->app['uname']=$_SESSION[$this->app["name"]."_ap_uname"];
 			if(array_key_exists($this->app["name"]."_ap_locale", $_SESSION)) {
@@ -292,9 +294,9 @@ class APPcelerate {
 			}
 		}
 		else {
-			doLog("Session uid empty");
+			$this->doLog("Session uid empty");
 			if (!empty($_REQUEST["login"]) and !empty($_REQUEST["password"])) {
-				doLog("Requested login for ".$_REQUEST["login"]." / ".$_REQUEST["password"]);
+				$this->doLog("Requested login for ".$_REQUEST["login"]." / ".$_REQUEST["password"]);
 				$sql="select id from users where app='". $this->app["name"] ."' and login='" . $_REQUEST["login"] . "' and pwd='" . $_REQUEST["password"] . "'";
 				$rs=$this->app["db_".$this->app["name"]]->query($sql);
 				$this->sqlError($rs,$sql);
@@ -326,11 +328,11 @@ class APPcelerate {
 				}
 			}
 			else {
-				doLog("No Request login data found");
+				$this->doLog("No Request login data found");
 				unset($this->app['uid']);
 				unset($this->app['uname']);
 				if (!(strpos($_SERVER['REQUEST_URI'],"/login/")) and !(strpos($_SERVER['REQUEST_URI'],"/logout/"))) {
-					doLog("Not login or logout page => Security Error");
+					$this->doLog("Not login or logout page => Security Error");
 					$this->doLog("[SECURITY] redirecting to ". $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
 					header("Location: " . $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
 					die();
@@ -394,8 +396,14 @@ class APPcelerate {
 			// Security
 			//
 			//
-			$this->doLog("Doing Security ".json_encode($_SESSION));
-			$this->doSecurity();
+			if ($this->app["accounts"]) {
+				$this->doLog("Doing Security ".json_encode($_SESSION));
+				$this->doLog("Accounts Active");
+				$this->doSecurity();
+			}
+			else {
+				$this->doLog("Accounts Not Active");
+			}
 			
 			//
 			// Init app variables
