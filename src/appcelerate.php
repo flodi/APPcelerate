@@ -86,6 +86,8 @@ class APPcelerate {
 	
 		$this->app["accounts"]=getenv('ACCOUNTS');
 
+		$this->app["loglevel"]=getenv('LOGLEVEL');
+
 		# Define Additional templates
 		foreach ($this->app["apps"] as $app_name) {
 			$add_tpl=getenv('ADD_TPL_'.$app_name);
@@ -103,7 +105,15 @@ class APPcelerate {
 		$output = "%datetime% ; %level_name% ; %message% ; %context%\n";
 		$formatter = new Monolog\Formatter\LineFormatter($output, $dateFormat);
 		
-		$mainstream=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/appcelerate.log", Monolog\Logger::DEBUG);
+		switch($this->app["loglevel"]) {
+			case "info":
+				$ll=Monolog\Logger::INFO;
+				break;
+			default:
+				$ll=Monolog\Logger::DEBUG;
+		}
+		
+		$mainstream=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/appcelerate.log", $ll);
 		$mainstream->setFormatter($formatter);
 		
 		$this->app["main_logger"]->pushHandler($mainstream);
