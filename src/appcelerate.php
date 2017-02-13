@@ -224,23 +224,27 @@ class APPcelerate {
 				$file.=".css";
 				break;
 		}
-		
-		$include="";
-			
-		if (file_exists($this->app["base_path"].$file)) {
+					
+		if (file_exists($app["base_path"].$file)) {
 			
 			switch($type) {
 				case "js":
-					$include="<script src=\"".$this->app["base_url"].$file."\"></script>";
+					$tag="script";
 					break;
 				case "css":
-					$include="<link rel=\"stylesheet\" href=\"".$this->app["base_url"].$file."\">";
+					$tag="style";
 					break;
 			}
 			
+			$c="<$tag>\n";
+			$c.=file_get_contents($app["base_path"].$file);
+			$c.="</$tag>\n";
+			$app["TBS"]->Source.=$c;
+			$app["TBS"]->LoadTemplate(null);
+	
 		}
 	
-		return($include);
+		return("");
 		
 	}
 	
