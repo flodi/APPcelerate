@@ -284,6 +284,7 @@ class APPcelerate {
 	public function doSecurity() {
 
 		if (!empty($_SESSION[$this->app["name"]."_ap_uid"])) {
+			doLog("Session uid not empty");
 			$this->app['uid']=$_SESSION[$this->app["name"]."_ap_uid"];
 			$this->app['uname']=$_SESSION[$this->app["name"]."_ap_uname"];
 			if(array_key_exists($this->app["name"]."_ap_locale", $_SESSION)) {
@@ -291,7 +292,9 @@ class APPcelerate {
 			}
 		}
 		else {
+			doLog("Session uid empty");
 			if (!empty($_REQUEST["login"]) and !empty($_REQUEST["password"])) {
+				doLog("Requested login for ".$_REQUEST["login"]." / ".$_REQUEST["password"]);
 				$sql="select id from users where app='". $this->app["name"] ."' and login='" . $_REQUEST["login"] . "' and pwd='" . $_REQUEST["password"] . "'";
 				$rs=$this->app["db_".$this->app["name"]]->query($sql);
 				$this->sqlError($rs,$sql);
@@ -323,9 +326,11 @@ class APPcelerate {
 				}
 			}
 			else {
+				doLog("No Request login data found");
 				unset($this->app['uid']);
 				unset($this->app['uname']);
 				if (!(strpos($_SERVER['REQUEST_URI'],"/login/")) and !(strpos($_SERVER['REQUEST_URI'],"/logout/"))) {
+					doLog("Not login or logout page => Security Error");
 					$this->doLog("[SECURITY] redirecting to ". $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
 					header("Location: " . $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
 					die();
