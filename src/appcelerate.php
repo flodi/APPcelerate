@@ -237,7 +237,7 @@ class APPcelerate {
 			}
 			
 			$c="<$tag>\n";
-			$c.=file_get_contents($app["base_path"].$file);
+			$c.=file_get_contents($this->app["base_path"].$file);
 			$c.="</$tag>\n";
 			$app["TBS"]->Source.=$c;
 			$app["TBS"]->LoadTemplate(null);
