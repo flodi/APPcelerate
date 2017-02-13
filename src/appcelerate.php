@@ -121,7 +121,7 @@ class APPcelerate {
 		# Apps Log
 		foreach ($this->app["apps"] as $app_name) {
 			$this->app[$app_name."_logger"]=new Monolog\Logger($app_name);
-			$this->app[$app_name."_log_stream"]=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/".$app_name.".log", Monolog\Logger::DEBUG);
+			$this->app[$app_name."_log_stream"]=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/".$app_name.".log", $ll);
 			$this->app[$app_name."_log_stream"]->setFormatter($formatter);
 			$this->app[$app_name."_logger"]->pushHandler($this->app[$app_name."_log_stream"]);
 		}
