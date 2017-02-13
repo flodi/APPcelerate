@@ -225,7 +225,7 @@ class APPcelerate {
 				break;
 		}
 					
-		if (file_exists($app["base_path"].$file)) {
+		if (file_exists($this->app["base_path"].$file)) {
 			
 			switch($type) {
 				case "js":
