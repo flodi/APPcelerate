@@ -283,7 +283,7 @@ class APPcelerate {
 			}
 		}
 		
-		return();
+		return(NULL);
 		
 	}
 	
