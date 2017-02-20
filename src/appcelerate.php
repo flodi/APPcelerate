@@ -340,6 +340,12 @@ class APPcelerate {
 		}
 		else {
 			$this->doLog("Session uid empty");
+			if (!empty($_REQUEST["sso"])) {
+				$this->doLog("SSO requested");
+				list($login,$password)=explode("§",base64_decode($_REQUEST["sso"]>));
+				$_REQUEST["login"]=$login;
+				$_REQUEST["password"]=$password;
+			}
 			if (!empty($_REQUEST["login"]) and !empty($_REQUEST["password"])) {
 				$this->doLog("Requested login for ".$_REQUEST["login"]." / ".$_REQUEST["password"]);
 				$sql="select id from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "' and pwd='" . $_REQUEST["password"] . "'";
