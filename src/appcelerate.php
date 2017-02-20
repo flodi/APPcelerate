@@ -342,7 +342,7 @@ class APPcelerate {
 			$this->doLog("Session uid empty");
 			if (!empty($_REQUEST["sso"])) {
 				$this->doLog("SSO requested");
-				list($login,$password)=explode("§",base64_decode($_REQUEST["sso"]>));
+				list($login,$password)=explode("§",base64_decode($_REQUEST["sso"]));
 				$_REQUEST["login"]=$login;
 				$_REQUEST["password"]=$password;
 			}
