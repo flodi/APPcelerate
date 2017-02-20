@@ -205,7 +205,7 @@ class APPcelerate {
 		if ($mode==="std") {
 			switch($type) {
 				case "js":
-					echo <<<END
+					$c='
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-2.2.0.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-ui.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap.min.js"></script>
@@ -215,10 +215,10 @@ class APPcelerate {
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.keepFormData.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.simple-popup.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.form.js"></script>
-					END;
+					';
 					break;
 				case "css":
-					echo <<<END
+					$c='
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.structure.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.theme.min.css">
@@ -230,11 +230,11 @@ class APPcelerate {
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/parsley.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.simple-popup.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.simple-popup.settings.css">
-					END;
+					';
 					break;					
 			}
 			
-			return;
+			return($c);
 
 		}
 		else {
