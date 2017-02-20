@@ -205,7 +205,7 @@ class APPcelerate {
 		if ($mode==="std") {
 			switch($type) {
 				case "js":
-					echo <<<END
+					echo <<END
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-2.2.0.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-ui.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap.min.js"></script>
@@ -218,7 +218,7 @@ class APPcelerate {
 					END;
 					break;
 				case "css":
-					echo <<<END
+					echo <<END
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.structure.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.theme.min.css">
@@ -233,6 +233,8 @@ class APPcelerate {
 					END;
 					break;					
 			}
+			
+			return;
 
 		}
 		else {
@@ -276,16 +278,12 @@ class APPcelerate {
 						break;
 				}
 			
-				$c="<$tag>\n";
-				$c.=file_get_contents($this->app["base_path"].$file);
-				$c.="</$tag>\n";
-				$app["TBS"]->Source.=$c;
-				$app["TBS"]->LoadTemplate(null);
-		
+				$c=file_get_contents($this->app["base_path"].$file);
+				return($c);		
 			}
 		}
 		
-		return("");
+		return();
 		
 	}
 	
