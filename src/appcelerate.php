@@ -201,54 +201,90 @@ class APPcelerate {
 	
 	public function getInclude($type,$params) {
 		$mode=$params["mode"];
-		$file="/include/";
 		
-		switch($type) {
-			case "js":
-				$file.="js/";
-				break;
-			case "css":
-				$file.="css/";
-				break;
-		}
-		
-		switch($mode) {
-			case "app":
-				$file.=$this->app["name"];
-				break;
-			case "section":
-				$file.=$this->app["name"]."_".$this->app["section"];
-				break;
-		}
-	
-		switch($type) {
-			case "js":
-				$file.=".js";
-				break;
-			case "css":
-				$file.=".css";
-				break;
-		}
-					
-		if (file_exists($this->app["base_path"].$file)) {
-			
+		if ($mode==="std") {
 			switch($type) {
 				case "js":
-					$tag="script";
+					echo <<<END
+		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-2.2.0.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-ui.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.bdt.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/parsley.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/i18n/it.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.keepFormData.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.simple-popup.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.form.js"></script>
+					END;
 					break;
 				case "css":
-					$tag="style";
+					echo <<<END
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.min.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.structure.min.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.theme.min.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap-theme.min.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.bdt.min.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/font-awesome.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/icomoon.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/parsley.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.simple-popup.min.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.simple-popup.settings.css">
+					END;
+					break;					
+			}
+
+		}
+		else {
+			$file="/include/";
+		
+			switch($type) {
+				case "js":
+					$file.="js/";
+					break;
+				case "css":
+					$file.="css/";
 					break;
 			}
+		
+			switch($mode) {
+				case "app":
+					$file.=$this->app["name"];
+					break;
+				case "section":
+					$file.=$this->app["name"]."_".$this->app["section"];
+					break;
+			}
+	
+			switch($type) {
+				case "js":
+					$file.=".js";
+					break;
+				case "css":
+					$file.=".css";
+					break;
+			}
+					
+			if (file_exists($this->app["base_path"].$file)) {
 			
-			$c="<$tag>\n";
-			$c.=file_get_contents($this->app["base_path"].$file);
-			$c.="</$tag>\n";
-			$app["TBS"]->Source.=$c;
-			$app["TBS"]->LoadTemplate(null);
-	
+				switch($type) {
+					case "js":
+						$tag="script";
+						break;
+					case "css":
+						$tag="style";
+						break;
+				}
+			
+				$c="<$tag>\n";
+				$c.=file_get_contents($this->app["base_path"].$file);
+				$c.="</$tag>\n";
+				$app["TBS"]->Source.=$c;
+				$app["TBS"]->LoadTemplate(null);
+		
+			}
 		}
-	
+		
 		return("");
 		
 	}
