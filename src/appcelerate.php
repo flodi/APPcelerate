@@ -198,6 +198,16 @@ class APPcelerate {
 		return($token);
 	
 	}
+
+	public function genSSO($token) {
+		$uid=$_SESSION[$token."_ap_uid"];
+		$sql="select login,pwd from users where id=$uid";
+		$rs=$this->app["db_".$token]->query($sql);
+		$this->sqlError($rs,$sql);
+		($login,$password)=$rs->fetch_array();
+		$sso=base64_encode($login."§".$password);
+		return("?sso="$sso);
+	}
 	
 	public function getInclude($type,$params) {
 		$mode=$params["mode"];
@@ -332,7 +342,7 @@ class APPcelerate {
 			$this->doLog("Session uid empty");
 			if (!empty($_REQUEST["login"]) and !empty($_REQUEST["password"])) {
 				$this->doLog("Requested login for ".$_REQUEST["login"]." / ".$_REQUEST["password"]);
-				$sql="select id from users where app='". $this->app["name"] ."' and login='" . $_REQUEST["login"] . "' and pwd='" . $_REQUEST["password"] . "'";
+				$sql="select id from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "' and pwd='" . $_REQUEST["password"] . "'";
 				$rs=$this->app["db_".$this->app["name"]]->query($sql);
 				$this->sqlError($rs,$sql);
 				switch ($rs->num_rows) {
@@ -577,6 +587,7 @@ class APPcelerate {
 				$this->app["TBS"]->ObjectRef['my_obj'] = $this;
 				$this->app["TBS"]->MergeField('tokens', '~my_obj.getString', true);
 				$this->app["TBS"]->MergeField('include', '~my_obj.getInclude', true);
+				$this->app["TBS"]->MergeField('sso', '~my_obj.genSSO', true);
 		
 				$this->app["TBS"]->SetOption('render',TBS_OUTPUT);
 				$this->app["TBS"]->Show();
