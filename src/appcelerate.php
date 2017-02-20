@@ -200,13 +200,17 @@ class APPcelerate {
 	}
 
 	public function genSSO($token) {
-		$uid=$_SESSION[$token."_ap_uid"];
-		$sql="select login,pwd from users where id=$uid";
-		$rs=$this->app["db_".$token]->query($sql);
-		$this->sqlError($rs,$sql);
-		list($login,$password)=$rs->fetch_array(MYSQLI_NUM);
-		$sso=base64_encode($login."§".$password);
-		return("?sso=".$sso);
+		if (array_key_exists($token."_ap_uid",$_SESSION)) {
+			$uid=$_SESSION[$token."_ap_uid"];
+			$sql="select login,pwd from users where id=$uid";
+			$rs=$this->app["db_".$token]->query($sql);
+			$this->sqlError($rs,$sql);
+			list($login,$password)=$rs->fetch_array(MYSQLI_NUM);
+			$sso=base64_encode($login."§".$password);
+			return("?sso=".$sso);
+		else {
+			return("");
+		}
 	}
 	
 	public function getInclude($type,$params) {
