@@ -343,7 +343,7 @@ class APPcelerate {
 						$_SESSION[$this->app["name"]."_ap_uid"]=$this->app['uid'];
 						$_SESSION[$this->app["name"]."_ap_uname"]=$this->app['uname'];
 						$sql="select locale from languages where id=(select id_language from users where id=".$this->app["uid"].")";
-						$rs1=$$this->app["db_".$this->app["name"]]->query($sql);
+						$rs1=$this->app["db_".$this->app["name"]]->query($sql);
 						$this->sqlError($rs1,$sql);
 						if ($rs1->num_rows!=0) {
 							$this->app["locale"]=$rs1->fetch_row()[0];
