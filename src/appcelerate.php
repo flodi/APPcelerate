@@ -196,7 +196,6 @@ class APPcelerate {
 			}
 		}
 		return($token);
-	
 	}
 
 	public function genSSO($token) {
@@ -208,6 +207,7 @@ class APPcelerate {
 			list($login,$password)=$rs->fetch_array(MYSQLI_NUM);
 			$sso=base64_encode($login."§".$password);
 			return("?sso=".$sso);
+		}
 		else {
 			return("");
 		}
