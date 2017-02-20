@@ -204,7 +204,7 @@ class APPcelerate {
 		$sql="select login,pwd from users where id=$uid";
 		$rs=$this->app["db_".$token]->query($sql);
 		$this->sqlError($rs,$sql);
-		($login,$password)=$rs->fetch_array();
+		list($login,$password)=$rs->fetch_array();
 		$sso=base64_encode($login."§".$password);
 		return("?sso="$sso);
 	}
