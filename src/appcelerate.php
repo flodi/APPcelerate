@@ -277,9 +277,7 @@ class APPcelerate {
 						$tag="style";
 						break;
 				}
-			
-				$c=file_get_contents($this->app["base_path"].$file);
-				return($c);		
+				return($this->app["base_path"].$file);		
 			}
 		}
 		
