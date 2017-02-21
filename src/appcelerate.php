@@ -450,7 +450,6 @@ class APPcelerate {
 			//
 			// Security
 			//
-			//
 			if ($this->app["accounts"]) {
 				$this->doLog("Doing Security ".json_encode($_SESSION));
 				$this->doLog("Accounts Active");
@@ -458,6 +457,13 @@ class APPcelerate {
 			}
 			else {
 				$this->doLog("Accounts Not Active");
+			}
+			
+			//
+			// Set Locale
+			//
+			if (!setlocale(LC_ALL,$this->app['locale'])) {
+				setlocale(LC_ALL,"it_IT");
 			}
 			
 			//
