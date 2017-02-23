@@ -229,6 +229,7 @@ class APPcelerate {
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.keepFormData.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.simple-popup.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.form.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.treetable.js"></script>
 					';
 					break;
 				case "css":
@@ -242,6 +243,8 @@ class APPcelerate {
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/font-awesome.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/icomoon.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/parsley.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.treetable.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.treetable.theme.default.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.simple-popup.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.simple-popup.settings.css">
 					';
