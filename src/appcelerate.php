@@ -223,7 +223,6 @@ class APPcelerate {
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-2.2.0.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-ui.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.bdt.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/parsley.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/i18n/it.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.keepFormData.min.js"></script>
@@ -239,7 +238,6 @@ class APPcelerate {
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.theme.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap-theme.min.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.bdt.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/font-awesome.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/icomoon.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/parsley.css">
