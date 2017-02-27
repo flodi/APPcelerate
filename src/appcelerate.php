@@ -581,12 +581,14 @@ class APPcelerate {
 		
 				if(array_key_exists("tail_blocks", $this->app)) {
 					foreach($this->app["tail_blocks"] as $block_name => $block_data) {
+						doLog("Merging Tail Block $block_name",$block_data);
 						$this->app["TBS"]->MergeBlock("$block_name",$block_data);
 					}
 				}
 		
 				if(array_key_exists("tail_fields", $this->app)) {
 					foreach($this->app["tail_fields"] as $field_name => $field_data) {
+						doLog("Merging Tail Field $field_name",$field_data);
 						$this->app["TBS"]->MergeField("$field_name",$field_data);
 					}
 				}
