@@ -313,20 +313,10 @@ class APPcelerate {
 	public function addMerge($type,$field,$var) {
 		switch ($type) {
 			case "block":
-					if (array_key_exists("bmerge", $this->app)) {
-						$this->app["bmerge"].="|$field;$var";
-					}
-					else {
-						$this->app["bmerge"]="$field;$var";
-					}
+				$this->app["bmerge"][$field]=$var;
 				break;
 			case "field":
-					if (array_key_exists("merge", $this->app)) {
-						$this->app["merge"].="|$field;$var";
-					}
-					else {
-						$this->app["merge"]="$field;$var";
-					}
+				$this->app["bmerge"][$field]=$var;
 				break;
 			default:
 				die("addMerge called with wrong type - $type");
