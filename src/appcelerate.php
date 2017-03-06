@@ -452,7 +452,7 @@ class APPcelerate {
 			//
 			// Security
 			//
-			if ($this->app["accounts"]) {
+			if ($this->app["accounts"] or $this->app["accounts_exception"][$app_name]) {
 				$this->doLog("Doing Security ".json_encode($_SESSION));
 				$this->doLog("Accounts Active");
 				$this->doSecurity();
