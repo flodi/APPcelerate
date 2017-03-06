@@ -96,6 +96,17 @@ class APPcelerate {
 			}
 		}
 
+		# Define Accounts exception
+		foreach ($this->app["apps"] as $app_name) {
+			$add_tpl=getenv('ACCOUNT_'.$app_name);
+			if ($add_tpl==="N") {
+				$this->app["accounts_exception"][$app_name]=0;
+			}
+			else if ($add_tpl==="Y") {
+				$this->app["accounts_exception"][$app_name]=1;
+			}
+		}
+
 		//
 		// Init Log
 		//		
