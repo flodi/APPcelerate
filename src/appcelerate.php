@@ -84,17 +84,16 @@ class APPcelerate {
 	
 		$this->app["loglevel"]=getenv('LOGLEVEL');
 
+		#Default template folders
 		foreach ($this->app["apps"] as $app_name) {
 			$app_path=$base_path."/apps/$app_name";
-			$views_path=$base_path."/apps/$app_name/views";
-			$home_path=$base_path."/apps/$app_name/home/views";
+			$views_path=$base_path."/apps/$app_name/templates";
+			$home_path=$base_path."/apps/$app_name/home/templates";
 			$include_path=$base_path."/include";
 			if (set_include_path(get_include_path().PATH_SEPARATOR.$app_path.PATH_SEPARATOR.$views_path.PATH_SEPARATOR.$home_path)==false) {
 				die("Cannot set include path.");
 			}
 		}
-
-
 
 		# Define Additional templates
 		foreach ($this->app["apps"] as $app_name) {
