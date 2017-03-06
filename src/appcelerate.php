@@ -57,11 +57,9 @@ class APPcelerate {
 		
 		$fwpath=__DIR__;
 
-		$views_path=$base_path."/views";
 		$vendor_path=$base_path."/vendor";
-		$include_path=$base_path."/include";
 
-		if (set_include_path(get_include_path().PATH_SEPARATOR.$include_path.PATH_SEPARATOR.$vendor_path.PATH_SEPARATOR.$views_path.PATH_SEPARATOR.$fwpath)==false) {
+		if (set_include_path(get_include_path().PATH_SEPARATOR.$vendor_path.PATH_SEPARATOR.$fwpath)==false) {
 			die("Cannot set include path.");
 		}
 
@@ -85,6 +83,18 @@ class APPcelerate {
 		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
 	
 		$this->app["loglevel"]=getenv('LOGLEVEL');
+
+		foreach ($this->app["apps"] as $app_name) {
+			$app_path=$base_path."/apps/$app_name";
+			$views_path=$base_path."/apps/$app_name/views";
+			$home_path=$base_path."/apps/$app_name/home/views";
+			$include_path=$base_path."/include";
+			if (set_include_path(get_include_path().PATH_SEPARATOR.$app_path.PATH_SEPARATOR.$views_path.PATH_SEPARATOR.$home_path)==false) {
+				die("Cannot set include path.");
+			}
+		}
+
+
 
 		# Define Additional templates
 		foreach ($this->app["apps"] as $app_name) {
