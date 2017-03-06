@@ -84,8 +84,6 @@ class APPcelerate {
 	
 		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
 	
-		$this->app["accounts"]=getenv('ACCOUNTS');
-
 		$this->app["loglevel"]=getenv('LOGLEVEL');
 
 		# Define Additional templates
@@ -100,10 +98,10 @@ class APPcelerate {
 		foreach ($this->app["apps"] as $app_name) {
 			$add_tpl=getenv('ACCOUNT_'.$app_name);
 			if ($add_tpl==="N") {
-				$this->app["accounts_exception"][$app_name]=0;
+				$this->app["accounts"][$app_name]=false;
 			}
 			else if ($add_tpl==="Y") {
-				$this->app["accounts_exception"][$app_name]=1;
+				$this->app["accounts"][$app_name]=true;
 			}
 		}
 
@@ -452,7 +450,7 @@ class APPcelerate {
 			//
 			// Security
 			//
-			if ($this->app["accounts"] or $this->app["accounts_exception"][$app_name]) {
+			if ($this->app["accounts"][$app_name]) {
 				$this->doLog("Doing Security ".json_encode($_SESSION));
 				$this->doLog("Accounts Active");
 				$this->doSecurity();
