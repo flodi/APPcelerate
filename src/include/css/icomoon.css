@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'icomoon';
-	src:url('http://new.b2b.momo.it/include/fonts/icomoon.eot');
-	src:url('http://new.b2b.momo.it/include/fonts/icomoon.eot?#iefix') format('embedded-opentype'),
-		url('http://new.b2b.momo.it/include/fonts/icomoon.woff') format('woff'),
-		url('http://new.b2b.momo.it/include/fonts/icomoon.ttf') format('truetype'),
-		url('http://new.b2b.momo.it/include/fonts/icomoon.svg#icomoon') format('svg');
+	src:url('../icomoon.eot');
+	src:url('../icomoon.eot?#iefix') format('embedded-opentype'),
+		url('../icomoon.woff') format('woff'),
+		url('../icomoon.ttf') format('truetype'),
+		url('../icomoon.svg#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
