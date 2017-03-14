@@ -210,7 +210,7 @@ class APPcelerate {
 				$this->sqlError($rs,$sql);
 			}
 			if ($rs->num_rows!=0) {
-				return (utf8_encode($rs->fetch_array()[0]));
+				return (htmlentities(utf8_encode($rs->fetch_array()[0])));
 			}
 		}
 		return($token);
@@ -509,7 +509,7 @@ class APPcelerate {
 				include_once($sec_vws_path."init.php");
 			}
 		
-			if (!$this->app["skipui"]) {
+			if ($this->app["skipui"]==false) {
 		
 				//
 				// Include app header template (if exists)
