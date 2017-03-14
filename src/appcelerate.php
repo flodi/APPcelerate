@@ -511,6 +511,8 @@ class APPcelerate {
 		
 			if ($this->app["skipui"]==false) {
 		
+				header('Content-type: text/html; charset=UTF-8');
+
 				//
 				// Include app header template (if exists)
 				//
