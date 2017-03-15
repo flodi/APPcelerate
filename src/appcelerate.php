@@ -333,7 +333,7 @@ class APPcelerate {
 				$this->app["tail_blocks"][$field]=$var;
 				break;
 			case "field":
-				$this->app["tail_fieldss"][$field]=$var;
+				$this->app["tail_fields"][$field]=$var;
 				break;
 			default:
 				die("addMerge called with wrong type - $type");
