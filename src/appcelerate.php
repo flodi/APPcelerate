@@ -60,7 +60,7 @@ class APPcelerate {
 		$vendor_path=$base_path."/vendor";
 		$include_path=$base_path."/include";
 
-		if (set_include_path(get_include_path().PATH_SEPARATOR.$vendor_path.PATH_SEPARATOR.PATH_SEPARATOR.$include_path.$fwpath)==false) {
+		if (set_include_path(get_include_path().PATH_SEPARATOR.$vendor_path.PATH_SEPARATOR.$include_path.PATH_SEPARATOR.$fwpath)==false) {
 			die("Cannot set include path.");
 		}
 
