@@ -566,6 +566,9 @@ class APPcelerate {
 				$this->doLog("Executing section ".$this->app["name"]."/".$this->app["section"],$this::L_INFO);
 				include_once($sec_vws_path."main.php");
 			}
+			else {
+				$this->doLog("Section main.php for ".$this->app["name"]."/".$this->app["section"]." not found",$this::L_INFO);
+			}
 		
 			if (!$this->app["skipui"]) {
 		
