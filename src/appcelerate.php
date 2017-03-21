@@ -406,6 +406,24 @@ class APPcelerate {
 
 	}
 	
+	public function checkRequest($reqs,$vars) {
+		$vals=array();
+		foreach ($reqs as $req) {
+			if (!array_key_exists($req,$_REQUEST)) {
+				return false;
+			}
+			else {
+				$vals["$req"]=$_REQUEST["$req"];
+			}
+		}
+		foreach ($vars as $var) {
+			if (array_key_exists($var,$_REQUEST)) {
+				$vals["$var"]=$_REQUEST["$var"];
+			}
+		}
+		return $vals;
+	}
+
 	public function map($method,$route,$name) {
 		$this->app["router"]->map($method,$route,$name);
 	}
