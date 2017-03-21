@@ -341,6 +341,14 @@ class APPcelerate {
 		}
 	}
 	
+	public function logged($app) {
+		if (!empty($_SESSION[$app."_ap_uid"])) {
+			return (true);
+		}
+		return (false);
+
+	}
+
 	public function doSecurity() {
 
 		if (!empty($_SESSION[$this->app["name"]."_ap_uid"])) {
