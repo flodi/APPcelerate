@@ -359,6 +359,13 @@ class APPcelerate {
 			$this->doLog("Session uid not empty");
 			$this->app['uid']=$_SESSION[$this->app["name"]."_ap_uid"];
 			$this->app['uname']=$_SESSION[$this->app["name"]."_ap_uname"];
+
+			$sql="select pwd from users where id=".$this->app['uid'];
+			$rs=$this->app["db_".$this->app["name"]]->query($sql);
+			$this->sqlError($rs,$sql);
+
+			$this->app['upwd']=$rs->fetch_row(MYSQLI_NUM)[0];
+
 			if(array_key_exists($this->app["name"]."_ap_locale", $_SESSION)) {
 				$this->app['locale']=$_SESSION[$this->app["name"]."_ap_locale"];
 			}
@@ -382,7 +389,6 @@ class APPcelerate {
 						$this->app['uid']=$row[0];
 						$this->app['uname']=$_REQUEST["login"];
 						$this->app['upwd']=$_REQUEST["password"];
-						$this->doLog("=======>".$this->app['upwd']);
 						$_SESSION[$this->app["name"]."_ap_uid"]=$this->app['uid'];
 						$_SESSION[$this->app["name"]."_ap_uname"]=$this->app['uname'];
 						$sql="select locale from languages where id=(select id_language from users where id=".$this->app["uid"].")";
