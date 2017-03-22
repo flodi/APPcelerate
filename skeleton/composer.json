@@ -1,0 +1,12 @@
+{
+	"config": {
+		"secure-http":false
+	},
+	"require": {
+		"flodi/appcelerate":"*",
+		"dompdf/dompdf":"0.7.x@beta",
+		"daniel-zahariev/php-aws-ses":"*",
+		"sentry/sentry":"*"
+	},
+	"minimum-stability":"dev"
+}
