@@ -323,6 +323,10 @@ class APPcelerate {
 		header("Location: ".$this->app["base_url"]."/");
 		die();
 	}
+
+	public function urlEncode($url) {
+		return urlencode($url);
+	}
 	
 	public function stringForHTML($field,&$value) {	
 		$value=utf8_encode($value);
@@ -644,6 +648,7 @@ class APPcelerate {
 				
 				$this->app["TBS"]->ObjectRef['my_obj'] = $this;
 				$this->app["TBS"]->MergeField('tokens', '~my_obj.getString', true);
+				$this->app["TBS"]->MergeField('urlencode', '~my_obj.urlEncode', true);
 				$this->app["TBS"]->MergeField('include', '~my_obj.getInclude', true);
 				$this->app["TBS"]->MergeField('sso', '~my_obj.genSSO', true);
 		
