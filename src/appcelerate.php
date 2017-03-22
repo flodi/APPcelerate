@@ -364,7 +364,7 @@ class APPcelerate {
 			$rs=$this->app["db_".$this->app["name"]]->query($sql);
 			$this->sqlError($rs,$sql);
 
-			$this->app['upwd']=$rs->fetch_row(MYSQLI_NUM)[0];
+			$this->app['upwd']=$rs->fetch_array(MYSQLI_NUM)[0];
 
 			if(array_key_exists($this->app["name"]."_ap_locale", $_SESSION)) {
 				$this->app['locale']=$_SESSION[$this->app["name"]."_ap_locale"];
