@@ -85,6 +85,8 @@ class APPcelerate {
 	
 		$this->app["loglevel"]=getenv('LOGLEVEL');
 
+		$this->app["from_email"]=getenv('FROM_EMAIL');
+
 		#Default template folders
 		foreach ($this->app["apps"] as $app_name) {
 			$app_path=$base_path."/apps/$app_name";
@@ -364,7 +366,8 @@ class APPcelerate {
 			$rs=$this->app["db_".$this->app["name"]]->query($sql);
 			$this->sqlError($rs,$sql);
 
-			$this->app['upwd']=$rs->fetch_array(MYSQLI_NUM)[0];
+			$this->app['upwd']=$rs->fetch_array
+			(MYSQLI_NUM)[0];
 
 			if(array_key_exists($this->app["name"]."_ap_locale", $_SESSION)) {
 				$this->app['locale']=$_SESSION[$this->app["name"]."_ap_locale"];
