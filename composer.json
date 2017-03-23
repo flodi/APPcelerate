@@ -6,7 +6,6 @@
     "require": {
         "vlucas/phpdotenv": "*",
         "monolog/monolog": "*",
-        "phpoption/phpoption": "*",
         "php-console/php-console": "*",
         "tinybutstrong/tinybutstrong": "*",
         "altorouter/altorouter": "*"
