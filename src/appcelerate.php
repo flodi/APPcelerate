@@ -85,6 +85,11 @@ class APPcelerate {
 	
 		$this->app["loglevel"]=getenv('LOGLEVEL');
 
+		$this->app["favicon"]=getenv('favicon');
+		if (!empty($this->app["favicon"])) {
+			$cmd=$this->app["base_path"]."/vendor/bin/favicon generate --ico-64 --ico-48 ".$this->app["base_path"]."/include/img/".$this->app["favicon"];
+		}
+
 		$this->app["from_email"]=getenv('FROM_EMAIL');
 
 		#Default template folders
@@ -266,6 +271,9 @@ class APPcelerate {
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.simple-popup.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.simple-popup.settings.css">
 					';
+					$c.=favicon(FAVICON_ENABLE_ALL,array(
+						'application_name' => $this->app["name"]
+					));
 					break;					
 			}
 			

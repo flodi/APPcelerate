@@ -8,7 +8,8 @@
         "monolog/monolog": "*",
         "php-console/php-console": "*",
         "tinybutstrong/tinybutstrong": "*",
-        "altorouter/altorouter": "*"
+        "altorouter/altorouter": "*",
+        "hieu-le/favicon" : "*"
     },
     "authors": [
         {
