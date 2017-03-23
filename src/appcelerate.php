@@ -85,9 +85,9 @@ class APPcelerate {
 	
 		$this->app["loglevel"]=getenv('LOGLEVEL');
 
-		$this->app["favicon"]=getenv('favicon');
+		$this->app["favicon"]=getenv('FAVICON');
 		if (!empty($this->app["favicon"])) {
-			$cmd=$this->app["base_path"]."/vendor/bin/favicon generate --ico-64 --ico-48 ".$this->app["base_path"]."/include/img/".$this->app["favicon"];
+			$cmd=$this->app["base_path"]."/vendor/bin/favicon generate --ico-64 --ico-48 ".$this->app["base_path"]."/include/img/".$this->app["favicon"]." ".$this->app["base_path"];
 		}
 
 		$this->app["from_email"]=getenv('FROM_EMAIL');
