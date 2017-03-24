@@ -374,8 +374,7 @@ class APPcelerate {
 			$rs=$this->app["db_".$this->app["name"]]->query($sql);
 			$this->sqlError($rs,$sql);
 
-			$this->app['upwd']=$rs->fetch_array
-			(MYSQLI_NUM)[0];
+			$this->app['upwd']=$rs->fetch_array(MYSQLI_NUM)[0];
 
 			if(array_key_exists($this->app["name"]."_ap_locale", $_SESSION)) {
 				$this->app['locale']=$_SESSION[$this->app["name"]."_ap_locale"];
@@ -410,6 +409,7 @@ class APPcelerate {
 							$_SESSION[$this->app["name"]."_ap_locale"]=$this->app['locale'];
 						}
 						$this->doLog("[SECURITY OK] redirecting to ".$_SERVER['REQUEST_URI']);
+						break;
 						header("Location: ".$_SERVER['REQUEST_URI']);
 						die();
 					case 0:
