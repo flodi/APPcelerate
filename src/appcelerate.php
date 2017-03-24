@@ -408,7 +408,7 @@ class APPcelerate {
 							$this->app["locale"]=$rs1->fetch_row()[0];
 							$_SESSION[$this->app["name"]."_ap_locale"]=$this->app['locale'];
 						}
-						$this->doLog("[SECURITY OK] redirecting to ".$_SERVER['REQUEST_URI']);
+						$this->doLog("[SECURITY OK] Continuing");
 						break;
 						header("Location: ".$_SERVER['REQUEST_URI']);
 						die();
