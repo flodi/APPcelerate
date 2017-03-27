@@ -21,7 +21,7 @@ class APPcelerate {
 	
 	public function doLog($msg,$level=APPcelerate::L_DEBUG) {
 	
-		if (array_key_exists("name", $this->app) and $this->app["name"]!=="init") {
+		if (isset($this->app) and  array_key_exists("name", $this->app) and $this->app["name"]!=="init") {
 			$app_name=$this->app["name"];
 		}
 		else {
