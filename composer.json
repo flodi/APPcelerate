@@ -10,7 +10,7 @@
         "tinybutstrong/tinybutstrong": "*",
         "altorouter/altorouter": "*",
         "hieu-le/favicon" : "*",
-        "phpoffice/phpexcel" : "*"
+        "nuovo/spreadsheet-reader" : "*"
     },
     "authors": [
         {

@@ -172,6 +172,83 @@ class APPcelerate {
 
 	}
 
+	//
+	// Excel Functions
+	//
+
+	public function excel2Table($file,$columns) {
+		global $_excel2TableError;
+
+		$sql="CREATE TABLE $tmptable (id INT NOT NULL AUTO_INCREMENT,";
+		foreach ($columns as $key => $value) {
+			$sql.="$value text,";
+		}
+		$sql.="PRIMARY KEY (id));";
+		$rs=$this->app["db_".$this->app["name"]]->query($sql);
+		$this->sqlError($rs,$sql);
+
+		$x = new SpreadsheetReader($file);
+		
+		$first=true;
+		foreach ($x as $r) {
+			if ($first) {
+				$first=false;
+				$colno=array();
+				$_excel2TableError="Missing Columns (";
+				foreach ($r as $no => $title) {
+					if (array_key_exists(trim($title), $columns)) {
+						$colno[$no]=$columns[$title];
+					}
+					else {
+						$_excel2TableError=$_excel2TableError." ".$columns[$title];
+					}
+				}
+				if (count(array_keys($columns))!=count(array_keys($colno))) {
+					return (false);
+				}
+				else {
+					$_excel2TableError="";
+				}
+			}
+			else {
+				$sql="insert into $tmptable (id) values (NULL)";
+				$rs=$this->app["db_".$this->app["name"]]->query($sql);
+				$err=$this->ISsqlError($rs,$sql);
+				if ($err) {
+					$_excel2TableError=$err;
+					return(false);
+				}
+				$id=$app["db_".$this->app["name"]]->insert_id;
+				foreach ($colno as $i => $col) {
+					if (array_key_exists($i, $r)) {
+						$sql="update $tmptable set $col='".$app["db_".$this->app["name"]]->escape_string($r[$i])."' where id=$id";
+						$rs=$this->app["db_".$this->app["name"]]->query($sql);
+						$err=$this->ISsqlError($rs,$sql);
+						if ($err) {
+							$_excel2TableError=$err;
+							return(false);
+						}
+					}
+				}
+			}
+		}
+
+		return (true);
+
+	}
+
+	public function ISsqlError($recordset,$query) {
+		if (!$recordset) {
+			$error=$this->app["db_".$this->app["name"]]->error;
+			$this->doLog("Failed SQL query - Query => $query, Error => ".$error);
+			return ($error);
+		}
+		else {
+			return (false);
+		}
+	}
+
+
 	public function sqlError($recordset,$query) {
 		if (!$recordset) {
 			$this->doLog("Failed SQL query - Query => $query, Error => ".$this->app["db_".$this->app["name"]]->error);
