@@ -9,7 +9,7 @@
         "php-console/php-console": "*",
         "tinybutstrong/tinybutstrong": "*",
         "altorouter/altorouter": "*",
-        "hieu-le/favicon" : "*",
+        "letrunghieu/favicon" : "*",
         "nuovo/spreadsheet-reader" : "*"
     },
     "authors": [
