@@ -9,7 +9,8 @@
         "php-console/php-console": "*",
         "tinybutstrong/tinybutstrong": "*",
         "altorouter/altorouter": "*",
-        "hieu-le/favicon" : "*"
+        "hieu-le/favicon" : "*",
+        "phpoffice/phpexcel" : "*"
     },
     "authors": [
         {
