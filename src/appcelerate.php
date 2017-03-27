@@ -185,6 +185,8 @@ class APPcelerate {
 	public function excel2Table($file,$columns) {
 		global $_excel2TableError;
 
+		$tmptable="import_ospiti_".str_replace(" ","",str_replace(".","",microtime()));
+
 		$sql="CREATE TABLE $tmptable (id INT NOT NULL AUTO_INCREMENT,";
 		foreach ($columns as $key => $value) {
 			$sql.="$value text,";
