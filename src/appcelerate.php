@@ -19,6 +19,9 @@ class APPcelerate {
 	const L_ALERT="550";
 	const L_EMERCENCY="600";
 	
+	//
+	// Logger Function
+	//
 	public function doLog($msg,$level=APPcelerate::L_DEBUG) {
 	
 		if (isset($this->app) and  array_key_exists("name", $this->app) and $this->app["name"]!=="init") {
@@ -42,6 +45,9 @@ class APPcelerate {
 		
 	}
 
+	//
+	// INIT
+	//
     public function __construct() {
 	    
 		register_shutdown_function(function() {
