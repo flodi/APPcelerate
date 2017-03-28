@@ -65,8 +65,9 @@ class APPcelerate {
 
 		$vendor_path=$base_path."/vendor";
 		$include_path=$base_path."/include";
+		$apps_path=$base_path."/apps";
 
-		if (set_include_path(get_include_path().PATH_SEPARATOR.$vendor_path.PATH_SEPARATOR.$include_path.PATH_SEPARATOR.$fwpath)==false) {
+		if (set_include_path(get_include_path().PATH_SEPARATOR.$vendor_path.PATH_SEPARATOR.$include_path.PATH_SEPARATOR.$fwpath.PATH_SEPARATOR.$apps_path)==false) {
 			die("Cannot set include path.");
 		}
 
@@ -100,12 +101,9 @@ class APPcelerate {
 
 		#Default template folders
 		foreach ($this->app["apps"] as $app_name) {
-			$apps_path=$base_path."/apps";
 			$app_path=$base_path."/apps/$app_name";
 			$views_path=$base_path."/apps/$app_name/templates";
-			$home_path=$base_path."/apps/$app_name/home/templates";
-			$include_path=$base_path."/include";
-			if (set_include_path(get_include_path().PATH_SEPARATOR.$app_path.PATH_SEPARATOR.$views_path.PATH_SEPARATOR.$home_path.PATH_SEPARATOR.$apps_path)==false) {
+			if (set_include_path(get_include_path().PATH_SEPARATOR.$app_path.PATH_SEPARATOR.$views_path)==false) {
 				die("Cannot set include path.");
 			}
 		}
@@ -527,6 +525,7 @@ class APPcelerate {
 		$vals=array();
 		foreach ($reqs as $req) {
 			if (!array_key_exists($req,$_REQUEST)) {
+				$_SESSION["we missing"]=$req;
 				return false;
 			}
 			else {
