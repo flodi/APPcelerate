@@ -181,13 +181,14 @@ class APPcelerate {
 	// Excel Functions
 	//
 
-	public function excel2Table($file,$columns) {
-		global $_excel2TableError;
-
+	public function excel2Table($file,$columns,$addcolumns=array()) {
 		$tmptable="import_ospiti_".str_replace(" ","",str_replace(".","",microtime()));
 
 		$sql="CREATE TABLE $tmptable (id INT NOT NULL AUTO_INCREMENT,";
 		foreach ($columns as $key => $value) {
+			$sql.="$value text,";
+		}
+		foreach ($addcolumns as $key => $value) {
 			$sql.="$value text,";
 		}
 		$sql.="PRIMARY KEY (id));";
@@ -201,20 +202,17 @@ class APPcelerate {
 			if ($first) {
 				$first=false;
 				$colno=array();
-				$_excel2TableError="Missing Columns (";
+				$missing_error="";
 				foreach ($r as $no => $title) {
 					if (array_key_exists(trim($title), $columns)) {
 						$colno[$no]=$columns[$title];
 					}
 					else {
-						$_excel2TableError=$_excel2TableError." ".$columns[$title];
+						$missing_error=$missing_error." ".$columns[$title];
 					}
 				}
 				if (count(array_keys($columns))!=count(array_keys($colno))) {
-					return (false);
-				}
-				else {
-					$_excel2TableError="";
+					throw new Exception("Missing columns: $missing_error");
 				}
 			}
 			else {
@@ -222,8 +220,7 @@ class APPcelerate {
 				$rs=$this->app["db_".$this->app["name"]]->query($sql);
 				$err=$this->ISsqlError($rs,$sql);
 				if ($err) {
-					$_excel2TableError=$err;
-					return(false);
+					throw new Exception("SQL Error $err");
 				}
 				$id=$app["db_".$this->app["name"]]->insert_id;
 				foreach ($colno as $i => $col) {
@@ -232,8 +229,7 @@ class APPcelerate {
 						$rs=$this->app["db_".$this->app["name"]]->query($sql);
 						$err=$this->ISsqlError($rs,$sql);
 						if ($err) {
-							$_excel2TableError=$err;
-							return(false);
+							throw new Exception("SQL Error $err");
 						}
 					}
 				}
