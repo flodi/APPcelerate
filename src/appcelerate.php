@@ -276,7 +276,7 @@ class APPcelerate {
 
 	public function DBexistRelAll($rel,$idto,$tblto) {
 
-		if (is_numeric($idfrom) or is_numeric($idto)) {
+		if (is_numeric($idto)) {
 			return false;
 		}
 
