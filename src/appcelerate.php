@@ -273,8 +273,8 @@ class APPcelerate {
 
 	public function DBexistRelAll($rel,$idtoname,$tblto) {
 
-		$sql1="select count(*) from $rel where id in (select $idto from $tblto)";
-		$sql2="select count(distinct $idto) from $tblto";
+		$sql1="select count(*) from $rel where id in (select $idtoname from $tblto)";
+		$sql2="select count(distinct $idtoname) from $tblto";
 
 		$rs=$this->app["db_".$this->app["name"]]->query($sql1);
 		$this->sqlError($rs,$sql1);
