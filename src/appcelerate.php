@@ -242,8 +242,32 @@ class APPcelerate {
 			}
 		}
 
-		return (true);
+		return ($tmptable);
 
+	}
+
+	//
+	// MySQL function
+	//
+
+	public function DBnumRows($table,$cond="") {
+		$sql="select count(*) from $table";
+		if (!empty($cond)) {
+			$sql.=" where ".$cond;
+		}
+		$rs=$this->app["db_".$this->app["name"]]->query($sql);
+		$this->sqlError($rs,$sql);
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
+	public function DBnumValues($table,$column) {
+		$sql="select $column from $table";
+		$rs=$this->app["db_".$this->app["name"]]->query($sql);
+		$this->sqlError($rs,$sql);
+		while($r=$rs->fetch_array(MYSQLI_NUM)) {
+			$v[]=$r[0];
+		}
+		return(count(array_unique($v)));
 	}
 
 	public function ISsqlError($recordset,$query) {
