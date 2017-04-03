@@ -211,7 +211,7 @@ class APPcelerate {
 						$missing_error=$missing_error." ".$title;
 					}
 				}
-				if (count(array_keys($columns))!=count(array_keys($colno))) {
+				if (!empty($missing_error)) {
 					throw new Exception("Missing columns: $missing_error");
 				}
 				echo "<pre>"; print_r($colno); "echo </pre>";	
