@@ -204,11 +204,11 @@ class APPcelerate {
 				$colno=array();
 				$missing_error="";
 				foreach ($r as $no => $title) {
-					if (array_key_exists(trim($title), $columns)) {
+					if (array_key_exists($title, $columns)) {
 						$colno[$no]=$columns[$title];
 					}
 					else {
-						$missing_error=$missing_error." ".$columns[$title];
+						$missing_error=$missing_error." ".$title;
 					}
 				}
 				if (count(array_keys($columns))!=count(array_keys($colno))) {
