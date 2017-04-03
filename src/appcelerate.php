@@ -252,8 +252,8 @@ class APPcelerate {
 
 	public function DBexistRel($rel,$idfromname,$idto) {
 
-		if (is_numeric($idfromname)) {
-			return false;
+		if (!is_numeric($idto)) {
+			$idto="'".$idto."'";
 		}
 
 		$sql="select count(*) from $rel where $idfromname=$idto";
@@ -293,6 +293,14 @@ class APPcelerate {
 	}
 
 	public function DBisRelOK($rel,$idfromname,$idfrom,$idtoname,$idto) {
+
+		if (!is_numeric($idfrom)) {
+			$idfrom="'".$idfrom."'";
+		}
+
+		if (!is_numeric($idto)) {
+			$idto="'".$idto."'";
+		}
 
 		$sql="select * from $rel where $idfromname=$idfrom and $idtoname=$idto";
 
