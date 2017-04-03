@@ -214,6 +214,7 @@ class APPcelerate {
 				if (count(array_keys($columns))!=count(array_keys($colno))) {
 					throw new Exception("Missing columns: $missing_error");
 				}
+				echo "<pre>"; print_r($colno); "echo </pre>";	
 			}
 			else {
 				$sql="insert into $tmptable (id) values (NULL)";
