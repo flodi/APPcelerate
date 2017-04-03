@@ -195,7 +195,13 @@ class APPcelerate {
 		$rs=$this->app["db_".$this->app["name"]]->query($sql);
 		$this->sqlError($rs,$sql);
 
-		$x = new SpreadsheetReader($file);
+		try {
+			$x = new SpreadsheetReader($file);
+			$x->ChangeSheet("OSPITI");
+		}
+		catch (Exception $e) {
+			throw new Exception($e->getMessage());
+		}
 		
 		$first=true;
 		foreach ($x as $r) {
