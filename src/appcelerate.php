@@ -214,7 +214,6 @@ class APPcelerate {
 				if (!empty($missing_error)) {
 					throw new Exception("Missing columns: $missing_error");
 				}
-				echo "<pre>"; print_r($colno); "echo </pre>";	
 			}
 			else {
 				$sql="insert into $tmptable (id) values (NULL)";
@@ -223,10 +222,10 @@ class APPcelerate {
 				if ($err) {
 					throw new Exception("SQL Error $err");
 				}
-				$id=$app["db_".$this->app["name"]]->insert_id;
+				$id=$this->app["db_".$this->app["name"]]->insert_id;
 				foreach ($colno as $i => $col) {
 					if (array_key_exists($i, $r)) {
-						$sql="update $tmptable set $col='".$app["db_".$this->app["name"]]->escape_string($r[$i])."' where id=$id";
+						$sql="update $tmptable set $col='".$this->app["db_".$this->app["name"]]->escape_string($r[$i])."' where id=$id";
 						$rs=$this->app["db_".$this->app["name"]]->query($sql);
 						$err=$this->ISsqlError($rs,$sql);
 						if ($err) {
