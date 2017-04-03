@@ -186,10 +186,10 @@ class APPcelerate {
 
 		$sql="CREATE TABLE $tmptable (id INT NOT NULL AUTO_INCREMENT,";
 		foreach ($columns as $key => $value) {
-			$sql.="$value text,";
+			$sql.="`$value` text,";
 		}
 		foreach ($addcolumns as $key => $value) {
-			$sql.="$value text,";
+			$sql.="`$value` text,";
 		}
 		$sql.="PRIMARY KEY (id));";
 		$rs=$this->app["db_".$this->app["name"]]->query($sql);
