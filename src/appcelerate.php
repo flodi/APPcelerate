@@ -291,7 +291,7 @@ class APPcelerate {
 		$this->sqlError($rs,$sql2);
 		$nr2=$rs->num_rows;
 
-		if (nr1==nr2) {
+		if ($nr1==$nr2) {
 			return true;
 		}
 
