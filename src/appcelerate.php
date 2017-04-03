@@ -181,7 +181,7 @@ class APPcelerate {
 	// Excel Functions
 	//
 
-	public function excel2Table($file,$columns,$addcolumns=array()) {
+	public function excel2Table($file,$columns,$addcolumns) {
 		$tmptable="import_ospiti_".str_replace(" ","",str_replace(".","",microtime()));
 
 		$sql="CREATE TABLE $tmptable (mytmpid INT NOT NULL AUTO_INCREMENT,";
@@ -202,7 +202,7 @@ class APPcelerate {
 		catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}
-		
+
 		$first=true;
 		foreach ($x as $r) {
 			if ($first) {
