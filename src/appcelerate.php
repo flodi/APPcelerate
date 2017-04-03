@@ -250,6 +250,75 @@ class APPcelerate {
 	// MySQL function
 	//
 
+	public function DBexistRel($rel,$idfromname,$idto) {
+
+		if (!(is_numeric($idto))) {
+			return false;
+		}
+
+		if (is_numeric($idfromname)) {
+			return false;
+		}
+
+		$sql="select count(*) from $rel where $idfromname=$idto";
+
+		$rs=$this->app["db_".$this->app["name"]]->query($sql);
+		$this->sqlError($rs,$sql);
+		$nr=$rs->fetch_array(MYSQLI_NUM)[0];
+		if ($nr===0) {
+			return false;
+		}
+		else {
+			return true;
+		}
+
+	}
+
+	public function DBexistRelAll($rel,$idto,$tblto) {
+
+		if (is_numeric($idfrom) or is_numeric($idto)) {
+			return false;
+		}
+
+		$sql1="select count(*) from $rel where id in (select $idto from $tblto)";
+		$sql2="select count(distinct $idto) from $tblto";
+
+		$rs=$this->app["db_".$this->app["name"]]->query($sql1);
+		$this->sqlError($rs,$sql1);
+		$nr1=$rs->num_rows;
+
+		$rs=$this->app["db_".$this->app["name"]]->query($sql2);
+		$this->sqlError($rs,$sql2);
+		$nr2=$rs->num_rows;
+
+		if (nr1==nr2) {
+			return true;
+		}
+
+		return false;
+
+	}
+
+	public function DBisRelOK($rel,$idfromname,$idfrom,$idtoname,$idto) {
+
+		if (!(is_numeric($idfrom) and is_numeric($idto))) {
+			return false;
+		}
+
+		$sql="select * from $rel where $idfromname=$idfrom and $idtoname=$idto";
+
+		$rs=$this->app["db_".$this->app["name"]]->query($sql);
+		$this->sqlError($rs,$sql);
+		$nr=$rs->num_rows;
+		if ($nr===0) {
+			return false;
+		}
+		else {
+			return true;
+		}
+
+	}
+
 	public function DBnumRows($table,$cond="") {
 		$sql="select count(*) from $table";
 		if (!empty($cond)) {
