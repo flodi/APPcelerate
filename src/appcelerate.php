@@ -213,12 +213,9 @@ class APPcelerate {
 					if (array_key_exists($title, $columns)) {
 						$colno[$no]=$columns[$title];
 					}
-					else {
-						$missing_error=$missing_error." ".$title;
-					}
 				}
-				if (!empty($missing_error)) {
-					throw new Exception("Missing columns: $missing_error");
+				if (count($colno)!=count($columns)) {
+					throw new Exception("Missing columns: ".implode(",",array_diff(array_keys($columns,$colno))));
 				}
 			}
 			else {
