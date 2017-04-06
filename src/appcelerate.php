@@ -640,7 +640,9 @@ class APPcelerate {
 		$this->doLog("Instance Started",$this::L_INFO);
 		
 		$this->app["TBS"] = new clsTinyButStrong;
-		
+
+		$this->app["TBS"]->addMatchTypes(array('l' => '(.+,)*.+'));
+
 		$this->app["router"] = new AltoRouter();
 		if (!empty($this->app["base_app"]) or $this->app["base_app"]!=="") {
 			$this->app["router"]->setBasePath($this->app["base_app"]);
