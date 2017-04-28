@@ -181,10 +181,15 @@ class APPcelerate {
 	// Excel Functions
 	//
 
-	public function excel2Table($file,$columns,$addcolumns) {
+	public function excel2Table($file,$columns,$addcolumns,$temporary=true) {
 		$tmptable="import_ospiti_".str_replace(" ","",str_replace(".","",microtime()));
 
-		$sql="CREATE TEMPORARY TABLE $tmptable (mytmpid INT NOT NULL AUTO_INCREMENT,";
+		if ($temporary) {
+			$sql="CREATE TEMPORARY TABLE $tmptable (mytmpid INT NOT NULL AUTO_INCREMENT,";
+		}
+		else {
+			$sql="CREATE TABLE $tmptable (mytmpid INT NOT NULL AUTO_INCREMENT,";
+		}
 		foreach ($columns as $key => $value) {
 			$sql.="`$value` text,";
 		}
@@ -344,7 +349,11 @@ class APPcelerate {
 		}
 	}
 
+	public function DBsqlError($recordset,$query) {
+		sqlError($recordset,$query);
+	}
 
+	// DEPRECATED
 	public function sqlError($recordset,$query) {
 		if (!$recordset) {
 			$this->doLog("Failed SQL query - Query => $query, Error => ".$this->app["db_".$this->app["name"]]->error);
