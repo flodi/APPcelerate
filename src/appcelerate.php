@@ -224,6 +224,16 @@ class APPcelerate {
 				}
 			}
 			else {
+				// Skip empty rows
+				$empty=0;
+				foreach ($r as $key => $value) {
+					if (empty($value)) {
+						$empty++;
+					}
+				}
+				if ($empty==count(array_keys($r))) {
+					break;
+				}
 				$sql="insert into $tmptable (id) values (NULL)";
 				$rs=$this->app["db_".$this->app["name"]]->query($sql);
 				$err=$this->ISsqlError($rs,$sql);
