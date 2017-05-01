@@ -641,8 +641,10 @@ class APPcelerate {
 				if (!(strpos($_SERVER['REQUEST_URI'],"/login/")) and !(strpos($_SERVER['REQUEST_URI'],"/logout/"))) {
 					$this->doLog($_SERVER['REQUEST_URI']." is not login or logout page => Security Error");
 					$this->doLog("[SECURITY] redirecting to ". $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
-					header("Location: " . $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
-					die();
+					if ($secredir) {
+						header("Location: " . $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
+						die();
+					}
 				}
 			}
 		}
