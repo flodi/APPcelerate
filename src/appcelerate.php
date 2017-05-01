@@ -570,7 +570,7 @@ class APPcelerate {
 
 	public function doSecurity() {
 
-		$secredir=$this->app["secredir"][$app_name];
+		$secredir=$this->app["secredir"][$this->app["name"]];
 
 		if (!empty($_SESSION[$this->app["name"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
