@@ -121,9 +121,15 @@ class APPcelerate {
 			$add_tpl=getenv('ACCOUNT_'.$app_name);
 			if ($add_tpl==="N") {
 				$this->app["accounts"][$app_name]=false;
+				$this->app["secredir"][$app_name]=true;
 			}
 			else if ($add_tpl==="Y") {
 				$this->app["accounts"][$app_name]=true;
+				$this->app["secredir"][$app_name]=true;
+			}
+			else if ($add_tpl==="C") {
+				$this->app["accounts"][$app_name]=true;
+				$this->app["secredir"][$app_name]=false;
 			}
 		}
 
@@ -564,6 +570,8 @@ class APPcelerate {
 
 	public function doSecurity() {
 
+		$secredir=$this->app["secredir"][$app_name];
+
 		if (!empty($_SESSION[$this->app["name"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
 			$this->app['uid']=$_SESSION[$this->app["name"]."_ap_uid"];
@@ -609,16 +617,21 @@ class APPcelerate {
 						}
 						$this->doLog("[SECURITY OK] Continuing");
 						break;
-						header("Location: ".$_SERVER['REQUEST_URI']);
-						die();
 					case 0:
 						$this->doLog("[SECURITY KO] redirecting to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
-						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
-						die();
+						if ($secredir) {
+							header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
+							die();
+						}
+						else {
+							$break;
+						}
 					default:
 						$this->doLog("[SECURITY MULTI] redirecting to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
-						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?multi");
-						die();
+						if ($secredir) {
+							header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?multi");
+							die();
+						}
 				}
 			}
 			else {
