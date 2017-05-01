@@ -522,10 +522,15 @@ class APPcelerate {
 		
 	}
 	
-	public function errRoute() {
+	public function errRoute($redir=true) {
 		$this->doLog("Route Error, restarting ".$_SERVER["REQUEST_URI"]);
-		header("Location: ".$this->app["base_url"]."/");
-		die();
+		if ($redir) {
+			header("Location: ".$this->app["base_url"]."/");
+			die();
+		}
+		else {
+			die("Routing error, you've done something not permitted");
+		}
 	}
 
 	public function urlEncode($url) {
