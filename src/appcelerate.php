@@ -366,7 +366,7 @@ class APPcelerate {
 		$sql="select $column from $table";
 		$rs=$this->app["db_".$this->app["name"]]->query($sql);
 		$this->sqlError($rs,$sql);
-		$v=$rs->fetch_array(MYSQLI_NUM);
+		$v=array_values($rs->fetch_array(MYSQLI_NUM));
 		return(count(array_unique($v)));
 	}
 
