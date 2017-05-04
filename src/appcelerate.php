@@ -289,10 +289,18 @@ class APPcelerate {
 
 	}
 
-	public function DBexistRelAll($rel,$idtoname,$tblto) {
+	public function DBfindDup($table,$field) {
+		$sql="select $field from $table group by $field having count($field)>1";
+		$rs=$this->app["db_".$this->app["name"]]->query($sql);
+		$this->sqlError($rs,$sql);
+		return(array_values($rs->fetch_array(MYSQLI_NUM)));
+	}
 
-		$sql1="select count(*) from $rel where id in (select $idtoname from $tblto)";
-		$sql2="select count(distinct $idtoname) from $tblto";
+	public function DBexistRelAll($rel,$idtoname,$tblto,$idfromname="id") {
+		global $DBerrMsg;
+
+		$sql1="select count(*) from $rel where $idfromname in (select $idtoname from $tblto)";
+		$sql2="select count(distinct $idfromname) from $tblto";
 
 		$rs=$this->app["db_".$this->app["name"]]->query($sql1);
 		$this->sqlError($rs,$sql1);
@@ -305,6 +313,11 @@ class APPcelerate {
 		if ($nr1==$nr2) {
 			return true;
 		}
+
+		$sql="select $idfromname from $rel where $idfromname not in (select $idfromname from $tblto)";
+		$rs=$this->app["db_".$this->app["name"]]->query($sql);
+		$this->sqlError($rs,$sql);
+		$DBerrMsg=explode(",",array_values($rs->fetch_array(MYSQLI_NUM)));
 
 		return false;
 
@@ -640,8 +653,8 @@ class APPcelerate {
 				unset($this->app['uname']);
 				if (!(strpos($_SERVER['REQUEST_URI'],"/login/")) and !(strpos($_SERVER['REQUEST_URI'],"/logout/"))) {
 					$this->doLog($_SERVER['REQUEST_URI']." is not login or logout page => Security Error");
-					$this->doLog("[SECURITY] redirecting to ". $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
 					if ($secredir) {
+						$this->doLog("[SECURITY] redirecting to ". $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
 						header("Location: " . $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
 						die();
 					}
