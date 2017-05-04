@@ -293,7 +293,12 @@ class APPcelerate {
 		$sql="select $field from $table group by $field having count($field)>1";
 		$rs=$this->app["db_".$this->app["name"]]->query($sql);
 		$this->sqlError($rs,$sql);
-		return(array_values($rs->fetch_array(MYSQLI_NUM)));
+		if ($rs->num_rows>0) {
+			return(array_values($rs->fetch_array(MYSQLI_NUM)));
+		}
+		else {
+			return(array());
+		}
 	}
 
 	public function DBexistRelAll($rel,$idtoname,$tblto,$idfromname="id") {
