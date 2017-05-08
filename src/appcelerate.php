@@ -472,6 +472,7 @@ class APPcelerate {
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.form.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.treetable.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/datatables/datatables.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap-editable.min.js"></script>
 					';
 					break;
 				case "css":
@@ -488,6 +489,7 @@ class APPcelerate {
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.simple-popup.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.simple-popup.settings.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/datatables/datatables.min.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap-editable.css">
 					';
 					$c.=favicon(FAVICON_ENABLE_ALL,array(
 						'application_name' => $this->app["name"]
