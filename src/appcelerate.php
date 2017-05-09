@@ -924,3 +924,88 @@ class APPcelerate {
 	}
 
 }
+
+class BPME {
+
+	private $app_name;
+	private $fw;
+	private $db;
+	private $logger;
+	private $activity_types = array(
+		"S" => "Start",
+		"F" => "Finish",
+		"U" => "Manual",
+		"A" => "Automatic"
+	);
+
+	//
+	// $fw - Istanza di framework attiva
+	// $name - Nome dell'applicazione sotto la quale gestire i processi 
+	//
+    public function __construct($fw,$name) {
+    	$this->fw=$fw;
+    	$this->app_name=$name;
+    	$this->db=$fw->app["db_".$name];
+
+		$this->logger=new Monolog\Logger('bpme');
+		
+		$dateFormat = "d-m-Y G:i";
+		$output = "%datetime% ; %level_name% ; %message% ; %context%\n";
+		$formatter = new Monolog\Formatter\LineFormatter($output, $dateFormat);
+		
+		switch($fw->app["loglevel"]) {
+			case "info":
+				$ll=Monolog\Logger::INFO;
+				break;
+			default:
+				$ll=Monolog\Logger::DEBUG;
+		}
+		
+		$mainstream=new Monolog\Handler\StreamHandler($fw->app["base_path"]."/logs/bpme.log", $ll);
+		$mainstream->setFormatter($formatter);
+		
+		$this->logger->pushHandler($mainstream);
+	}
+
+	public function startProcess($code,$start='start') {
+		$sql="select * from processes where code='$code'";
+		$rs=$this->db->query($sql);
+		if ($rs->num_rows===0) {
+			throw new Exception("Process $code not found", 0);
+		}
+		$r=$rs->fetch_array(MYSQLI_ASSOC);
+		try {
+			$sql=sprintf("insert into process_instances (id_process,id_user_created,id_current_activity,status) values (%d,%d,%d,%d,'R')",$r["id"],$this->getCurrentUID(),$this->getActivityID($code,'S'));
+		}
+		catch (Exception $e){
+			$msg=$e->getMessage();
+			throw new Exception("Cannot create process ($msg)", 0);
+		}
+		$rs=$this->db->query($sql);
+	}
+
+	private function getCurrentUID() {
+		return $this->$fw->app["uid"];
+	}
+
+	private function getActivityID($process_code,$activity_type='') {
+		$sql="select id from processes where code='$process_code'";
+		$rs=$this->db->query($sql);
+		if ($rs->num_rows===0) {
+			throw new Exception("Process $code not found", 0);
+		}
+		$id_process=$rs->fetch_array(MYSQLI_NUM)[0];
+		$sql="select id from activities where id_process=$id_process";
+		if (!empty($activity_type)) {
+
+			if (array_key_exists($activity_type,$activity_types)) {
+				$sql.=" and activity_type='$activity_type'";
+			}
+			else {
+				throw new Exception("Activity type $activity_type not allowed", 0);
+			}
+		}
+		$rs=$this->db->query($sql);
+	}
+
+}
