@@ -1009,6 +1009,37 @@ class BPME {
 			throw new Exception("Cannot create process ($msg)", 0);
 		}
 
+
+		$id_activity_instance=createActivityInstance($id_process_instance,$id_activity);
+
+		$this->dispatchActivity($id_activity_instance);
+
+		return($id_process_instance);
+	}
+
+	private function createActivityInstance($id_process_instance,$id_activity) {
+		$this->doLog("F: (P) createActivityInstance $id_process_instance $id_activity");
+		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
+			throw new Exception("Process instance id $id_process_instance not valid", 0);
+		}
+		if (!is_numeric($id_activity) and !is_int($id_activity)) {
+			throw new Exception("Activity id $id_activity not valid", 0);
+		}
+
+		$uid=$this->getCurrentUID();
+
+		$sql="select id_process from process_instances where id=$id_process_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) createActivityInstance | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+		$id_process=$rs->fetch_array(MYSQLI_NUM)[0];
+
 		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_user_assigned) values (%d,%d,%d,%d,%d)",$id_activity,$id_process,$id_process_instance,$uid,$uid);
 		$rs=$this->db->query($sql);
 		try {
@@ -1016,15 +1047,13 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) startProcess | $sql | $msg");
+			$this->doLog("F: (P) createActivityInstance | $sql | $msg");
 			throw new Exception("Query Error", 0);
 		}
 
 		$id_activity_instance=$this->db->insert_id;
 
-		$this->dispatchActivity($id_activity_instance);
-
-		return($id_process_instance);
+		return($id_activity_instance);
 	}
 
 	private function dispatchActivity($id_activity_instance) {
@@ -1146,7 +1175,21 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		$id_activity_instance_to=$rs->fetch_array(MYSQLI_NUM)[0];
+		$sql="select id_process_instance from action_instances where id=$id_action_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) executeAction | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+
+		$id_process_instance=$rs->fetch_array(MYSQLI_NUM)[0];
+
+		$id_activity_instance_to=createActivityInstance($id_process_instance,$id_activity_to);
+
 
 		$sql="update action_instances set id_activity_instance_to=$id_activity_instance_to, date_executed=now(), id_user_executed=".$this->fw->app["uid"];
 		$rs=$this->db->query($sql);
