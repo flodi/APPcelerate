@@ -977,7 +977,7 @@ class BPME {
 		}
 		$r=$rs->fetch_array(MYSQLI_ASSOC);
 		try {
-			$sql=sprintf("insert into process_instances (id_process,id_user_created,status) values (%d,%d,%d,%d,'R')",$r["id"],$this->getCurrentUID(),$this->getActivityID($code,'S'));
+			$sql=sprintf("insert into process_instances (id_process,id_user_created,status) values (%d,%d,'R')",$r["id"],$this->getCurrentUID(),$this->getActivityID($code));
 		}
 		catch (Exception $e){
 			$msg=$e->getMessage();
@@ -990,7 +990,7 @@ class BPME {
 		return $this->fw->app["uid"];
 	}
 
-	private function getActivityID($process_code,$activity_type='') {
+	private function getActivityID($process_code,$activity_name='MAIN') {
 		$sql="select id from processes where code='$process_code'";
 		$rs=$this->db->query($sql);
 		if ($rs->num_rows===0) {
