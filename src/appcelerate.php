@@ -1019,7 +1019,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		$id_activity_instance=$rs->insert_id;
+		$id_activity_instance=$this->db->insert_id;
 
 		$this->dispatchActivity($id_activity_instance);
 	}
