@@ -1005,6 +1005,7 @@ class BPME {
 		}
 		catch (Exception $e){
 			$msg=$e->getMessage();
+			$this->doLog("F: (P) startProcess | Cannot create process | $msg");
 			throw new Exception("Cannot create process ($msg)", 0);
 		}
 
@@ -1027,6 +1028,10 @@ class BPME {
 	}
 
 	private function dispatchActivity($id_activity_instance) {
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
 		$sql="select id_activity from activity_instances where id=$id_activity_instance";
 		$rs=$this->db->query($sql);
 		if ($rs->num_rows===0) {
@@ -1043,7 +1048,13 @@ class BPME {
 
 		switch ($activity_type) {
 			case 'S':
-
+				try {
+					$this->followActions($id_activity_instance);
+				}
+				catch (Exception $e) {
+					$msg=$e->getMessage();
+					$this->doLog("F: (P) dispatchActivity | Cannot follow actions from instance $id_activity_instance | $msg");
+				}
 				break;
 			case 'F':
 				break;
@@ -1057,6 +1068,44 @@ class BPME {
 				break;
 		}
 
+	}
+
+	private function followActions($id_activity_instance) {
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$sql="select * from action where id_activity_from=(select id_activity from activity_instances where id=$id_activity_instance)";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) followActions | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+
+		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
+			$id_action=$r["id"];
+			if (!empty($r["entry_condition"])) {
+				if (!checkActionCondition($id_activity_instance,$id_action,$r["entry_condition"])) {
+					break;
+				}
+			}
+			$this->executeAction($id_activity_instance,$id_action);
+		}
+
+		return true;
+
+	}
+
+	private function checkActionCondition($id_activity_instance,$id_action,$condition) {
+		return true;
+	}
+
+	private function executeAction($id_activity_instance,$id_action) {
+		return true;
 	}
 
 	public function getAvailableActivities($uid=false) {
