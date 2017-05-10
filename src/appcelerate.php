@@ -1065,7 +1065,7 @@ class BPME {
 		}
 
 		if (!$uid) {
-			$sql="select * from activity_instances where data_completed is null";
+			$sql="select * from activity_instances where data_completed is null and not id_user_assigned=$uid";
 		}
 		else {
 			$sql="select * from activity_instances where data_completed is null and id_user_assigned=$uid";			
