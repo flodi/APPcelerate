@@ -1175,7 +1175,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		$sql="select id_process_instance from action_instances where id=$id_action_instance";
+		$sql="select id_process_instance from activity_instances where id=(select id_activity_instance_from from action_instances where id=$id_action_instance)";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
