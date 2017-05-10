@@ -974,6 +974,14 @@ class BPME {
 		$uid=$this->getCurrentUID();
 		$sql="select * from processes where code='$code'";
 		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) startProcess | $msg");
+			throw new Exception("Quert Error", 0);
+		}
 		if ($rs->num_rows===0) {
 			throw new Exception("Process $code not found", 0);
 		}
@@ -1117,5 +1125,16 @@ class BPME {
 		
 	}
 
+	private function rsCheck($rs) {
+		if ($rs) {
+			return true;
+		}
+
+		$error=$this->db->error;
+
+		throw new Exception($error, 0);
+		
+
+	}
 
 }
