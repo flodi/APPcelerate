@@ -1089,7 +1089,7 @@ class BPME {
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			$id_action=$r["id"];
 
-			$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_user_executed) values (%d,%d,%d,%d)",$r["id_process"],$r["id_action"],$id_activity_instance,$this->fw->app["uid"]);
+			$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_user_executed) values (%d,%d,%d,%d)",$r["id_process"],$r["id"],$id_activity_instance,$this->fw->app["uid"]);
 			$rs=$this->db->query($sql);
 			try {
 				$this->rsCheck($rs);
