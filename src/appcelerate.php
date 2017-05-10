@@ -1066,6 +1066,7 @@ class BPME {
 		$rs=$this->db->query($sql);
 		if ($rs->num_rows===0) {
 			throw new Exception("Process $code not found", 0);
+			$this->doLog("F: (P) getActivityID | Process $code not found");
 		}
 		$id_process=$rs->fetch_array(MYSQLI_NUM)[0];
 		$sql="select id from activities where id_process=$id_process";
@@ -1075,10 +1076,20 @@ class BPME {
 				$sql.=" and activity_type='$activity_type'";
 			}
 			else {
+				$this->doLog("F: (P) getActivityID | Activity type $activity_type not allowed");
 				throw new Exception("Activity type $activity_type not allowed", 0);
 			}
 		}
 		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) getActivityID | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getActivityType($id_activity) {
