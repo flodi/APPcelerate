@@ -1089,7 +1089,7 @@ class BPME {
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			$id_action=$r["id"];
 
-			$sql="insert into action_instances (id_process,id_action,id_activity_instance_from,id_activity_instance_to,id_user_executed) values ()";
+			$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_user_executed) values (%d,%d,%d,%d)",$r["id_process"],$r["id_action"],$id_activity_instance,$this->fw->app["uid"]);
 			$rs=$this->db->query($sql);
 			try {
 				$this->rsCheck($rs);
@@ -1133,17 +1133,6 @@ class BPME {
 			throw new Exception("Activity instance id $id_action_instance not valid", 0);
 		}
 
-		$sql="update action_instances set date_executed=now(), id_user_executed=".$this->fw->app["uid"];
-		$rs=$this->db->query($sql);
-		try {
-			$this->rsCheck($rs);
-		}
-		catch (Exception $e) {
-			$msg=$e->getMessage();
-			$this->doLog("F: (P) executeAction | $sql | $msg");
-			throw new Exception("Query Error", 0);
-		}
-
 		$sql="select id_activity_to from actions where id=(select id_action from action_instances where id=$id_action_instance)";
 		$rs=$this->db->query($sql);
 		try {
@@ -1155,7 +1144,20 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		dispatchActivity($rs->fetch_array(MYSQLI_NUM)[0]);
+		$id_activity_instance_to=$rs->fetch_array(MYSQLI_NUM)[0];
+
+		$sql="update action_instances set id_activity_instance_to=$id_activity_instance_to, date_executed=now(), id_user_executed=".$this->fw->app["uid"];
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) executeAction | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+
+		dispatchActivity($id_activity_instance_to);
 
 		return true;
 	}
