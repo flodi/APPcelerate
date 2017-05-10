@@ -1112,7 +1112,7 @@ class BPME {
 
 		switch($level) {
 			default:
-				$this->logger->addRecord($level,$msg,$context);
+				$this->logger->addRecord($level,$msg,$acontext);
 		}
 		
 	}
