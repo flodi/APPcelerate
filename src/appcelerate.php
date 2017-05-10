@@ -970,6 +970,7 @@ class BPME {
 	}
 
 	public function startProcess($code,$start='start') {
+		$this->doLog("F: (P) startProcess | Requested with code $code and start $start");
 		$uid=$this->getCurrentUID();
 		$sql="select * from processes where code='$code'";
 		$rs=$this->db->query($sql);
