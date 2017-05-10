@@ -1157,7 +1157,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		dispatchActivity($id_activity_instance_to);
+		$this->dispatchActivity($id_activity_instance_to);
 
 		return true;
 	}
