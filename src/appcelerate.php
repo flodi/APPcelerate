@@ -998,7 +998,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		$id_process_instance=$rs->insert_id;
+		$id_process_instance=$this->db->insert_id;
 
 		try {
 			$id_activity=$this->getActivityID($code);
