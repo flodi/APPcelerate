@@ -1081,7 +1081,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		return($fw->fetchAllAssoc($rs));
+		return($this->fw->fetchAllAssoc($rs));
 	}
 
 	private function getCurrentUID() {
