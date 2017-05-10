@@ -1000,7 +1000,7 @@ class BPME {
 		$sql="select id from activities where id_process=$id_process";
 		if (!empty($activity_type)) {
 
-			if (array_key_exists($activity_type,$activity_types)) {
+			if (array_key_exists($activity_type,$this->activity_types)) {
 				$sql.=" and activity_type='$activity_type'";
 			}
 			else {
