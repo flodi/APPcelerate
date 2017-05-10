@@ -969,7 +969,7 @@ class BPME {
 		$this->logger->pushHandler($mainstream);
 	}
 
-	public function startProcess($code,$start='start',$initial_data=array()) {
+	public function startProcess($code,$start='MAIN',$initial_data=array()) {
 		$this->doLog("F: (P) startProcess | Requested with code $code and start $start");
 		$uid=$this->getCurrentUID();
 		$sql="select * from processes where code='$code'";
@@ -1001,7 +1001,7 @@ class BPME {
 		$id_process_instance=$this->db->insert_id;
 
 		try {
-			$id_activity=$this->getActivityID($code);
+			$id_activity=$this->getActivityID($code,$start);
 		}
 		catch (Exception $e){
 			$msg=$e->getMessage();
@@ -1199,7 +1199,7 @@ class BPME {
 		return $this->fw->app["uid"];
 	}
 
-	private function getActivityID($process_code,$activity_name='MAIN') {
+	private function getActivityID($process_code,$activity_name) {
 		$sql="select id from processes where code='$process_code'";
 		$rs=$this->db->query($sql);
 		if ($rs->num_rows===0) {
