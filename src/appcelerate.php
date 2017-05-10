@@ -1022,6 +1022,8 @@ class BPME {
 		$id_activity_instance=$this->db->insert_id;
 
 		$this->dispatchActivity($id_activity_instance);
+
+		return($id_process_instance);
 	}
 
 	private function dispatchActivity($id_activity_instance) {
