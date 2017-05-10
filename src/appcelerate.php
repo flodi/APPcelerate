@@ -1088,8 +1088,32 @@ class BPME {
 
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			$id_action=$r["id"];
+
+			$sql="insert into action_instances (id_process,id_action,id_activity_instance_from,id_activity_instance_to,id_user_executed) values ()";
+			$rs=$this->db->query($sql);
+			try {
+				$this->rsCheck($rs);
+			}
+			catch (Exception $e) {
+				$msg=$e->getMessage();
+				$this->doLog("F: (P) followActions | $sql | $msg");
+				throw new Exception("Query Error", 0);
+			}
+			$id_action_instance=$this->db->insert_id;
+
 			if (!empty($r["entry_condition"])) {
-				if (!checkActionCondition($id_activity_instance,$id_action,$r["entry_condition"])) {
+				list($evaluation,$ok)=checkActionCondition($id_activity_instance,$id_action,$r["entry_condition"]);
+				$sql="update action_instances set entry_condition_evaluation='$evaluation' where id=$id_action_instance";
+				$rs=$this->db->query($sql);
+				try {
+					$this->rsCheck($rs);
+				}
+				catch (Exception $e) {
+					$msg=$e->getMessage();
+					$this->doLog("F: (P) followActions | $sql | $msg");
+					throw new Exception("Query Error", 0);
+				}
+				if (!$ok) {
 					break;
 				}
 			}
@@ -1101,10 +1125,38 @@ class BPME {
 	}
 
 	private function checkActionCondition($id_activity_instance,$id_action,$condition) {
-		return true;
+		return array("",true);
 	}
 
-	private function executeAction($id_activity_instance,$id_action) {
+	private function executeAction($id_action_instance) {
+		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
+			throw new Exception("Activity instance id $id_action_instance not valid", 0);
+		}
+
+		$sql="update action_instances set date_executed=now(), id_user_executed=".$this->fw->app["uid"];
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) executeAction | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+
+		$sql="select id_activity_to from actions where id=(select id_action from action_instances where id=$id_action_instance)";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) executeAction | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+
+		dispatchActivity($rs->fetch_array(MYSQLI_NUM)[0]);
+
 		return true;
 	}
 
