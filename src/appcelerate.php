@@ -1071,7 +1071,7 @@ class BPME {
 		return ($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
-	private function doLog($context='N',$id_instance=0,$msg,$level=APPcelerate::L_DEBUG) {
+	private function doLog($msg,$context='N',$id_instance=0,$level=APPcelerate::L_DEBUG) {
 		if (!is_numeric($id_activity) and !is_int($id_activity)) {
 			throw new Exception("ID instance $id_instance not valid", 0);
 		}
