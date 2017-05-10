@@ -1059,7 +1059,7 @@ class BPME {
 
 	}
 
-	private function getAvailableActivities($uid=false) {
+	public function getAvailableActivities($uid=false) {
 		if (!is_numeric($uid) and !is_int($uid)) {
 			throw new Exception("User id $uid not valid", 0);
 		}
