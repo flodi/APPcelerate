@@ -1090,9 +1090,9 @@ class BPME {
 			$id_action=$r["id"];
 
 			$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_user_executed) values (%d,%d,%d,%d)",$r["id_process"],$r["id"],$id_activity_instance,$this->fw->app["uid"]);
-			$rs=$this->db->query($sql);
+			$rs1=$this->db->query($sql);
 			try {
-				$this->rsCheck($rs);
+				$this->rsCheck($rs1);
 			}
 			catch (Exception $e) {
 				$msg=$e->getMessage();
@@ -1104,9 +1104,9 @@ class BPME {
 			if (!empty($r["entry_condition"])) {
 				list($evaluation,$ok)=checkActionCondition($id_activity_instance,$id_action,$r["entry_condition"]);
 				$sql="update action_instances set entry_condition_evaluation='$evaluation' where id=$id_action_instance";
-				$rs=$this->db->query($sql);
+				$rs1=$this->db->query($sql);
 				try {
-					$this->rsCheck($rs);
+					$this->rsCheck($rs1);
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
