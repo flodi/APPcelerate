@@ -935,7 +935,9 @@ class BPME {
 		"S" => "Start",
 		"F" => "Finish",
 		"U" => "Manual",
-		"A" => "Automatic"
+		"A" => "Automatic",
+		"S" => "Sync",
+		"C" => "Evaluate condition"
 	);
 
 	//
