@@ -980,7 +980,7 @@ class BPME {
 		catch (Exception $e) {
 			$msg=$e->getMessage();
 			$this->doLog("F: (P) startProcess | $msg");
-			throw new Exception("Quert Error", 0);
+			throw new Exception("Query Error", 0);
 		}
 		if ($rs->num_rows===0) {
 			throw new Exception("Process $code not found", 0);
@@ -989,6 +989,14 @@ class BPME {
 		$id_process=$r["id"];
 		$sql=sprintf("insert into process_instances (id_process,id_user_created,status) values (%d,%d,'R')",$id_process,$uid);
 		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) startProcess | $msg");
+			throw new Exception("Query Error", 0);
+		}
 
 		$id_process_instance=$rs->insert_id;
 
@@ -1002,6 +1010,14 @@ class BPME {
 
 		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_user_assigned) values (%d,%d,%d,%d,%d)",$id_activity,$id_process,$id_process_instance);
 		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) startProcess | $msg");
+			throw new Exception("Query Error", 0);
+		}
 
 		$id_activity_instance=$rs->insert_id;
 
