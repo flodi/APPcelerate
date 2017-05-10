@@ -1165,12 +1165,20 @@ class BPME {
 			throw new Exception("User id $uid not valid", 0);
 		}
 
+
+		$sql="
+			select
+			activities.id as id,
+			activities.code as code,
+			activities.name as name,
+			processes.code as process_code,
+			processes.name as process_name
+			from activity_instances join activities on activities.id=activity_instances.id_activity join processes on processes.id=activity_instances.id_process where date_completed is null and
+		";
 		if (!$uid) {
-			$sql="select * from activity_instances where date_completed is null and not id_user_assigned=$uid";
+			$sql.="not ";
 		}
-		else {
-			$sql="select * from activity_instances where date_completed is null and id_user_assigned=$uid";			
-		}
+		$sql.="id_user_assigned=$uid";			
 
 		$rs=$this->db->query($sql);
 		try {
