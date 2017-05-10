@@ -969,7 +969,7 @@ class BPME {
 		$this->logger->pushHandler($mainstream);
 	}
 
-	public function startProcess($code,$start='start') {
+	public function startProcess($code,$start='start',$initial_data=array()) {
 		$this->doLog("F: (P) startProcess | Requested with code $code and start $start");
 		$uid=$this->getCurrentUID();
 		$sql="select * from processes where code='$code'";
@@ -987,7 +987,7 @@ class BPME {
 		}
 		$r=$rs->fetch_array(MYSQLI_ASSOC);
 		$id_process=$r["id"];
-		$sql=sprintf("insert into process_instances (id_process,id_user_created,status) values (%d,%d,'R')",$id_process,$uid);
+		$sql=sprintf("insert into process_instances (id_process,id_user_created,status,data) values (%d,%d,'R','%s')",$id_process,$uid,json_encode($initial_data));
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
