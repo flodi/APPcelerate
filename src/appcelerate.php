@@ -1010,7 +1010,7 @@ class BPME {
 		}
 
 
-		$id_activity_instance=createActivityInstance($id_process_instance,$id_activity);
+		$id_activity_instance=$this->createActivityInstance($id_process_instance,$id_activity);
 
 		$this->dispatchActivity($id_activity_instance);
 
@@ -1101,8 +1101,8 @@ class BPME {
 	}
 
 	private function followActions($id_activity_instance) {
-			$this->doLog("F: (P) followActions $id_activity_instance");
-			if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+		$this->doLog("F: (P) followActions $id_activity_instance");
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 
@@ -1120,7 +1120,7 @@ class BPME {
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			$id_action=$r["id"];
 
-			$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_user_executed) values (%d,%d,%d,%d)",$r["id_process"],$r["id"],$id_activity_instance,$this->fw->app["uid"]);
+			$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_user_executed) values (%d,%d,%d,%d)",$r["id_process"],$r["id"],$id_activity_instance,$this->getCurrentUID());
 			$rs1=$this->db->query($sql);
 			try {
 				$this->rsCheck($rs1);
@@ -1188,10 +1188,10 @@ class BPME {
 
 		$id_process_instance=$rs->fetch_array(MYSQLI_NUM)[0];
 
-		$id_activity_instance_to=createActivityInstance($id_process_instance,$id_activity_to);
+		$id_activity_instance_to=$this->createActivityInstance($id_process_instance,$id_activity_to);
 
 
-		$sql="update action_instances set id_activity_instance_to=$id_activity_instance_to, date_executed=now(), id_user_executed=".$this->fw->app["uid"];
+		$sql="update action_instances set id_activity_instance_to=$id_activity_instance_to, date_executed=now(), id_user_executed=".$this->getCurrentUID();
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1211,7 +1211,6 @@ class BPME {
 		if (!is_numeric($uid) and !is_int($uid)) {
 			throw new Exception("User id $uid not valid", 0);
 		}
-
 
 		$sql="
 			select
