@@ -1075,7 +1075,7 @@ class BPME {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 
-		$sql="select * from action where id_activity_from=(select id_activity from activity_instances where id=$id_activity_instance)";
+		$sql="select * from actions where id_activity_from=(select id_activity from activity_instances where id=$id_activity_instance)";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
