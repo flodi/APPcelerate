@@ -970,20 +970,66 @@ class BPME {
 	}
 
 	public function startProcess($code,$start='start') {
+		$uid=$this->getCurrentUID();
 		$sql="select * from processes where code='$code'";
 		$rs=$this->db->query($sql);
 		if ($rs->num_rows===0) {
 			throw new Exception("Process $code not found", 0);
 		}
 		$r=$rs->fetch_array(MYSQLI_ASSOC);
+		$id_process=$r["id"];
+		$sql=sprintf("insert into process_instances (id_process,id_user_created,status) values (%d,%d,'R')",$id_process,$uid);
+		$rs=$this->db->query($sql);
+
+		$id_process_instance=$rs->insert_id;
+
 		try {
-			$sql=sprintf("insert into process_instances (id_process,id_user_created,status) values (%d,%d,'R')",$r["id"],$this->getCurrentUID(),$this->getActivityID($code));
+			$id_activity=$this->getActivityID($code);
 		}
 		catch (Exception $e){
 			$msg=$e->getMessage();
 			throw new Exception("Cannot create process ($msg)", 0);
 		}
+
+		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_user_assigned) values (%d,%d,%d,%d,%d)",$id_activity,$id_process,$id_process_instance);
 		$rs=$this->db->query($sql);
+
+		$id_activity_instance=$rs->insert_id;
+
+		$this->dispatchActivity($id_activity_instance);
+	}
+
+	private function dispatchActivity($id_activity_instance) {
+		$sql="select id_activity from activity_instances where id=$id_activity_instance";
+		$rs=$this->db->query($sql);
+		if ($rs->num_rows===0) {
+			throw new Exception("Activity instance $id_activity_instance not found", 0);
+		}
+
+		$id_activity=$rs->fetch_array(MYSQLI_NUM)[0];
+
+		$activity_type=$this->getActivityType($id_activity);
+
+		if (!array_key_exists($activity_type,$this->activity_types)) {
+			throw new Exception("Activity type $activity_type not allowed", 0);
+		}
+
+		switch ($activity_type) {
+			case 'S':
+
+				break;
+			case 'F':
+				break;
+			case 'U':
+				break;
+			case 'A':
+				break;
+			case 'S':
+				break;
+			case 'C':
+				break;
+		}
+
 	}
 
 	private function getCurrentUID() {
@@ -1009,5 +1055,66 @@ class BPME {
 		}
 		$rs=$this->db->query($sql);
 	}
+
+	private function getActivityType($id_activity) {
+		if (!is_numeric($id_activity) and !is_int($id_activity)) {
+			throw new Exception("Activity id $id_activity not valid", 0);
+		}
+
+		$sql="select activity_type from activities where id=$id_activity";
+		$rs=$this->db->query($sql);
+		if ($rs->num_rows===0) {
+			throw new Exception("Activity id $id_activity not found", 0);
+		}
+
+		return ($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
+	private function doLog($context='N',$id_instance=0,$msg,$level=APPcelerate::L_DEBUG) {
+		if (!is_numeric($id_activity) and !is_int($id_activity)) {
+			throw new Exception("ID instance $id_instance not valid", 0);
+		}
+		switch ($context) {
+			case "P":
+				$where="Process";
+				$sql="select processes.code,process_instances.id,0,0 from process_instances join processes on processes.id=process_instances.id_process where id=$id_instance";
+				break;
+			case "A":
+				$where="Activity";
+				$sql="select activities.code,activity_instances.id_proces,activity_instances.id,0 from activity_instances join processes on activities.id=activity_instances.id_activity where id=$id_instance";
+				break;
+			case "F":
+				$where="Action";
+				$sql="select actions.code,action_instances.id_process,action_instances.id_activity,action_instances.id from action_instances join actions on actions.id=action_instances.id_action where id=$id_instance";
+				break;
+			default:
+				$where="BPME";
+				$sql="select 'BPME','BPME','BPME','BPME'";
+		}
+		$rs=$this->db->query($sql);
+		list($code,$process,$action,$activity)=$rs->fetch_array(MYSQLI_NUM);
+		if (array_key_exists("uname",$this->fw->app)) {
+			$uname=$this->fw->app["uname"];
+		}
+		else {
+			$uname="NOLOGGEDUSER";
+		}
+
+		$acontext=array(
+			"user" => $uname,
+			"context" => $where,
+			"code" => $code,
+			"process instance" => $code,
+			"action instance" => $action,
+			"activity instance" => $activity
+		);		
+
+		switch($level) {
+			default:
+				$this->logger->addRecord($level,$msg,$context);
+		}
+		
+	}
+
 
 }
