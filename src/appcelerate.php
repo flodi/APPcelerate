@@ -1028,6 +1028,7 @@ class BPME {
 	}
 
 	private function dispatchActivity($id_activity_instance) {
+		$this->doLog("F: (P) dispatchActivity $id_activity_instance");
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
