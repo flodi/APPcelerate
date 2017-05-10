@@ -979,7 +979,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) startProcess | $msg");
+			$this->doLog("F: (P) startProcess | $sql | $msg");
 			throw new Exception("Query Error", 0);
 		}
 		if ($rs->num_rows===0) {
@@ -994,7 +994,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) startProcess | $msg");
+			$this->doLog("F: (P) startProcess | $sql | $msg");
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1015,7 +1015,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) startProcess | $msg");
+			$this->doLog("F: (P) startProcess | $sql | $msg");
 			throw new Exception("Query Error", 0);
 		}
 
