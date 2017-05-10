@@ -1008,7 +1008,7 @@ class BPME {
 			throw new Exception("Cannot create process ($msg)", 0);
 		}
 
-		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_user_assigned) values (%d,%d,%d,%d,%d)",$id_activity,$id_process,$id_process_instance);
+		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_user_assigned) values (%d,%d,%d,%d,%d)",$id_activity,$id_process,$id_process_instance,$uid,$uid);
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
