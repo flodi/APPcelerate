@@ -977,7 +977,7 @@ class BPME {
 		}
 		$r=$rs->fetch_array(MYSQLI_ASSOC);
 		try {
-			$sql=sprintf("insert into process_instances (id_process,id_user_created,id_current_activity,status) values (%d,%d,%d,%d,'R')",$r["id"],$this->getCurrentUID(),$this->getActivityID($code,'S'));
+			$sql=sprintf("insert into process_instances (id_process,id_user_created,status) values (%d,%d,%d,%d,'R')",$r["id"],$this->getCurrentUID(),$this->getActivityID($code,'S'));
 		}
 		catch (Exception $e){
 			$msg=$e->getMessage();
