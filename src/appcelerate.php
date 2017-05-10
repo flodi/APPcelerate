@@ -985,7 +985,7 @@ class BPME {
 	}
 
 	private function getCurrentUID() {
-		return $this->$fw->app["uid"];
+		return $this->fw->app["uid"];
 	}
 
 	private function getActivityID($process_code,$activity_type='') {
