@@ -1072,7 +1072,7 @@ class BPME {
 	}
 
 	private function doLog($msg,$context='N',$id_instance=0,$level=APPcelerate::L_DEBUG) {
-		if (!is_numeric($id_activity) and !is_int($id_activity)) {
+		if (!is_numeric($id_instance) and !is_int($id_instance)) {
 			throw new Exception("ID instance $id_instance not valid", 0);
 		}
 		switch ($context) {
