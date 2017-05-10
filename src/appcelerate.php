@@ -1059,6 +1059,31 @@ class BPME {
 
 	}
 
+	private function getAvailableActivities($uid=false) {
+		if (!is_numeric($uid) and !is_int($uid)) {
+			throw new Exception("User id $uid not valid", 0);
+		}
+
+		if (!$uid) {
+			$sql="select * from activity_instances where data_completed is null";
+		}
+		else {
+			$sql="select * from activity_instances where data_completed is null and id_user_assigned=$uid";			
+		}
+
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) getAvailableActivities | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+
+		return($fw->fetchAllAssoc($rs));
+	}
+
 	private function getCurrentUID() {
 		return $this->fw->app["uid"];
 	}
