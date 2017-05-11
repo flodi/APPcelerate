@@ -1008,21 +1008,16 @@ class BPME {
 		}
 		catch (Exception $e){
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) startProcess | Cannot create process | $msg");
+			$this->doLog("Cannot create process ( $msg )");
 			throw new Exception("Cannot create process ($msg)", 0);
 		}
 
 
 		$id_activity_instance=$this->createActivityInstance($id_process_instance,$id_activity);
 
-		$id_activity_instance=$this->dispatchActivity($id_activity_instance,$ui);
+		$this->dispatchActivity($id_activity_instance,$ui);
 
-		if ($ui) {
-			return(array($id_process_instance,$id_activity_instance));
-		}
-		else {
-			return($id_process_instance);
-		}
+		return($id_process_instance);
 	}
 
 	private function getProcessIDFromProcessInstance($id_process_instance) {
@@ -1036,7 +1031,24 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) getProcessIDFromProcessInstance | $sql | $msg");
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
+	private function getProcessCodeFromProcessInstance($id_process_instance) {
+		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
+			throw new Exception("Process instance id $id_process_instance not valid", 0);
+		}
+		$sql="select code from process_instances where id=$id_process_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
@@ -1053,7 +1065,24 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) getProcessInstanceFromActivityInstance | $sql | $msg");
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
+	private function getActivityCodeFromActivityInstance($id_activity_instance) {
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+		$sql="select code from activity_instances where id=$id_activity_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
@@ -1081,7 +1110,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) createActivityInstance | $sql | $msg");
+			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1110,7 +1139,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) followActions | $sql | $msg");
+			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
 		$id_action_instance=$this->db->insert_id;
@@ -1141,17 +1170,17 @@ class BPME {
 		switch ($activity_type) {
 			case 'S':
 				try {
-					$this->followActions($id_activity_instance,$ui);
+					return($this->followActions($id_activity_instance,$ui));
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
-					$this->doLog("F: (P) dispatchActivity | Cannot follow actions from instance $id_activity_instance | $msg");
+					$this->doLog("Cannot follow actions from instance $id_activity_instance ( $msg )");
 				}
 				break;
 			case 'F':
 				break;
 			case 'U':
-				return($id_activity_instance);
+				return($this->showActivity($id_activity_instance));
 				break;
 			case 'A':
 				try {
@@ -1159,7 +1188,7 @@ class BPME {
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
-					$this->doLog("F: (P) dispatchActivity | Cannot execute automatic activity instance $id_activity_instance | $msg");
+					$this->doLog("Cannot execute automatic activity instance $id_activity_instance ( $msg )");
 				}
 
 				try {
@@ -1167,17 +1196,22 @@ class BPME {
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
-					$this->doLog("F: (P) dispatchActivity | Cannot dispatch activity instance $id_activity_instance | $msg");
+					$this->doLog("Cannot dispatch activity instance $id_activity_instance ( $msg )");
 				}
-
 				break;
 			case 'S':
 				break;
 			case 'C':
 				break;
 		}
-		return(0);
 
+	}
+
+	private function showActivity($id_activity_instance) {
+		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
+		$data=getProcessInstanceData($id_process_instance);
+		$this->fw->AddMerge("block","process_data",$data);
+		$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm","+");
 	}
 
 	private function followActions($id_activity_instance_from,$ui=false) {
@@ -1195,7 +1229,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) followActions | $sql | $msg");
+			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1215,7 +1249,7 @@ class BPME {
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
-					$this->doLog("F: (P) followActions | $sql | $msg");
+					$this->doLog("$sql ( $msg )");
 					throw new Exception("Query Error", 0);
 				}
 				if (!$ok) {
@@ -1249,7 +1283,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) executeAction | $sql | $msg");
+			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1261,7 +1295,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) executeAction | $sql | $msg");
+			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1275,7 +1309,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) executeAction | $sql | $msg");
+			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1294,7 +1328,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) executeAction | $sql | $msg");
+			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1329,7 +1363,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) getAvailableActivities | $sql | $msg");
+			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1345,7 +1379,7 @@ class BPME {
 		$rs=$this->db->query($sql);
 		if ($rs->num_rows===0) {
 			throw new Exception("Process $code not found", 0);
-			$this->doLog("F: (P) getActivityID | Process $code not found");
+			$this->doLog("Process $code not found");
 		}
 		$id_process=$rs->fetch_array(MYSQLI_NUM)[0];
 		$sql="select id from activities where id_process=$id_process";
@@ -1355,7 +1389,7 @@ class BPME {
 				$sql.=" and activity_type='$activity_type'";
 			}
 			else {
-				$this->doLog("F: (P) getActivityID | Activity type $activity_type not allowed");
+				$this->doLog("Activity type $activity_type not allowed");
 				throw new Exception("Activity type $activity_type not allowed", 0);
 			}
 		}
@@ -1365,7 +1399,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) getActivityID | $sql | $msg");
+			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
