@@ -971,7 +971,7 @@ class BPME {
 
 	public function startProcess($code,$start='MAIN',$initial_data=array(),$ui=false) {
 
-		$this->doLog("Requested with code $code and start $start and ui $uia",$initial_data);
+		$this->doLog("Requested with code $code and start $start and ui $ui",$initial_data);
 
 		$uid=$this->getCurrentUID();
 
