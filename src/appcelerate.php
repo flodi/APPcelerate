@@ -968,7 +968,8 @@ class BPME {
 		
 		$this->logger->pushHandler($mainstream);
 
-		$this->fw->app["TBS"]->MergeField('bpme', '~my_obj.bpmeTBS', true);
+		$this->fw->app["TBS"]->ObjectRef['bpme_obj'] = $this;
+		$this->fw->app["TBS"]->MergeField('bpme', '~bpme_obj.bpmeTBS', true);
 
 	}
 
