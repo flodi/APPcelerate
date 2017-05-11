@@ -1181,7 +1181,7 @@ class BPME {
 
 			$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_from);
 
-			$id_action_instance=createActionInstance($id_process_instance,$id_activity_instance_from,$id_action);
+			$id_action_instance=$this->createActionInstance($id_process_instance,$id_activity_instance_from,$id_action);
 
 			if (!empty($r["entry_condition"])) {
 				list($evaluation,$ok)=checkActionCondition($id_activity_instance_from,$id_action,$r["entry_condition"]);
