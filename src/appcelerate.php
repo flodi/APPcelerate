@@ -1355,9 +1355,12 @@ class BPME {
 		return true;
 	}
 
-	public function getAvailableActivities($uid=false) {
+	public function getAvailableActivities($uid=0,$id_process_instance=0) {
 		if (!is_numeric($uid) and !is_int($uid)) {
 			throw new Exception("User id $uid not valid", 0);
+		}
+		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
+			throw new Exception("Process instance id $id_process_instance not valid", 0);
 		}
 
 		$sql="
@@ -1369,10 +1372,14 @@ class BPME {
 			processes.name as process_name
 			from activity_instances join activities on activities.id=activity_instances.id_activity join processes on processes.id=activity_instances.id_process where date_completed is null and
 		";
-		if (!$uid) {
+		if ($uid===0) {
 			$sql.="not ";
 		}
 		$sql.="id_user_assigned=$uid";			
+
+		if ($id_process_instance!==0) {
+			$sql.=" and activity_instances.id_process_instance=$id_process_instance";
+		}
 
 		$rs=$this->db->query($sql);
 		try {
