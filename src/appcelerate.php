@@ -989,10 +989,10 @@ class BPME {
 	public function bpmeTBS($function,$params) {
 		switch($function) {
 			case 'processNameFromProcessInstance':
-				return($this->getProcessNameFromProcessInstance($oarams["id"]));
+				return($this->getProcessNameFromProcessInstance($params["id"]));
 				break;
 			default:
-			return("Function Not Present");
+			return("[Function $function Not Present]");
 		}
 
 	}
@@ -1271,6 +1271,10 @@ class BPME {
 				break;
 		}
 
+	}
+
+	private function executeActivity($id_activity_instance) {
+		return($id_action_instance);
 	}
 
 	private function showActivity($id_activity_instance) {
