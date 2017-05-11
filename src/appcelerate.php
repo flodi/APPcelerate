@@ -1388,8 +1388,8 @@ class BPME {
 		}
 
 		$debug=debug_backtrace()[1];
-		$caller_file=$ebug["file"];
-		$caller_line=$ebug["line"];
+		$caller_file=$debug["file"];
+		$caller_line=$debug["line"];
 
 		switch ($context) {
 			case "P":
