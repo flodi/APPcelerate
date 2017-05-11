@@ -952,7 +952,7 @@ class BPME {
 		$this->logger=new Monolog\Logger('bpme');
 		
 		$dateFormat = "d-m-Y G:i";
-		$output = "%datetime% ; %level_name% ; %message% ; %context%\n";
+		$output = "%datetime% ; %file% %line% ; %level_name% ; %message% ; %context%\n";
 		$formatter = new Monolog\Formatter\LineFormatter($output, $dateFormat);
 		
 		switch($fw->app["loglevel"]) {
@@ -1015,9 +1015,14 @@ class BPME {
 
 		$id_activity_instance=$this->createActivityInstance($id_process_instance,$id_activity);
 
-		$this->dispatchActivity($id_activity_instance,$ui);
+		$id_activity_instance=$this->dispatchActivity($id_activity_instance,$ui);
 
-		return($id_process_instance);
+		if ($ui) {
+			return(array($id_process_instance,$id_activity_instance));
+		}
+		else {
+			return($id_process_instance);
+		}
 	}
 
 	private function getProcessIDFromProcessInstance($id_process_instance) {
@@ -1146,14 +1151,32 @@ class BPME {
 			case 'F':
 				break;
 			case 'U':
+				return($id_activity_instance);
 				break;
 			case 'A':
+				try {
+					$new_id_activity_instance=$this->executeActivity($id_activity_instance);
+				}
+				catch (Exception $e) {
+					$msg=$e->getMessage();
+					$this->doLog("F: (P) dispatchActivity | Cannot execute automatic activity instance $id_activity_instance | $msg");
+				}
+
+				try {
+					$this->dispatchActivity($new_id_activity_instance);
+				}
+				catch (Exception $e) {
+					$msg=$e->getMessage();
+					$this->doLog("F: (P) dispatchActivity | Cannot dispatch activity instance $id_activity_instance | $msg");
+				}
+
 				break;
 			case 'S':
 				break;
 			case 'C':
 				break;
 		}
+		return(0);
 
 	}
 
@@ -1363,6 +1386,11 @@ class BPME {
 		if (!is_numeric($id_instance) and !is_int($id_instance)) {
 			throw new Exception("ID instance $id_instance not valid", 0);
 		}
+
+		$debug=debug_backtrace()[1];
+		$caller_file=$ebug["file"];
+		$caller_line=$ebug["line"];
+
 		switch ($context) {
 			case "P":
 				$where="Process";
@@ -1400,7 +1428,7 @@ class BPME {
 
 		switch($level) {
 			default:
-				$this->logger->addRecord($level,$msg,$acontext);
+				$this->logger->addRecord($caller_file,$caller_line,$level,$msg,$acontext);
 		}
 		
 	}
