@@ -1388,7 +1388,7 @@ class BPME {
 		}
 
 		$debug=debug_backtrace()[1];
-		$caller_file=$debug["file"];
+		$caller_file=str_replace($_SERVER["DOCUMENT_ROOT"],"",$debug["file"]);
 		$caller_line=$debug["line"];
 		$caller_function=$debug["function"];
 
