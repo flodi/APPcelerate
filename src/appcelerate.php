@@ -9,6 +9,8 @@
 class APPcelerate {
 	
 	public $app;
+
+	private $bpme;
 	
 	const L_DEBUG="100";
 	const L_INFO="200";
@@ -43,6 +45,10 @@ class APPcelerate {
 				$this->app[$app_name."_logger"]->addRecord($level,$msg,$context);
 		}
 		
+	}
+
+	public function setBPME($v) {
+		$this->bpme=$v;
 	}
 
 	//
@@ -179,6 +185,8 @@ class APPcelerate {
 			$this->app["db_".$app_name]->set_charset("utf8");
 		}
 		
+		$this->bpme=false;
+
 		$this->doLog("APPCelerate created for http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 
 	}
@@ -907,6 +915,9 @@ class APPcelerate {
 				$this->app["TBS"]->MergeField('urlencode', '~my_obj.urlEncode', true);
 				$this->app["TBS"]->MergeField('include', '~my_obj.getInclude', true);
 				$this->app["TBS"]->MergeField('sso', '~my_obj.genSSO', true);
+				if ($this->bpme) {
+					$this->fw->app["TBS"]->MergeField('bpme', '~bpme_obj.bpmeTBS', true);
+				}
 		
 				$this->app["TBS"]->SetOption('render',TBS_OUTPUT);
 				$this->app["TBS"]->Show();
@@ -948,6 +959,8 @@ class BPME {
     	$this->fw=$fw;
     	$this->app_name=$name;
     	$this->db=$fw->app["db_".$name];
+
+    	$this->fw->setBPME(true);
 
 		$this->logger=new Monolog\Logger('bpme');
 		
