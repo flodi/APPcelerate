@@ -916,7 +916,7 @@ class APPcelerate {
 				$this->app["TBS"]->MergeField('include', '~my_obj.getInclude', true);
 				$this->app["TBS"]->MergeField('sso', '~my_obj.genSSO', true);
 				if ($this->bpme) {
-					$this->fw->app["TBS"]->MergeField('bpme', '~bpme_obj.bpmeTBS', true);
+					$this->app["TBS"]->MergeField('bpme', '~bpme_obj.bpmeTBS', true);
 				}
 		
 				$this->app["TBS"]->SetOption('render',TBS_OUTPUT);
