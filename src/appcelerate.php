@@ -1429,7 +1429,7 @@ class BPME {
 	}
 
 	public function getAvailableActivities($uid=0,$id_process_instance=0) {
-		$this->doLog("Requested with uid $uid and process instance $id_action_instance");
+		$this->doLog("Requested with uid $uid and process instance $id_process_instance");
 
 		if (!is_numeric($uid) and !is_int($uid)) {
 			throw new Exception("User id $uid not valid", 0);
