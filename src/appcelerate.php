@@ -952,7 +952,7 @@ class BPME {
 		$this->logger=new Monolog\Logger('bpme');
 		
 		$dateFormat = "d-m-Y G:i";
-		$output = "%datetime% ; %user% ; %caller_file% %caller_line% %caller_function%; %level_name% ; %message% ; %context%\n";
+		$output = "%datetime% ; %level_name% ; %message% ; %context%\n";
 		$formatter = new Monolog\Formatter\LineFormatter($output, $dateFormat);
 		
 		switch($fw->app["loglevel"]) {
@@ -1419,15 +1419,9 @@ class BPME {
 		}
 
 		$acontext=array(
-			"user" => $uname,
-			"context" => $where,
-			"code" => $code,
-			"process instance" => $code,
-			"action instance" => $action,
-			"activity instance" => $activity,
-			"caller_file" => $caller_file,
-			"caller_line" => $caller_line
-		);		
+		);
+
+		$msg="$uname ; $caller_file $caller_line $caller_function ; $where ; $code ; $process; $activity ; $action ; ".$msg;
 
 		switch($level) {
 			default:
