@@ -1429,6 +1429,8 @@ class BPME {
 	}
 
 	public function getAvailableActivities($uid=0,$id_process_instance=0) {
+		$this->doLog("Requested with uid $uid and process instance $id_action_instance");
+
 		if (!is_numeric($uid) and !is_int($uid)) {
 			throw new Exception("User id $uid not valid", 0);
 		}
@@ -1443,12 +1445,11 @@ class BPME {
 			activities.name as name,
 			processes.code as process_code,
 			processes.name as process_name
-			from activity_instances join activities on activities.id=activity_instances.id_activity join processes on processes.id=activity_instances.id_process where date_completed is null and
+			from activity_instances join activities on activities.id=activity_instances.id_activity join processes on processes.id=activity_instances.id_process where date_completed is null
 		";
-		if ($uid===0) {
-			$sql.="not ";
+		if ($uid!==0) {
+			$sql.=" and id_user_assigned=$uid";			
 		}
-		$sql.="id_user_assigned=$uid";			
 
 		if ($id_process_instance!==0) {
 			$sql.=" and activity_instances.id_process_instance=$id_process_instance";
