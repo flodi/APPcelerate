@@ -1067,7 +1067,7 @@ class BPME {
 
 		$uid=$this->getCurrentUID();
 
-		$id_process=getProcessIDFromProcessInstance($id_process_instance);
+		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
 
 		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_user_assigned) values (%d,%d,%d,%d,%d)",$id_activity,$id_process,$id_process_instance,$uid,$uid);
 		$rs=$this->db->query($sql);
@@ -1096,7 +1096,7 @@ class BPME {
 			throw new Exception("Activity instance id $id_activity_instance_from not valid", 0);
 		}
 
-		$id_process=getProcessIDFromProcessInstance($id_process_instance);
+		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
 
 		$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_user_executed) values (%d,%d,%d,%d)",$id_process,$id_action,$id_activity_instance_from,$this->getCurrentUID());
 		$rs1=$this->db->query($sql);
@@ -1179,7 +1179,7 @@ class BPME {
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			$id_action=$r["id"];
 
-			$id_process_instance=getProcessInstanceFromActivityInstance($id_activity_instance_from);
+			$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_from);
 
 			$id_action_instance=createActionInstance($id_process_instance,$id_activity_instance_from,$id_action);
 
@@ -1255,7 +1255,7 @@ class BPME {
 
 		$id_activity_instance=$rs->fetch_array(MYSQLI_NUM)[0];
 
-		$id_process_instance=getProcessInstanceFromActivityInstance($id_activity_instance);
+		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 
 		//Creo l'istanza di activity di arrivo
 		$id_activity_instance_to=$this->createActivityInstance($id_process_instance,$id_activity_to);
