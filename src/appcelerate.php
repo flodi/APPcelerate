@@ -1423,12 +1423,14 @@ class BPME {
 			"code" => $code,
 			"process instance" => $code,
 			"action instance" => $action,
-			"activity instance" => $activity
+			"activity instance" => $activity,
+			"caller_file" => $caller_file,
+			"caller_line" => $caller_line
 		);		
 
 		switch($level) {
 			default:
-				$this->logger->addRecord($caller_file,$caller_line,$level,$msg,$acontext);
+				$this->logger->addRecord($level,$msg,$acontext);
 		}
 		
 	}
