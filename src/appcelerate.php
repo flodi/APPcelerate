@@ -967,8 +967,25 @@ class BPME {
 		$mainstream->setFormatter($formatter);
 		
 		$this->logger->pushHandler($mainstream);
+
+		$this->fw->app["TBS"]->MergeField('bpme', '~my_obj.bpmeTBS', true);
+
 	}
 
+	public function bpmeTBS($token,$params) {
+		$id=$token;
+		$function=$params["f"];
+		switch($f) {
+			case 'processNameFromProcessInstance':
+				return($this->getProcessNameFromProcessInstance($id));
+				break;
+			default:
+			return($token);
+		}
+
+	}
+
+	// Ritorna l'id dell'istanza dell'ultima attività eseguita
 	public function startProcess($code,$start='MAIN',$initial_data=array(),$ui=false) {
 
 		$this->doLog("Requested with code $code and start $start and ui $ui",$initial_data);
@@ -1015,9 +1032,9 @@ class BPME {
 
 		$id_activity_instance=$this->createActivityInstance($id_process_instance,$id_activity);
 
-		$this->dispatchActivity($id_activity_instance,$ui);
+		$id_activity_instance=$this->dispatchActivity($id_activity_instance,$ui);
 
-		return($id_process_instance);
+		return(array($id_process_instance,$id_activity_instance));
 	}
 
 	private function getProcessInstanceData($id_process_instance) {
@@ -1059,6 +1076,23 @@ class BPME {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
 		}
 		$sql="select processes.code from processes join process_instances on processes.id_process_instance.id_process where id=$id_process_instance)";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
+	private function getProcessNameFromProcessInstance($id_process_instance) {
+		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
+			throw new Exception("Process instance id $id_process_instance not valid", 0);
+		}
+		$sql="select processes.name from processes join process_instances on processes.id_process_instance.id_process where id=$id_process_instance)";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1163,6 +1197,7 @@ class BPME {
 		return($id_action_instance);
 	}
 
+	// Ritorna l'id dell'istanza dell'ultima attività eseguita
 	private function dispatchActivity($id_activity_instance,$ui=false) {
 
 		$this->doLog("Requested with activity instance  $id_activity_instance and ui $ui");
@@ -1187,17 +1222,18 @@ class BPME {
 		switch ($activity_type) {
 			case 'S':
 				try {
-					return($this->followActions($id_activity_instance,$ui));
+					$this->followActions($id_activity_instance,$ui);
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
 					$this->doLog("Cannot follow actions from instance $id_activity_instance ( $msg )");
 				}
+				return($id_activity_instance);
 				break;
 			case 'F':
 				break;
 			case 'U':
-				return($this->showActivity($id_activity_instance));
+				return($id_activity_instance);
 				break;
 			case 'A':
 				try {
@@ -1215,6 +1251,7 @@ class BPME {
 					$msg=$e->getMessage();
 					$this->doLog("Cannot dispatch activity instance $id_activity_instance ( $msg )");
 				}
+				return($new_id_activity_instance);
 				break;
 			case 'S':
 				break;
