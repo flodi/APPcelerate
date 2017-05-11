@@ -992,7 +992,7 @@ class BPME {
 				return($this->getProcessNameFromProcessInstance($oarams["id"]));
 				break;
 			default:
-			return($token);
+			return("Function Not Present");
 		}
 
 	}
