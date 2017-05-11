@@ -991,6 +991,9 @@ class BPME {
 			case 'processNameFromProcessInstance':
 				return($this->getProcessNameFromProcessInstance($params["id"]));
 				break;
+			case 'activityNameFromActivityInstance':
+				return($this->getActivityNameFromActivityInstance($params["id"]));
+				break;
 			default:
 			return("[Function $function Not Present]");
 		}
@@ -1104,7 +1107,7 @@ class BPME {
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
 		}
-		$sql="select processes.name from processes join process_instances on processes.id_process_instance.id_process where id=$id_process_instance)";
+		$sql="select processes.name from processes join process_instances on processes.id_process_instance.id_process where id=$id_process_instance";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1139,6 +1142,23 @@ class BPME {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 		$sql="select code from activity_instances where id=$id_activity_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
+	private function getActivityNameFromActivityInstance($id_activity_instance) {
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+		$sql="select name from activity_instances where id=$id_activity_instance";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
