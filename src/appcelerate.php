@@ -1226,7 +1226,7 @@ class BPME {
 
 	private function showActivity($id_activity_instance) {
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
-		$data=getProcessInstanceData($id_process_instance);
+		$data=$this->getProcessInstanceData($id_process_instance);
 		$this->fw->AddMerge("block","process_data",$data);
 		$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm","+");
 	}
