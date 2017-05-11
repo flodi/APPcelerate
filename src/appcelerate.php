@@ -1090,7 +1090,7 @@ class BPME {
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
 		}
-		$sql="select processes.code from processes join process_instances on processes.id_process_instance.id_process where id=$id_process_instance";
+		$sql="select processes.code from processes join process_instances on processes.id_process_instance.id_process where process_instances.id=$id_process_instance";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1107,7 +1107,7 @@ class BPME {
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
 		}
-		$sql="select processes.name from processes join process_instances on processes.id_process_instance.id_process where id=$id_process_instance";
+		$sql="select processes.name from processes join process_instances on processes.id_process_instance.id_process where process_instances.id=$id_process_instance";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
