@@ -1087,7 +1087,7 @@ class BPME {
 
 	private function createActionInstance($id_process_instance,$id_activity_instance_from,$id_action) {
 
-		$this->doLog("F: (P) createActionInstance $id_process_instance $id_activity_instance_from");
+		$this->doLog("F: (P) createActionInstance $id_process_instance $id_activity_instance_from $id_action");
 		
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
