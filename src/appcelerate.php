@@ -910,11 +910,11 @@ class APPcelerate {
 					}
 				}
 				
-				$this->app["TBS"]->ObjectRef['my_obj'] = $this;
-				$this->app["TBS"]->MergeField('tokens', '~my_obj.getString', true);
-				$this->app["TBS"]->MergeField('urlencode', '~my_obj.urlEncode', true);
-				$this->app["TBS"]->MergeField('include', '~my_obj.getInclude', true);
-				$this->app["TBS"]->MergeField('sso', '~my_obj.genSSO', true);
+				$this->app["TBS"]->ObjectRef['fw_obj'] = $this;
+				$this->app["TBS"]->MergeField('tokens', '~fw_obj.getString', true);
+				$this->app["TBS"]->MergeField('urlencode', '~fw_obj.urlEncode', true);
+				$this->app["TBS"]->MergeField('include', '~fw_obj.getInclude', true);
+				$this->app["TBS"]->MergeField('sso', '~fw_obj.genSSO', true);
 				if ($this->bpme) {
 					$this->app["TBS"]->MergeField('bpme', '~bpme_obj.bpmeTBS', true);
 				}
@@ -986,12 +986,10 @@ class BPME {
 
 	}
 
-	public function bpmeTBS($token,$params) {
-		$id=$token;
-		$function=$params["f"];
-		switch($f) {
+	public function bpmeTBS($function,$params) {
+		switch($function) {
 			case 'processNameFromProcessInstance':
-				return($this->getProcessNameFromProcessInstance($id));
+				return($this->getProcessNameFromProcessInstance($oarams["id"]));
 				break;
 			default:
 			return($token);
