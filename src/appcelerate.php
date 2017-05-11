@@ -1109,7 +1109,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 		$id_action_instance=$this->db->insert_id;
-
+		return($id_action_instancen);
 	}
 
 	private function dispatchActivity($id_activity_instance,$ui=false) {
