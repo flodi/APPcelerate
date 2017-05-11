@@ -971,7 +971,7 @@ class BPME {
 
 	public function startProcess($code,$start='MAIN',$initial_data=array(),$ui=false) {
 
-		$this->doLog("F: (P) startProcess | Requested with code $code and start $start");
+		$this->doLog("Requested with code $code and start $start and ui $uia",$initial_data);
 
 		$uid=$this->getCurrentUID();
 
@@ -1061,7 +1061,7 @@ class BPME {
 
 	private function createActivityInstance($id_process_instance,$id_activity) {
 
-		$this->doLog("F: (P) createActivityInstance $id_process_instance $id_activity");
+		$this->doLog("Requested with process instance  $id_process_instance and activity $id_activity");
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
@@ -1092,7 +1092,7 @@ class BPME {
 
 	private function createActionInstance($id_process_instance,$id_activity_instance_from,$id_action) {
 
-		$this->doLog("F: (P) createActionInstance $id_process_instance $id_activity_instance_from $id_action");
+		$this->doLog("Requested with process instance $id_process_instance and activity instance $id_activity_instance_from and action $id_action");
 		
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
@@ -1119,7 +1119,7 @@ class BPME {
 
 	private function dispatchActivity($id_activity_instance,$ui=false) {
 
-		$this->doLog("F: (P) dispatchActivity $id_activity_instance");
+		$this->doLog("Requested with activity instance  $id_activity_instance and ui $ui");
 
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
@@ -1182,7 +1182,7 @@ class BPME {
 
 	private function followActions($id_activity_instance_from,$ui=false) {
 
-		$this->doLog("Call $id_activity_instance_from");
+		$this->doLog("Requested with activty instance from $id_activity_instance_from and ui $ui");
 
 		if (!is_numeric($id_activity_instance_from) and !is_int($id_activity_instance_from)) {
 			throw new Exception("Activity instance id $id_activity_instance_from not valid", 0);
@@ -1235,7 +1235,7 @@ class BPME {
 	}
 
 	private function executeAction($id_action_instance,$ui=false) {
-		$this->doLog("Call $id_action_instance $ui");
+		$this->doLog("Requested with action instance $id_action_instance and ui $ui");
 
 		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
 			throw new Exception("Activity instance id $id_action_instance not valid", 0);
