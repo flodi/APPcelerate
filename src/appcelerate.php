@@ -1141,7 +1141,7 @@ class BPME {
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
-		$sql="select code from activity_instances where id=$id_activity_instance";
+		$sql="select activities.code from activities join activity_instances on activities.id=activity_instances.id_activity where activity_instances.id=$id_activity_instance";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1158,7 +1158,7 @@ class BPME {
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
-		$sql="select name from activity_instances where id=$id_activity_instance";
+		$sql="select activities.name from activities join activity_instances on activities.id=activity_instances.id_activity where activity_instances.id=$id_activity_instance";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
