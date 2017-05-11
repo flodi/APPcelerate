@@ -1034,7 +1034,7 @@ class BPME {
 			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
-		return(json_decode($rs->fetch_array(MYSQLI_NUM)[0]));
+		return(json_decode($rs->fetch_array(MYSQLI_NUM)[0],true));
 	}
 
 	private function getProcessIDFromProcessInstance($id_process_instance) {
