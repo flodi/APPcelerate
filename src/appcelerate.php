@@ -1182,7 +1182,7 @@ class BPME {
 
 	private function followActions($id_activity_instance_from,$ui=false) {
 
-		$this->doLog("F: (P) followActions $id_activity_instance_from");
+		$this->doLog("Call $id_activity_instance_from");
 
 		if (!is_numeric($id_activity_instance_from) and !is_int($id_activity_instance_from)) {
 			throw new Exception("Activity instance id $id_activity_instance_from not valid", 0);
@@ -1230,10 +1230,13 @@ class BPME {
 	}
 
 	private function checkActionCondition($id_activity_instance,$id_action,$condition) {
+		$this->doLog("Call $id_activity_instance $id_action $condition");
 		return array("",true);
 	}
 
 	private function executeAction($id_action_instance,$ui=false) {
+		$this->doLog("Call $id_action_instance $ui");
+
 		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
 			throw new Exception("Activity instance id $id_action_instance not valid", 0);
 		}
