@@ -969,9 +969,12 @@ class BPME {
 		$this->logger->pushHandler($mainstream);
 	}
 
-	public function startProcess($code,$start='MAIN',$initial_data=array()) {
+	public function startProcess($code,$start='MAIN',$initial_data=array(),$ui=false) {
+
 		$this->doLog("F: (P) startProcess | Requested with code $code and start $start");
+
 		$uid=$this->getCurrentUID();
+
 		$sql="select * from processes where code='$code'";
 		$rs=$this->db->query($sql);
 		try {
@@ -987,6 +990,7 @@ class BPME {
 		}
 		$r=$rs->fetch_array(MYSQLI_ASSOC);
 		$id_process=$r["id"];
+
 		$sql=sprintf("insert into process_instances (id_process,id_user_created,status,data) values (%d,%d,'R','%s')",$id_process,$uid,json_encode($initial_data));
 		$rs=$this->db->query($sql);
 		try {
@@ -997,7 +1001,6 @@ class BPME {
 			$this->doLog("F: (P) startProcess | $sql | $msg");
 			throw new Exception("Query Error", 0);
 		}
-
 		$id_process_instance=$this->db->insert_id;
 
 		try {
@@ -1012,13 +1015,49 @@ class BPME {
 
 		$id_activity_instance=$this->createActivityInstance($id_process_instance,$id_activity);
 
-		$this->dispatchActivity($id_activity_instance);
+		$this->dispatchActivity($id_activity_instance,$ui);
 
 		return($id_process_instance);
 	}
 
+	private function getProcessIDFromProcessInstance($id_process_instance) {
+		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
+			throw new Exception("Process instance id $id_process_instance not valid", 0);
+		}
+		$sql="select id_process from process_instances where id=$id_process_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) getProcessIDFromProcessInstance | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
+	public function getProcessInstanceFromActivityInstance($id_activity_instance) {
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+		$sql="select id_process_instance from activity_instances where id=$id_activity_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) getProcessInstanceFromActivityInstance | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
 	private function createActivityInstance($id_process_instance,$id_activity) {
+
 		$this->doLog("F: (P) createActivityInstance $id_process_instance $id_activity");
+
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
 		}
@@ -1028,17 +1067,7 @@ class BPME {
 
 		$uid=$this->getCurrentUID();
 
-		$sql="select id_process from process_instances where id=$id_process_instance";
-		$rs=$this->db->query($sql);
-		try {
-			$this->rsCheck($rs);
-		}
-		catch (Exception $e) {
-			$msg=$e->getMessage();
-			$this->doLog("F: (P) createActivityInstance | $sql | $msg");
-			throw new Exception("Query Error", 0);
-		}
-		$id_process=$rs->fetch_array(MYSQLI_NUM)[0];
+		$id_process=getProcessIDFromProcessInstance($id_process_instance);
 
 		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_user_assigned) values (%d,%d,%d,%d,%d)",$id_activity,$id_process,$id_process_instance,$uid,$uid);
 		$rs=$this->db->query($sql);
@@ -1056,8 +1085,37 @@ class BPME {
 		return($id_activity_instance);
 	}
 
-	private function dispatchActivity($id_activity_instance) {
+	private function createActionInstance($id_process_instance,$id_activity_instance_from,$id_action) {
+
+		$this->doLog("F: (P) createActionInstance $id_process_instance $id_activity_instance_from");
+		
+		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
+			throw new Exception("Process instance id $id_process_instance not valid", 0);
+		}
+		if (!is_numeric($id_activity_instance_from) and !is_int($id_activity_instance_from)) {
+			throw new Exception("Activity instance id $id_activity_instance_from not valid", 0);
+		}
+
+		$id_process=getProcessIDFromProcessInstance($id_process_instance);
+
+		$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_user_executed) values (%d,%d,%d,%d)",$id_process,$id_action,$id_activity_instance_from,$this->getCurrentUID());
+		$rs1=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs1);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("F: (P) followActions | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+		$id_action_instance=$this->db->insert_id;
+
+	}
+
+	private function dispatchActivity($id_activity_instance,$ui=false) {
+
 		$this->doLog("F: (P) dispatchActivity $id_activity_instance");
+
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
@@ -1067,7 +1125,6 @@ class BPME {
 		if ($rs->num_rows===0) {
 			throw new Exception("Activity instance $id_activity_instance not found", 0);
 		}
-
 		$id_activity=$rs->fetch_array(MYSQLI_NUM)[0];
 
 		$activity_type=$this->getActivityType($id_activity);
@@ -1079,7 +1136,7 @@ class BPME {
 		switch ($activity_type) {
 			case 'S':
 				try {
-					$this->followActions($id_activity_instance);
+					$this->followActions($id_activity_instance,$ui);
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
@@ -1100,13 +1157,15 @@ class BPME {
 
 	}
 
-	private function followActions($id_activity_instance) {
-		$this->doLog("F: (P) followActions $id_activity_instance");
-		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
-			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+	private function followActions($id_activity_instance_from,$ui=false) {
+
+		$this->doLog("F: (P) followActions $id_activity_instance_from");
+
+		if (!is_numeric($id_activity_instance_from) and !is_int($id_activity_instance_from)) {
+			throw new Exception("Activity instance id $id_activity_instance_from not valid", 0);
 		}
 
-		$sql="select * from actions where id_activity_from=(select id_activity from activity_instances where id=$id_activity_instance)";
+		$sql="select * from actions where id_activity_from=(select id_activity from activity_instances where id=$id_activity_instance_from)";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1120,20 +1179,12 @@ class BPME {
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			$id_action=$r["id"];
 
-			$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_user_executed) values (%d,%d,%d,%d)",$r["id_process"],$r["id"],$id_activity_instance,$this->getCurrentUID());
-			$rs1=$this->db->query($sql);
-			try {
-				$this->rsCheck($rs1);
-			}
-			catch (Exception $e) {
-				$msg=$e->getMessage();
-				$this->doLog("F: (P) followActions | $sql | $msg");
-				throw new Exception("Query Error", 0);
-			}
-			$id_action_instance=$this->db->insert_id;
+			$id_process_instance=getProcessInstanceFromActivityInstance($id_activity_instance_from);
+
+			$id_action_instance=createActionInstance($id_process_instance,$id_activity_instance_from,$id_action);
 
 			if (!empty($r["entry_condition"])) {
-				list($evaluation,$ok)=checkActionCondition($id_activity_instance,$id_action,$r["entry_condition"]);
+				list($evaluation,$ok)=checkActionCondition($id_activity_instance_from,$id_action,$r["entry_condition"]);
 				$sql="update action_instances set entry_condition_evaluation='$evaluation' where id=$id_action_instance";
 				$rs1=$this->db->query($sql);
 				try {
@@ -1148,7 +1199,7 @@ class BPME {
 					break;
 				}
 			}
-			$this->executeAction($id_action_instance);
+			$this->executeAction($id_action_instance,$ui);
 		}
 
 		return true;
@@ -1159,12 +1210,12 @@ class BPME {
 		return array("",true);
 	}
 
-	private function executeAction($id_action_instance) {
+	private function executeAction($id_action_instance,$ui=false) {
 		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
 			throw new Exception("Activity instance id $id_action_instance not valid", 0);
 		}
 
-
+		//Concludo l'activity precedente
 		$sql="update activity_instances set date_completed=now(), id_user_completed=".$this->getCurrentUID()." where id=(select id_activity_instance_from from action_instances where id=$id_action_instance)";
 		$rs=$this->db->query($sql);
 		try {
@@ -1176,6 +1227,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
+		//Definisco l'activity successiva
 		$sql="select id_activity_to from actions where id=(select id_action from action_instances where id=$id_action_instance)";
 		$rs=$this->db->query($sql);
 		try {
@@ -1189,7 +1241,8 @@ class BPME {
 
 		$id_activity_to=$rs->fetch_array(MYSQLI_NUM)[0];
 
-		$sql="select id_process_instance from activity_instances where id=(select id_activity_instance_from from action_instances where id=$id_action_instance)";
+		//Cerco l'istanza di processo relativa
+		$sql="select id_activity_instance_from from action_instances where id=$id_action_instance";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1200,11 +1253,14 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		$id_process_instance=$rs->fetch_array(MYSQLI_NUM)[0];
+		$id_activity_instance=$rs->fetch_array(MYSQLI_NUM)[0];
 
+		$id_process_instance=getProcessInstanceFromActivityInstance($id_activity_instance);
+
+		//Creo l'istanza di activity di arrivo
 		$id_activity_instance_to=$this->createActivityInstance($id_process_instance,$id_activity_to);
 
-
+		//Chiudo l'action
 		$sql="update action_instances set id_activity_instance_to=$id_activity_instance_to, date_executed=now(), id_user_executed=".$this->getCurrentUID();
 		$rs=$this->db->query($sql);
 		try {
@@ -1216,7 +1272,8 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		$this->dispatchActivity($id_activity_instance_to);
+		//Esecuo l'activity di arrivo
+		$this->dispatchActivity($id_activity_instance_to,$ui);
 
 		return true;
 	}
