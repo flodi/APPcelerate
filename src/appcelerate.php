@@ -1041,9 +1041,7 @@ class BPME {
 			$this->fw->AddMerge("field","piid",$id_process_instance);
 			$this->fw->AddMerge("field","aiid",$id_activity_instance);
 			$this->fw->AddMerge("block","bTasks",$tasks);
-			$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_HEAD.htm","+");
 			$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT.htm","+");
-			$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_TAIL.htm","+");			
 		}
 
 		$this->doLog("Returning process instance $id_process_instance and activity instance $id_activity_instance");
@@ -1312,9 +1310,7 @@ class BPME {
 		$this->fw->AddMerge("block","process_data",$data);
 		$this->fw->AddMerge("field","piid",$id_process_instance);
 		$this->fw->AddMerge("field","aiid",$id_activity_instance);
-		$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_HEAD.htm");
 		$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm","+");
-		$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_TAIL.htm");
 	}
 
 	private function followActions($id_activity_instance_from,$ui=false) {
