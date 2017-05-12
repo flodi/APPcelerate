@@ -1036,6 +1036,10 @@ class BPME {
 		$id_activity_instance=$this->dispatchActivity($id_activity_instance,$ui);
 
 		if ($ui) {
+			$context=$this->getActivityInstanceContext($id_activity_instance);
+
+			$this->fw->AddMerge("block","context",$context);
+
 			$tasks=$this->getAvailableActivities($this->fw->app["uid"],$id_process_instance);
 
 			$this->fw->AddMerge("field","piid",$id_process_instance);
@@ -1176,6 +1180,41 @@ class BPME {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
+	private function getActivityInstanceContext($id_activity_instance) {
+		$this->doLog("Requested with activity instance $id_activity_instance");
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+		$sql="
+			select
+				activities.name as name,
+				activities.code as code,
+				activities.description as description,
+				activities.type as type,
+				processes.name as process_name,
+				processes.code as process_code,
+				processes.description as process_descrption
+			from
+				activities
+					join processes on activities.id_process=processes.id
+					join activity_instances on activities.id=activity_instances.id_activity
+			where
+				activity_instances.id=$id_activity_instance
+		";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		$context=$this->fw->fetchAllAssoc($rs);
+
+		return($context);		
+	}
+
 	private function createActivityInstance($id_process_instance,$id_activity) {
 
 		$this->doLog("Requested with process instance  $id_process_instance and activity $id_activity");
@@ -1307,6 +1346,10 @@ class BPME {
 
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 		$data=$this->getProcessInstanceData($id_process_instance);
+
+		$context=$this->getActivityInstanceContext($id_activity_instance);
+
+		$this->fw->AddMerge("block","context",$context);
 		$this->fw->AddMerge("block","process_data",$data);
 		$this->fw->AddMerge("field","piid",$id_process_instance);
 		$this->fw->AddMerge("field","aiid",$id_activity_instance);
