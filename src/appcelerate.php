@@ -1142,7 +1142,7 @@ class BPME {
 	}
 
 	public function getProcessInstanceFromActivityInstance($id_activity_instance) {
-		$this->doLog("Requested with activity instance $id_process_instance");
+		$this->doLog("Requested with activity instance $id_activity_instance");
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
@@ -1160,7 +1160,7 @@ class BPME {
 	}
 
 	private function getActivityCodeFromActivityInstance($id_activity_instance) {
-		$this->doLog("Requested with activity instance $id_process_instance");
+		$this->doLog("Requested with activity instance $id_activity_instance");
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
@@ -1178,7 +1178,7 @@ class BPME {
 	}
 
 	private function getActivityNameFromActivityInstance($id_activity_instance) {
-		$this->doLog("Requested with activity instance $id_process_instance");
+		$this->doLog("Requested with activity instance $id_activity_instance");
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
