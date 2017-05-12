@@ -987,7 +987,7 @@ class BPME {
 	}
 
 	public function bpmeTBS($function,$params) {
-		$this->doLog("Requested with function $function and params ".print_r($params,true)." and ui $ui",$initial_data);
+		$this->doLog("Requested with function $function and params ".print_r($params,true));
 		switch($function) {
 			case 'processNameFromProcessInstance':
 				return($this->getProcessNameFromProcessInstance($params["id"]));
