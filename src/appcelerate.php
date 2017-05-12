@@ -1086,6 +1086,37 @@ class BPME {
 	}
 
 	private function getProcessDataFieldFromDB($token) {
+		
+		list($table,$field_list,$where_field_list,$where_value_list)=explode(":", $token);
+
+		$table=substr($table,1);
+
+		if (empty($field_list)) {
+			throw new Exception("Field list is mandatory", 0);
+		}
+
+		$sql="select $field from $table";
+
+		if (!empty($where_field_list) and !empty($where_value_list)) {
+			$where_fields=explode(",",$where_field_list);
+			$where_values=explode(",",$where_value_list);
+
+			if(count($where_fields)!=count($where_values)) {
+				throw new Exception("Where fields and values must have the same length", 0);
+			}
+
+			if(count($where_field_list)!=0) {
+				$sql.=" where";
+				for($i=0;$i<count($where_field_list);$i++) {
+					if (!is_numeric($where_value_list[$i])) {
+						$where_value_list[$i]="'".$this->db->real_escape_string($where_value_list[$i])."'";
+					}
+					$sql.=" ".$where_field_list[$i]."=".$where_value_list[$i];
+				}
+			}
+
+		}
+
 		return $token;
 	}
 
