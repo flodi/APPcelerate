@@ -1117,7 +1117,18 @@ class BPME {
 
 		}
 
-		return $token;
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		$value=json_encode($this->fw->fetchAllAssoc($rs));
+
+		return($value);
 	}
 
 	private function getProcessIDFromProcessInstance($id_process_instance) {
