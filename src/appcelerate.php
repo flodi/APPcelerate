@@ -1036,14 +1036,14 @@ class BPME {
 		$id_activity_instance=$this->dispatchActivity($id_activity_instance,$ui);
 
 		if ($ui) {
-			$tasks=$bpme->getAvailableActivities($fw->app["uid"],$id_process_instance);
+			$tasks=$this->getAvailableActivities($this->fw->app["uid"],$id_process_instance);
 
 			$this->fw->AddMerge("field","piid",$id_process_instance);
 			$this->fw->AddMerge("field","aiid",$id_activity_instance);
 			$this->fw->AddMerge("block","bTasks",$tasks);
-			$this->fw->app["TBS"]->LoadTemplate($bpme_app."/bpme/templates/STEP_RESULT.htm","+");
-			$this->fw->app["TBS"]->LoadTemplate($bpme_app."/bpme/templates/STEP_RESULT.htm","+");
-			$this->fw->app["TBS"]->LoadTemplate($bpme_app."/bpme/templates/STEP_RESULT.htm","+");			
+			$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT.htm","+");
+			$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT.htm","+");
+			$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT.htm","+");			
 		}
 
 		$this->doLog("Returning process instance $id_process_instance and activity instance $id_activity_instance");
