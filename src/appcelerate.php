@@ -1124,7 +1124,7 @@ class BPME {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
-	public function getProcessInstanceFromActivityInstance($id_activity_instance) {
+	private function getProcessInstanceFromActivityInstance($id_activity_instance) {
 		$this->doLog("Requested with activity instance $id_activity_instance");
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
@@ -1628,7 +1628,8 @@ class BPME {
 				if (!array_key_exists("ui",$params)) {
 					$params["ui"]=false;
 				}
-				return($this-startProcess($params["code"],$params["start"],$params["data"],$params["ui"]));
+				$r=$this->startProcess($params["code"],$params["start"],$params["data"],$params["ui"]);
+				return($r);
 				break;
 			default:
 				throw new Exception("Function $function not present");
