@@ -841,17 +841,6 @@ class APPcelerate {
 					$this->doLog("MAIN template not found for ".$this->app["name"]."/".$this->app["section"],$this::L_INFO);
 				}
 		
-				//
-				// Include section tail template (if exists)
-				//
-				$this->doLog("Loading TAIL template for ".$this->app["name"]."/".$this->app["section"],$this::L_INFO);
-				if (stream_resolve_include_path($sec_tpl_path."tail.htm")) {
-					$this->app["TBS"]->LoadTemplate($sec_tpl_path."tail.htm","+");
-				}
-				else {
-					$this->doLog("TAIL template not found for ".$this->app["name"]."/".$this->app["section"],$this::L_INFO);
-				}
-		
 			}
 			
 			//
@@ -867,6 +856,17 @@ class APPcelerate {
 		
 			if (!$this->app["skipui"]) {
 		
+				//
+				// Include section tail template (if exists)
+				//
+				$this->doLog("Loading TAIL template for ".$this->app["name"]."/".$this->app["section"],$this::L_INFO);
+				if (stream_resolve_include_path($sec_tpl_path."tail.htm")) {
+					$this->app["TBS"]->LoadTemplate($sec_tpl_path."tail.htm","+");
+				}
+				else {
+					$this->doLog("TAIL template not found for ".$this->app["name"]."/".$this->app["section"],$this::L_INFO);
+				}
+				
 				//
 				// Include app tail template (if exists)
 				//
