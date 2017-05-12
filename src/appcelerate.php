@@ -1072,6 +1072,7 @@ class BPME {
 		$d=json_decode($rs->fetch_array(MYSQLI_NUM)[0],true);
 
 		$i=0;
+		$data=array();
 		foreach($d as $key => $value) {
 			if (substr($key, 0, 1) !== "_") {
 				if (substr($value, 0, 1) === "@") {
