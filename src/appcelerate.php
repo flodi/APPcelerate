@@ -1190,7 +1190,7 @@ class BPME {
 				activities.name as name,
 				activities.code as code,
 				activities.description as description,
-				activities.type as type,
+				activities.activity_type as type,
 				processes.name as process_name,
 				processes.code as process_code,
 				processes.description as process_descrption
