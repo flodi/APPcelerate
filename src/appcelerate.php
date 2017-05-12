@@ -1305,6 +1305,8 @@ class BPME {
 	}
 
 	private function showActivity($id_activity_instance) {
+		$this->doLog("Requested with activty instance $id_activity_instance");
+
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 		$data=$this->getProcessInstanceData($id_process_instance);
 		$this->fw->AddMerge("block","process_data",$data);
