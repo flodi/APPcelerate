@@ -1016,6 +1016,7 @@ class BPME {
 		}
 	}
 
+	// Ritorna l'id dell'istanza dell'ultima attività eseguita
 	public function startProcess($code,$start='MAIN',$initial_data=array(),$ui=false) {
 
 		$this->doLog("Requested with code $code and start $start and ui $ui",$initial_data);
@@ -1062,11 +1063,11 @@ class BPME {
 
 		$id_activity_instance=$this->createActivityInstance($id_process_instance,$id_activity);
 
-		$this->dispatchActivity($id_activity_instance,$ui);
+		$id_activity_instance=$this->dispatchActivity($id_activity_instance,$ui);
 
-		$this->doLog("Returning process instance $id_process_instance");
+		$this->doLog("Returning process instance $id_process_instance and activity instance $id_activity_instance");
 
-		return(array($id_process_instance));
+		return(array($id_process_instance,$id_activity_instance));
 	}
 
 	private function getProcessInstanceData($id_process_instance) {
@@ -1254,6 +1255,7 @@ class BPME {
 		return($id_action_instance);
 	}
 
+	// Ritorna l'id dell'istanza dell'ultima attività eseguita
 	private function dispatchActivity($id_activity_instance,$ui=false) {
 
 		$this->doLog("Requested with activity instance  $id_activity_instance and ui $ui");
@@ -1284,10 +1286,12 @@ class BPME {
 					$msg=$e->getMessage();
 					$this->doLog("Cannot follow actions from instance $id_activity_instance ( $msg )");
 				}
+				return($id_activity_instance);
 				break;
 			case 'F':
 				break;
 			case 'U':
+				return($id_activity_instance);
 				break;
 			case 'A':
 				try {
@@ -1305,6 +1309,7 @@ class BPME {
 					$msg=$e->getMessage();
 					$this->doLog("Cannot dispatch activity instance $id_activity_instance ( $msg )");
 				}
+				return($new_id_activity_instance);
 				break;
 			case 'S':
 				break;
