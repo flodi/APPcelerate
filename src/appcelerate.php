@@ -1308,7 +1308,9 @@ class BPME {
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 		$data=$this->getProcessInstanceData($id_process_instance);
 		$this->fw->AddMerge("block","process_data",$data);
+		$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_HEAD.htm");
 		$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm","+");
+		$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_TAIL.htm");
 	}
 
 	private function followActions($id_activity_instance_from,$ui=false) {
