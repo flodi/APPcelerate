@@ -1031,6 +1031,7 @@ class BPME {
 					$params["ui"]=false;
 				}
 				return($this-startProcess($params["code"],$params["start"],$params["data"],$params["ui"]));
+				break;
 			default:
 				throw new Exception("Function $function not present");
 		}
