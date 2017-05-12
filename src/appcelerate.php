@@ -1466,7 +1466,7 @@ class BPME {
 
 		$sql="
 			select
-			activitie_instance.id as id,
+			activities_instance.id as id,
 			activities.code as code,
 			activities.name as name,
 			processes.code as process_code,
