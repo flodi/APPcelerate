@@ -1076,7 +1076,7 @@ class BPME {
 		foreach($d as $key => $value) {
 			if (substr($key, 0, 1) !== "_") {
 				if (substr($value, 0, 1) === "@") {
-					$value=$this->getProcessDataFieldFromDB($value);
+					$value=json_encode($this->getProcessDataFieldFromDB($value));
 				}
 				$data[$i]["key"]=$key;
 				$data[$i++]["value"]=$value;
@@ -1105,13 +1105,13 @@ class BPME {
 				throw new Exception("Where fields and values must have the same length", 0);
 			}
 
-			if(count($where_field_list)!=0) {
+			if(count($where_fields)!=0) {
 				$sql.=" where";
-				for($i=0;$i<count($where_field_list);$i++) {
-					if (!is_numeric($where_value_list[$i])) {
-						$where_value_list[$i]="'".$this->db->real_escape_string($where_value_list[$i])."'";
+				for($i=0;$i<count($where_fields);$i++) {
+					if (!is_numeric($where_values[$i])) {
+						$where_value_list[$i]="'".$this->db->real_escape_string($where_values[$i])."'";
 					}
-					$sql.=" ".$where_field_list[$i]."=".$where_value_list[$i];
+					$sql.=" ".$where_fields[$i]."=".$where_values[$i];
 				}
 			}
 
@@ -1126,7 +1126,7 @@ class BPME {
 			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
-		$value=json_encode($this->fw->fetchAllAssoc($rs));
+		$value=$this->fw->fetchAllAssoc($rs);
 
 		return($value);
 	}
