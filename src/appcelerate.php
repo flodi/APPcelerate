@@ -1006,18 +1006,38 @@ class BPME {
 
 		switch($function) {
 			case 'showActivity':
+				if (!array_key_exists("id",$params)) {
+					throw new Exception("Missing 'id' params", 0);
+				}
 				return($this->showActivity($params["id"]));
 				break;
 			case 'followActions':
+				if (!array_key_exists("id",$params)) {
+					throw new Exception("Missing 'id' params", 0);
+				}
 				return($this->followActions($params["id"],true));
 				break;
+			case 'startProcess':
+				if (!array_key_exists("code",$params)) {
+					throw new Exception("Missing 'code' params", 0);
+				}
+				if (!array_key_exists("start",$params)) {
+					$params["start"]="MAIN";
+				}
+				if (!array_key_exists("data",$params)) {
+					$params["data"]=array();
+				}
+				if (!array_key_exists("ui",$params)) {
+					$params["ui"]=false;
+				}
+				return($this-startProcess($params["code"],$params["start"],$params["data"],$params["ui"]));
 			default:
 				throw new Exception("Function $function not present");
 		}
 	}
 
 	// Ritorna l'id dell'istanza dell'ultima attività eseguita
-	public function startProcess($code,$start='MAIN',$initial_data=array(),$ui=false) {
+	private function startProcess($code,$start,$initial_data,$ui) {
 
 		$this->doLog("Requested with code $code and start $start and ui $ui",$initial_data);
 
@@ -1064,6 +1084,17 @@ class BPME {
 		$id_activity_instance=$this->createActivityInstance($id_process_instance,$id_activity);
 
 		$id_activity_instance=$this->dispatchActivity($id_activity_instance,$ui);
+
+		if ($ui) {
+			$tasks=$bpme->getAvailableActivities($fw->app["uid"],$id_process_instance);
+
+			$this->fw->AddMerge("field","piid",$id_process_instance);
+			$this->fw->AddMerge("field","aiid",$id_activity_instance);
+			$this->fw->AddMerge("block","bTasks",$tasks);
+			$this->fw->app["TBS"]->LoadTemplate($bpme_app."/bpme/templates/STEP_RESULT.htm","+");
+			$this->fw->app["TBS"]->LoadTemplate($bpme_app."/bpme/templates/STEP_RESULT.htm","+");
+			$this->fw->app["TBS"]->LoadTemplate($bpme_app."/bpme/templates/STEP_RESULT.htm","+");			
+		}
 
 		$this->doLog("Returning process instance $id_process_instance and activity instance $id_activity_instance");
 
@@ -1454,7 +1485,7 @@ class BPME {
 		return true;
 	}
 
-	public function getAvailableActivities($uid=0,$id_process_instance=0) {
+	private function getAvailableActivities($uid=0,$id_process_instance=0) {
 		$this->doLog("Requested with uid $uid and process instance $id_process_instance");
 
 		if (!is_numeric($uid) and !is_int($uid)) {
