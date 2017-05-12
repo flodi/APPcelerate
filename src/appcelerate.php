@@ -986,57 +986,6 @@ class BPME {
 
 	}
 
-	public function bpmeTBS($function,$params) {
-		$this->doLog("Requested with function $function and params ".print_r($params,true));
-		switch($function) {
-			case 'processNameFromProcessInstance':
-				return($this->getProcessNameFromProcessInstance($params["id"]));
-				break;
-			case 'activityNameFromActivityInstance':
-				return($this->getActivityNameFromActivityInstance($params["id"]));
-				break;
-			default:
-			return("[Function $function not present]");
-		}
-
-	}
-
-	public function engine($function,$params) {
-		$this->doLog("Requested with function $function and params ".print_r($params,true));
-
-		switch($function) {
-			case 'showActivity':
-				if (!array_key_exists("id",$params)) {
-					throw new Exception("Missing 'id' params", 0);
-				}
-				return($this->showActivity($params["id"]));
-				break;
-			case 'followActions':
-				if (!array_key_exists("id",$params)) {
-					throw new Exception("Missing 'id' params", 0);
-				}
-				return($this->followActions($params["id"],true));
-				break;
-			case 'startProcess':
-				if (!array_key_exists("code",$params)) {
-					throw new Exception("Missing 'code' params", 0);
-				}
-				if (!array_key_exists("start",$params)) {
-					$params["start"]="MAIN";
-				}
-				if (!array_key_exists("data",$params)) {
-					$params["data"]=array();
-				}
-				if (!array_key_exists("ui",$params)) {
-					$params["ui"]=false;
-				}
-				return($this-startProcess($params["code"],$params["start"],$params["data"],$params["ui"]));
-				break;
-			default:
-				throw new Exception("Function $function not present");
-		}
-	}
-
 	// Ritorna l'id dell'istanza dell'ultima attività eseguita
 	private function startProcess($code,$start,$initial_data,$ui) {
 
@@ -1633,6 +1582,57 @@ class BPME {
 		throw new Exception($error, 0);
 		
 
+	}
+
+	public function bpmeTBS($function,$params) {
+		$this->doLog("Requested with function $function and params ".print_r($params,true));
+		switch($function) {
+			case 'processNameFromProcessInstance':
+				return($this->getProcessNameFromProcessInstance($params["id"]));
+				break;
+			case 'activityNameFromActivityInstance':
+				return($this->getActivityNameFromActivityInstance($params["id"]));
+				break;
+			default:
+			return("[Function $function not present]");
+		}
+
+	}
+
+	public function engine($function,$params) {
+		$this->doLog("Requested with function $function and params ".print_r($params,true));
+
+		switch($function) {
+			case 'showActivity':
+				if (!array_key_exists("id",$params)) {
+					throw new Exception("Missing 'id' params", 0);
+				}
+				return($this->showActivity($params["id"]));
+				break;
+			case 'followActions':
+				if (!array_key_exists("id",$params)) {
+					throw new Exception("Missing 'id' params", 0);
+				}
+				return($this->followActions($params["id"],true));
+				break;
+			case 'startProcess':
+				if (!array_key_exists("code",$params)) {
+					throw new Exception("Missing 'code' params", 0);
+				}
+				if (!array_key_exists("start",$params)) {
+					$params["start"]="MAIN";
+				}
+				if (!array_key_exists("data",$params)) {
+					$params["data"]=array();
+				}
+				if (!array_key_exists("ui",$params)) {
+					$params["ui"]=false;
+				}
+				return($this-startProcess($params["code"],$params["start"],$params["data"],$params["ui"]));
+				break;
+			default:
+				throw new Exception("Function $function not present");
+		}
 	}
 
 }
