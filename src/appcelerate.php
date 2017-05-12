@@ -1074,11 +1074,18 @@ class BPME {
 		$i=0;
 		foreach($d as $key => $value) {
 			if (substr($key, 0, 1) !== "_") {
+				if (substr($value, 0, 1) === "@") {
+					$value=$this->getProcessDataFieldFromDB($value);
+				}
 				$data[$i]["key"]=$key;
 				$data[$i++]["value"]=$value;
 			}
 		}
 		return($data);
+	}
+
+	private function getProcessDataFieldFromDB($token) {
+		return $token;
 	}
 
 	private function getProcessIDFromProcessInstance($id_process_instance) {
