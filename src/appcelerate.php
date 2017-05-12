@@ -995,9 +995,22 @@ class BPME {
 				return($this->getActivityNameFromActivityInstance($params["id"]));
 				break;
 			default:
-			return("[Function $function Not Present]");
+			return("[Function $function not present]");
 		}
 
+	}
+
+	public function engine($function,$params) {
+		switch($function) {
+			case 'showActivity':
+				return($this->showActivity($params["id"]));
+				break;
+			case 'followActions':
+				return($this->followActions($params["id"],true));
+				break;
+			default:
+				throw new Exception("Function $function not present");
+		}
 	}
 
 	// Ritorna l'id dell'istanza dell'ultima attività eseguita
