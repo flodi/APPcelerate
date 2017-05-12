@@ -1095,7 +1095,7 @@ class BPME {
 			throw new Exception("Field list is mandatory", 0);
 		}
 
-		$sql="select $field from $table";
+		$sql="select $field_list from $table";
 
 		if (!empty($where_field_list) and !empty($where_value_list)) {
 			$where_fields=explode(",",$where_field_list);
