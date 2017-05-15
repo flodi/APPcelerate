@@ -248,7 +248,7 @@ class APPcelerate {
 				if ($empty==count(array_keys($r))) {
 					break;
 				}
-				$sql="insert into $tmptable (id) values (NULL)";
+				$sql="insert into $tmptable (mytmpid) values (NULL)";
 				$rs=$this->app["db_".$this->app["name"]]->query($sql);
 				$err=$this->ISsqlError($rs,$sql);
 				if ($err) {
