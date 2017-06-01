@@ -1578,9 +1578,8 @@ class BPME {
 		}
 
 		//Esecuo l'activity di arrivo
-		$this->dispatchActivity($id_activity_instance_to,$ui);
+		return($this->dispatchActivity($id_activity_instance_to,$ui));
 
-		return true;
 	}
 
 	private function getAvailableActivities($uid=0,$id_process_instance=0) {
