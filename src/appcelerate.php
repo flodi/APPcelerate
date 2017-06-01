@@ -1731,11 +1731,13 @@ class BPME {
 				activities.name as name,
 				activities.code as code,
 				processes.name as pname,
-				processes.code as pcode
+				processes.code as pcode,
+				process_instances.data as data
 			from
 			activity_instances
 				join activities on activity_instances.id_activity=activities.id
 				join processes on activity_instances.id_process=processes.id
+				join process_instances on activity_instances.id_process_instance=process_instances.id
 			where
 				id_user_assigned=$uid and 
 				date_completed is null
