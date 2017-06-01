@@ -1501,7 +1501,7 @@ class BPME {
 					break;
 				}
 			}
-			$this->executeAction($id_action_instance,$ui);
+			return($this->executeAction($id_action_instance,$ui));
 		}
 
 		return true;
