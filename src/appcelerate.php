@@ -1396,6 +1396,8 @@ class BPME {
 			throw new Exception("Activity type $activity_type not allowed", 0);
 		}
 
+		$this->doLog("Activity type of $id_activity_instance is $activity_type");
+
 		switch ($activity_type) {
 			case 'S':
 				try {
