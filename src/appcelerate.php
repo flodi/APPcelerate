@@ -1739,10 +1739,18 @@ class BPME {
 				join processes on activity_instances.id_process=processes.id
 				join process_instances on activity_instances.id_process_instance=process_instances.id
 			where
-				id_user_assigned=$uid and 
-				date_completed is null
+				activity_instances.id_user_assigned=$uid and 
+				activity_instances.date_completed is null
 		";
 		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
 
 		return($this->fw->fetchAllAssoc($rs));
 	}
