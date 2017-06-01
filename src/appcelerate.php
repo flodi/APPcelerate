@@ -1053,6 +1053,45 @@ class BPME {
 		return(array($id_process_instance,$id_activity_instance));
 	}
 
+	public function setProcessInstanceData($id_process_instance,$data) {
+		$this->doLog("Requested with process instance $id_process_instance");
+
+		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
+			throw new Exception("Process instance id $id_process_instance not valid", 0);
+		}
+
+		if (!is_array($data)) {
+			throw new Exception("Process data ".print_r($data,true)." not valid", 0);
+		}
+
+		$sql="select data from process_instances where id=$id_process_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		$d=json_decode($rs->fetch_array(MYSQLI_NUM)[0],true);
+
+		$new_d=array_merge($d,$data);
+
+		$sql="update process_instances et data='".json_encode($new_d)."' where id=$id_process_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+
+		return true;
+	}
+
 	private function getProcessInstanceData($id_process_instance) {
 		$this->doLog("Requested with process instance $id_process_instance");
 
