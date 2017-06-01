@@ -1081,7 +1081,7 @@ class BPME {
 
 		$new_d=array_merge($d,$data);
 
-		$sql="update process_instances et data='".json_encode($new_d)."' where id=$id_process_instance";
+		$sql="update process_instances set data='".json_encode($new_d)."' where id=$id_process_instance";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
