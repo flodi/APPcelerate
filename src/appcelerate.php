@@ -1719,6 +1719,17 @@ class BPME {
 		
 	}
 
+	private function getCases($uid) {
+		if (!is_numeric($uid) and !is_int($uid)) {
+			throw new Exception("Uid $uid not valid", 0);
+		}
+
+		$sql="select * from activity_instances where id_user_assigned=$uid and date_completed is null";
+		$rs=$this->db->query($sql);
+
+		return($this->fw->fetchAllAssoc($rs));
+	}
+
 	private function rsCheck($rs) {
 		if ($rs) {
 			return true;
@@ -1750,6 +1761,14 @@ class BPME {
 		$this->doLog("Requested with function $function and params ".print_r($params,true));
 
 		switch($function) {
+			case 'getCases':
+				if (!array_key_exists("id",$params)) {
+					throw new Exception("Missing 'id' params", 0);
+				}
+
+				$uid=$this->fw->app["uid"];
+				return($this->getCases($uid));
+				break;
 			case 'showActivity':
 				if (!array_key_exists("id",$params)) {
 					throw new Exception("Missing 'id' params", 0);
