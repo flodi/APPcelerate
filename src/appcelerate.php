@@ -1031,7 +1031,7 @@ class BPME {
 		}
 
 
-		$id_activity_instance=$this->createActivityInstance($id_process_instance,$id_activity);
+		$id_activity_instance=$this->createActivityInstance($id_process_instance,$id_activity,$ui);
 
 		$id_activity_instance=$this->dispatchActivity($id_activity_instance,$ui);
 
@@ -1316,7 +1316,7 @@ class BPME {
 		return($context);		
 	}
 
-	private function createActivityInstance($id_process_instance,$id_activity) {
+	private function createActivityInstance($id_process_instance,$id_activity,$ui=false) {
 
 		$this->doLog("Requested with process instance  $id_process_instance and activity $id_activity");
 
@@ -1331,7 +1331,14 @@ class BPME {
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
 
-		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_user_assigned) values (%d,%d,%d,%d,%d)",$id_activity,$id_process,$id_process_instance,$uid,$uid);
+		if ($ui) {
+			$id_user_assigned=$uid;
+		}
+		else {
+			$id_user_assigned="null";
+		}
+
+		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_user_assigned) values (%d,%d,%d,%d,%d)",$id_activity,$id_process,$id_process_instance,$uid,$id_user_assigned);
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1563,7 +1570,7 @@ class BPME {
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 
 		//Creo l'istanza di activity di arrivo
-		$id_activity_instance_to=$this->createActivityInstance($id_process_instance,$id_activity_to);
+		$id_activity_instance_to=$this->createActivityInstance($id_process_instance,$id_activity_to,$ui);
 
 		//Chiudo l'action
 		$sql="update action_instances set id_activity_instance_to=$id_activity_instance_to, date_executed=now(), id_user_executed=".$this->getCurrentUID();
