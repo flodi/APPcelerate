@@ -1075,6 +1075,9 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 		$d=json_decode($rs->fetch_array(MYSQLI_NUM)[0],true);
+		if (empty($d)) {
+			$d=array();
+		}
 
 		$new_d=array_merge($d,$data);
 
