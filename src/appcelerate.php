@@ -1724,7 +1724,22 @@ class BPME {
 			throw new Exception("Uid $uid not valid", 0);
 		}
 
-		$sql="select * from activity_instances where id_user_assigned=$uid and date_completed is null";
+		$sql="
+			select
+				activity_instances.id as aiid,
+				activities.id as aid,
+				activities.name as name,
+				activities.code as code,
+				processes.name as pname,
+				processes.code as pcode
+			from
+			activity_instances
+				join activities on activity_instances.id_activity=activities.id
+				join processes on activity_instances.id_process=processes.id
+			where
+				id_user_assigned=$uid and 
+				date_completed is null
+		";
 		$rs=$this->db->query($sql);
 
 		return($this->fw->fetchAllAssoc($rs));
