@@ -947,8 +947,8 @@ class BPME {
 		"F" => "Finish",
 		"U" => "Manual",
 		"A" => "Automatic",
-		"S" => "Sync",
-		"C" => "Evaluate condition"
+		"E" => "Evaluate condition",
+		"C" => "Counterpart"
 	);
 
 	//
@@ -1009,7 +1009,9 @@ class BPME {
 		$r=$rs->fetch_array(MYSQLI_ASSOC);
 		$id_process=$r["id"];
 
-		$sql=sprintf("insert into process_instances (id_process,id_user_created,status,data) values (%d,%d,'R','%s')",$id_process,$uid,json_encode($initial_data));
+		$serialized_data=$this->db->real_escape_string(json_encode($initial_data));
+
+		$sql=sprintf("insert into process_instances (id_process,id_user_created,status,data) values (%d,%d,'R','%s')",$id_process,$uid,$serialized_data);
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
