@@ -1340,7 +1340,7 @@ class BPME {
 			$id_user_assigned="null";
 		}
 
-		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_user_assigned) values (%d,%d,%d,%d,%d)",$id_activity,$id_process,$id_process_instance,$uid,$id_user_assigned);
+		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_user_assigned) values (%d,%d,%d,%d,%s)",$id_activity,$id_process,$id_process_instance,$uid,$id_user_assigned);
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
