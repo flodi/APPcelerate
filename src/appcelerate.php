@@ -1827,6 +1827,9 @@ class BPME {
 				$r=$this->startProcess($params["code"],$params["start"],$params["data"],$params["ui"]);
 				return($r);
 				break;
+			case 'getProcessInstanceIDFromActivityInstanceID':
+				return($this->getProcessInstanceFromActivityInstance($params["id"]));
+				break;
 			default:
 				throw new Exception("Function $function not present");
 		}
