@@ -1608,10 +1608,13 @@ class BPME {
 			activities.name as name,
 			processes.code as process_code,
 			processes.name as process_name
-			from activity_instances join activities on activities.id=activity_instances.id_activity join processes on processes.id=activity_instances.id_process where date_completed is null
+			from activity_instances join activities on activities.id=activity_instances.id_activity join processes on processes.id=activity_instances.id_process where activity_instances.date_completed is null and activities.activity_type in ('U')
 		";
 		if ($uid!==0) {
-			$sql.=" and id_user_assigned=$uid";			
+			$sql.=" and activity_instances.id_user_assigned=$uid or activity_instances.id_user_assigned is null";			
+		}
+		else {
+			$sql.=" and activity_instances.id_user_assigned is null";			
 		}
 
 		if ($id_process_instance!==0) {
