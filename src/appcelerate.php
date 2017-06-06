@@ -556,6 +556,35 @@ class APPcelerate {
 		
 	}
 	
+	public function  _SendEmail($body, $subject, $from, $to, $bcc, $files=array()) {
+
+		$to = array_map('trim', explode(';', $to));
+
+		$bcc = array_map('trim', explode(';', $to));
+
+		$m = new SimpleEmailServiceMessage();
+		$m->setFrom($from);
+		$m->addReplyTo($from);
+		$m->setReturnPath($from);
+
+		foreach ($files as $name => $path) {
+		    $m->addAttachmentFromFile("$name",$path,'application/octet-stream', "<$name>" , 'inline');
+		}
+
+		$m->addTo($to);
+		$m->addBCC($bcc);
+		$m->setSubject($subject);
+		$m->setMessageFromString(strip_tags($body), $body);
+		$ses = new SimpleEmailService('AKIAISOPAR4V3TEUGUPA', '3w+Mh74AYf2Lu9HFgQUSK5A19wzZvhdQKNcGrv3H', 'email.eu-west-1.amazonaws.com', true);
+		$result = $ses->sendEmail($m);
+		$ses_messageid = $result['MessageId'];
+		$ses_requestid = $result['RequestId'];
+
+		$sql = "insert into ses_log (messageid, requestid, object) value ('$ses_messageid','$ses_requestid','".json_encode($m)."')";
+		$rs = $fw->app['db_eventi']->query($sql);
+		$fw->sqlError($rs, $sql);
+	}
+
 	public function errRoute($redir=true) {
 		$this->doLog("Route Error, restarting ".$_SERVER["REQUEST_URI"]);
 		if ($redir) {
@@ -1520,7 +1549,7 @@ class BPME {
 			$this->fw->AddMerge("block","bTasks",$tasks);
 			$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT.htm","+");
 		}
-		
+
 		return true;
 
 	}
