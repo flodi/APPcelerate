@@ -1523,7 +1523,7 @@ class BPME {
 					break;
 				}
 			}
-			return($this->executeAction($id_action_instance,$ui));
+			$this->executeAction($id_action_instance,$ui);
 		}
 
 		return true;
@@ -1598,9 +1598,6 @@ class BPME {
 			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
-
-		//Esecuo l'activity di arrivo
-		return($this->dispatchActivity($id_activity_instance_to,$ui));
 
 	}
 
