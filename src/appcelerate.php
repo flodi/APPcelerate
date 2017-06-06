@@ -556,7 +556,7 @@ class APPcelerate {
 		
 	}
 	
-	public function  _SendEmail($body, $subject, $from, $to, $bcc, $files=array()) {
+	public function  sendEmail($body, $subject, $from, $to, $bcc=array(), $files=array()) {
 
 		$to = array_map('trim', explode(';', $to));
 
