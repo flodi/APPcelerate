@@ -1434,9 +1434,14 @@ class BPME {
 			case 'S':
 				break;
 			case 'C':
+				$this->executeCounterpartActivity($id_activity_instance);
 				break;
 		}
 
+	}
+
+	private function executeCounterpartActivity($id_activity_instance) {
+		return($id_action_instance);
 	}
 
 	private function executeActivity($id_activity_instance) {
@@ -1503,17 +1508,19 @@ class BPME {
 			$this->executeAction($id_action_instance,$ui);
 		}
 
-		$context=$this->getActivityInstanceContext($id_activity_instance_from);
+		if ($ui) {
+			$context=$this->getActivityInstanceContext($id_activity_instance_from);
 
-		$this->fw->AddMerge("block","context",$context);
+			$this->fw->AddMerge("block","context",$context);
 
-		$tasks=$this->getAvailableActivities($this->fw->app["uid"],$id_process_instance);
+			$tasks=$this->getAvailableActivities($this->fw->app["uid"],$id_process_instance);
 
-		$this->fw->AddMerge("field","piid",$id_process_instance);
-		$this->fw->AddMerge("field","aiid","$id_activity_instance_from");
-		$this->fw->AddMerge("block","bTasks",$tasks);
-		$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT.htm","+");
-
+			$this->fw->AddMerge("field","piid",$id_process_instance);
+			$this->fw->AddMerge("field","aiid","$id_activity_instance_from");
+			$this->fw->AddMerge("block","bTasks",$tasks);
+			$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT.htm","+");
+		}
+		
 		return true;
 
 	}
