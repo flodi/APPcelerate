@@ -1045,7 +1045,7 @@ class BPME {
 			$tasks=$this->getAvailableActivities($this->fw->app["uid"],$id_process_instance);
 
 			$this->fw->AddMerge("field","piid",$id_process_instance);
-			$this->fw->AddMerge("field","aiid",$id_activity_instance);
+			$this->fw->AddMerge("field","aiid","$id_activity_instance");
 			$this->fw->AddMerge("block","bTasks",$tasks);
 			$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT.htm","+");
 		}
@@ -1424,6 +1424,16 @@ class BPME {
 			case 'F':
 				break;
 			case 'U':
+				$context=$this->getActivityInstanceContext($id_activity_instance);
+
+				$this->fw->AddMerge("block","context",$context);
+
+				$tasks=$this->getAvailableActivities($this->fw->app["uid"],$id_process_instance);
+
+				$this->fw->AddMerge("field","piid",$id_process_instance);
+				$this->fw->AddMerge("field","aiid","$id_activity_instance");
+				$this->fw->AddMerge("block","bTasks",$tasks);
+				$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT.htm","+");
 				return($id_activity_instance);
 				break;
 			case 'A':
@@ -1811,6 +1821,12 @@ class BPME {
 				}
 				return($this->followActions($params["id"],true));
 				break;
+			case 'dispatchActivity':
+				if (!array_key_exists("id",$params)) {
+					throw new Exception("Missing 'id' params", 0);
+				}
+				return($this->dispatchActivity($params["id"],true));
+				break;
 			case 'startProcess':
 				if (!array_key_exists("code",$params)) {
 					throw new Exception("Missing 'code' params", 0);
@@ -1828,6 +1844,9 @@ class BPME {
 				return($r);
 				break;
 			case 'getProcessInstanceIDFromActivityInstanceID':
+				if (!array_key_exists("id",$params)) {
+					throw new Exception("Missing 'id' params", 0);
+				}
 				return($this->getProcessInstanceFromActivityInstance($params["id"]));
 				break;
 			default:
