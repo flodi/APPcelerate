@@ -1742,7 +1742,8 @@ class BPME {
 				join process_instances on activity_instances.id_process_instance=process_instances.id
 			where
 				(activity_instances.id_user_assigned=$uid or activity_instances.id_user_assigned is null) and 
-				activity_instances.date_completed is null
+				activity_instances.date_completed is null and
+				activities.activity_type in ('U')
 		";
 		$rs=$this->db->query($sql);
 		try {
