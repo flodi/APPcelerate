@@ -1635,7 +1635,9 @@ class BPME {
 		return $this->fw->app["uid"];
 	}
 
-	private function getActivityID($process_code,$activity_name) {
+	private function getActivityID($process_code,$activity_code) {
+		$this->doLog("Requested with process_code $process_code and activity_code $activity_code");
+
 		$sql="select id from processes where code='$process_code'";
 		$rs=$this->db->query($sql);
 		if ($rs->num_rows===0) {
@@ -1643,17 +1645,8 @@ class BPME {
 			$this->doLog("Process $code not found");
 		}
 		$id_process=$rs->fetch_array(MYSQLI_NUM)[0];
-		$sql="select id from activities where id_process=$id_process";
-		if (!empty($activity_type)) {
 
-			if (array_key_exists($activity_type,$this->activity_types)) {
-				$sql.=" and activity_type='$activity_type'";
-			}
-			else {
-				$this->doLog("Activity type $activity_type not allowed");
-				throw new Exception("Activity type $activity_type not allowed", 0);
-			}
-		}
+		$sql="select id from activities where id_process=$id_process and code='$activity_code'";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
