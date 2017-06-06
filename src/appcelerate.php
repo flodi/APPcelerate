@@ -1587,6 +1587,8 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
+		$this->dispatchActivity($id_activity_instance_to);
+
 	}
 
 	private function getAvailableActivities($uid=0,$id_process_instance=0) {
