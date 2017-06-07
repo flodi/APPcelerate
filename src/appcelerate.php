@@ -1949,6 +1949,12 @@ class BPME {
 				$r=$this->startProcess($params["code"],$params["start"],$params["data"],$params["ui"]);
 				return($r);
 				break;
+			case 'getProcessInstanceData':
+				if (!array_key_exists("id",$params)) {
+					throw new Exception("Missing 'id' params", 0);
+				}
+				return($this->getProcessInstanceData($params["id"]));
+				break;
 			case 'getProcessInstanceIDFromActivityInstanceID':
 				if (!array_key_exists("id",$params)) {
 					throw new Exception("Missing 'id' params", 0);
