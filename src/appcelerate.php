@@ -1117,7 +1117,7 @@ class BPME {
 	}
 
 	private function getProcessInstanceData($id_process_instance,$all=true,$block=true) {
-		$this->doLog("Requested with process instance $id_process_instancea and ".print_r($all,true));
+		$this->doLog("Requested with process instance $id_process_instance and ".print_r($all,true));
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
