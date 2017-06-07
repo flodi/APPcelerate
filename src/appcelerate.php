@@ -482,6 +482,7 @@ class APPcelerate {
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.treetable.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/datatables/datatables.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap-editable.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/appcelerate.js"></script>
 					';
 					break;
 				case "css":
