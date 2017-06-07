@@ -1491,7 +1491,7 @@ class BPME {
 		$TBSC->Show(TBS_NOTHING);
 		$mail=$TBSC->Source;
 
-		$sql="select * from activities where id=".$this->getActivityCodeFromActivityInstance($id_activity_instance)." and id_process_instance=".$id_process_instance;
+		$sql="select * from activities where code='".$this->getActivityCodeFromActivityInstance($id_activity_instance)."'' and id_process_instance=".$id_process_instance;
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
