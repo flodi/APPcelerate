@@ -1116,7 +1116,7 @@ class BPME {
 		return true;
 	}
 
-	private function getProcessInstanceData($id_process_instance,$all=true) {
+	private function getProcessInstanceData($id_process_instance,$all=true,$block=true) {
 		$this->doLog("Requested with process instance $id_process_instancea and ".print_r($all,true));
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
@@ -1141,8 +1141,13 @@ class BPME {
 				if (substr($value, 0, 1) === "@") {
 					$value=json_encode($this->getProcessDataFieldFromDB($value));
 				}
-				$data[$i]["key"]=$key;
-				$data[$i++]["value"]=$value;
+				if ($block) {
+					$data[$i]["key"]=$key;
+					$data[$i++]["value"]=$value;
+				}
+				else {
+					$data[$key]=$value;
+				}
 			}
 		}
 		return($data);
