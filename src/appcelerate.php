@@ -1652,7 +1652,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		$closing_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_CLOSE.php";
+		$closing_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance_from)."_CLOSE.php";
 		if (stream_resolve_include_path($closing_script)) {
 			include($closing_script);
 		}
