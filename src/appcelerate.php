@@ -824,7 +824,7 @@ class APPcelerate {
 			//
 			// Security
 			//
-			if ($this->app["accounts"][$this->app["name"]] or $this->app["skipsec"]) {
+			if ($this->app["accounts"][$this->app["name"]] and !$this->app["skipsec"]) {
 				$this->doLog("Doing Security ".json_encode($_SESSION));
 				$this->doLog("Accounts Active");
 				$this->doSecurity();
