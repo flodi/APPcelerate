@@ -1504,7 +1504,7 @@ class BPME {
 		$activity=$rs->fetch_array(MYSQLI_ASSOC);
 		$TBSC->MergeBlock("bActivity",$activity);
 
-		$sql="select * from ospiti where partecipanti.id=".$data["_id_ospite"];
+		$sql="select * from ospiti where id=".$data["_id_ospite"];
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
