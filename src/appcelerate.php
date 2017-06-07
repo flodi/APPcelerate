@@ -778,19 +778,7 @@ class APPcelerate {
 			if (!in_array($this->app["name"],$this->app["apps"])) {
 				die("Error in routes definition: unauthorized app ".$this->app["name"]);
 			}
-				
-			//
-			// Security
-			//
-			if ($this->app["accounts"][$this->app["name"]]) {
-				$this->doLog("Doing Security ".json_encode($_SESSION));
-				$this->doLog("Accounts Active");
-				$this->doSecurity();
-			}
-			else {
-				$this->doLog("Accounts Not Active");
-			}
-			
+							
 			//
 			// Set Locale
 			//
@@ -824,13 +812,24 @@ class APPcelerate {
 				include_once($app_vws_path."init.php");
 			}
 			
-			
 			//
 			// Init section (if exists)
 			//
 			if (stream_resolve_include_path($sec_vws_path."init.php")) {
 				$this->doLog("Initializing section ".$this->app["section"],$this::L_INFO);
 				include_once($sec_vws_path."init.php");
+			}
+
+			//
+			// Security
+			//
+			if ($this->app["accounts"][$this->app["name"]]) {
+				$this->doLog("Doing Security ".json_encode($_SESSION));
+				$this->doLog("Accounts Active");
+				$this->doSecurity();
+			}
+			else {
+				$this->doLog("Accounts Not Active");
 			}
 		
 			if ($this->app["skipui"]==false) {
@@ -1470,6 +1469,18 @@ class BPME {
 	}
 
 	private function executeCounterpartActivity($id_activity_instance) {
+		return;
+		$TBSC = new clsTinyButStrong;
+		$TBSC->LoadTemplate($this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm");
+		$data=getProcessInstanceData($id_process_instance);
+		$TBSC->MergeBlock("bMail",$data);
+		$TBSC->Show(TBS_NOTHING);
+		$mail=$TBSC->Source;
+
+
+
+		$this->fw->sendEmail($mail, "", $from, $to);
+
 		return($id_action_instance);
 	}
 
