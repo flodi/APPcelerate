@@ -1485,7 +1485,7 @@ class BPME {
 
 		$TBSC = new clsTinyButStrong;
 		$TBSC->LoadTemplate($this->app_name."/bpme/templates/STEP_COUNT_EMAIL.htm");
-		$data=$this->getProcessInstanceData($id_process_instance);
+		$data=$this->getProcessInstanceData($id_process_instance,true,false);
 		$TBSC->MergeBlock("bPdata",$data);
 		
 		$TBSC->Show(TBS_NOTHING);
