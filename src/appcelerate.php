@@ -1538,7 +1538,6 @@ $to=array("flodi@e-scientia.eu");
 			$this->fw->sendEmail($mail, $subject, $data["_mail_from"], $to);
 		}
 
-		return($id_action_instance);
 	}
 
 	private function executeActivity($id_activity_instance) {
