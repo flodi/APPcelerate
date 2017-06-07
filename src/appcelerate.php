@@ -559,9 +559,13 @@ class APPcelerate {
 	
 	public function  sendEmail($body, $subject, $from, $to, $bcc=array(), $files=array()) {
 
-		$to = array_map('trim', explode(';', $to));
+		if (!is_array($to)) {
+			$to=array($to);
+		}
 
-		$bcc = array_map('trim', explode(';', $to));
+		if (!is_array($bcc)) {
+			$bcc=array($bcc);
+		}
 
 		$m = new SimpleEmailServiceMessage();
 		$m->setFrom($from);
