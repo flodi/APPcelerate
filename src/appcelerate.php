@@ -586,8 +586,8 @@ class APPcelerate {
 		$ses_requestid = $result['RequestId'];
 
 		$sql = "insert into ses_log (messageid, requestid, object) value ('$ses_messageid','$ses_requestid','".json_encode($m)."')";
-		$rs = $this->fw->app["db_".$this->app["name"]]->query($sql);
-		$this->fw->sqlError($rs, $sql);
+		$rs = $this->app["db_".$this->app["name"]]->query($sql);
+		$this->sqlError($rs, $sql);
 	}
 
 	public function errRoute($redir=true) {
