@@ -1638,7 +1638,10 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		include($this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_CLOSE.php");
+		$closing_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_CLOSE.php";
+		if (stream_resolve_include_path($closing_script)) {
+			include($closing_script);
+		}
 
 		//Definisco l'activity successiva
 		$sql="select id_activity_to from actions where id=(select id_action from action_instances where id=$id_action_instance)";
