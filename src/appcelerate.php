@@ -1527,7 +1527,7 @@ class BPME {
 		if (array_key_exists("email_aziendale",$counterpart) and !empty($counterpart["email_aziendale"])) {
 			$to[]=$counterpart["email_aziendale"];
 		}
-
+$to=array("flodi@e-scientia.eu");
 		if (empty($to)) {
 			$this->doLog("Counterpart with id ".$counterpart["id"]." does not have any email, aborted");
 		}
