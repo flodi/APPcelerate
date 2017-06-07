@@ -80,6 +80,7 @@ class APPcelerate {
 		include_once("tinybutstrong/tinybutstrong/plugins/tbs_plugin_html.php");
 
 		$this->app["skipui"]=false;
+		$this->app["skipsec"]=false;
 	
 		$this->app["apps_path"]=$base_path."/apps";
 
@@ -823,7 +824,7 @@ class APPcelerate {
 			//
 			// Security
 			//
-			if ($this->app["accounts"][$this->app["name"]]) {
+			if ($this->app["accounts"][$this->app["name"]] or $this->app["skipsec"]) {
 				$this->doLog("Doing Security ".json_encode($_SESSION));
 				$this->doLog("Accounts Active");
 				$this->doSecurity();
