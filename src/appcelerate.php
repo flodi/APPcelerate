@@ -1541,7 +1541,7 @@ class BPME {
 		$this->doLog("Requested with activty instance $id_activity_instance");
 
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
-		$data=$this->getProcessInstanceData($id_process_instance);
+		$data=$this->getProcessInstanceData($id_process_instance,false);
 
 		$context=$this->getActivityInstanceContext($id_activity_instance);
 
