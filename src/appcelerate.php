@@ -1626,8 +1626,22 @@ class BPME {
 			throw new Exception("Activity instance id $id_action_instance not valid", 0);
 		}
 
+		$sql="select id_activity_instance_from from action_instances where id=$id_action_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		$id_activity_instance_from=$rs->fetch_array(MYSQLI_NUM)[0];
+
+		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance_from);
+
 		//Concludo l'activity precedente
-		$sql="update activity_instances set date_completed=now(), id_user_completed=".$this->getCurrentUID()." where id=(select id_activity_instance_from from action_instances where id=$id_action_instance)";
+		$sql="update activity_instances set date_completed=now(), id_user_completed=".$this->getCurrentUID()." where id=$id_activity_instance_from";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
