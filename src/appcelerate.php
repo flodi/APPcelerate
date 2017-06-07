@@ -1137,7 +1137,7 @@ class BPME {
 		$i=0;
 		$data=array();
 		foreach($d as $key => $value) {
-			if (substr($key, 0, 1) !== "_" and !$all) {
+			if (substr($key, 0, 1) !== "_" or $all) {
 				if (substr($value, 0, 1) === "@") {
 					$value=json_encode($this->getProcessDataFieldFromDB($value));
 				}
