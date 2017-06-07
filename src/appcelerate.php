@@ -1470,17 +1470,65 @@ class BPME {
 	}
 
 	private function executeCounterpartActivity($id_activity_instance) {
-		return;
+		$this->doLog("Requested with activty instance  $id_activity_instance");
+
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
+
 		$TBSC = new clsTinyButStrong;
-		$TBSC->LoadTemplate($this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm");
+		$TBSC->LoadTemplate($this->app_name."/bpme/templates/STEP_COUNT_EMAIL.htm");
+
 		$data=getProcessInstanceData($id_process_instance);
-		$TBSC->MergeBlock("bMail",$data);
+		$TBSC->MergeBlock("bPdata",$data);
+		
 		$TBSC->Show(TBS_NOTHING);
 		$mail=$TBSC->Source;
 
+		$sql="select * from activities where id=".$this->getActivityCodeFromActivityInstance($id_activity_instance)." and id_process_instance=".$id_process_instance;
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		$activity=$rs->fetch_array(MYSQLI_ASSOC);
+		$TBSC->MergeBlock("bActivity",$activity);
 
+		$sql="select * from ospiti where partecipanti.id=".$data["_id_ospite"];
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		$counterpart=$rs->fetch_array(MYSQLI_ASSOC);
+		$TBSC->MergeBlock("bCount",$counterpart);
 
-		$this->fw->sendEmail($mail, "", $from, $to);
+		$subject=sprintf("#%d %s > %s > Richiesta riscontro - Messaggio Automatico",$activity["id"],$data["_mail_object"],$counterpart["nome"]." ".$counterpart["cognome"]);
+
+		$to=array();
+		if (array_key_exists("email_personale",$counterpart) and !empty($counterpart["email_personale"])) {
+			$to[]=$counterpart["email_personale"];
+		}
+		if (array_key_exists("email_aziendale",$counterpart) and !empty($counterpart["email_aziendale"])) {
+			$to[]=$counterpart["email_aziendale"];
+		}
+
+		if (empty($to)) {
+			$this->doLog("Counterpart with id ".$counterpart["id"]." does not have any email, aborted");
+		}
+		else {
+			$this->fw->sendEmail($mail, $subject, $data["_mail_from"], $to);
+		}
 
 		return($id_action_instance);
 	}
@@ -1589,6 +1637,8 @@ class BPME {
 			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
+
+		include($this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_CLOSE.php");
 
 		//Definisco l'activity successiva
 		$sql="select id_activity_to from actions where id=(select id_action from action_instances where id=$id_action_instance)";
