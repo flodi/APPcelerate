@@ -1476,7 +1476,7 @@ class BPME {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 
-		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
+		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 
 		$TBSC = new clsTinyButStrong;
 		$TBSC->LoadTemplate($this->app_name."/bpme/templates/STEP_COUNT_EMAIL.htm");
@@ -1638,7 +1638,7 @@ class BPME {
 		}
 		$id_activity_instance_from=$rs->fetch_array(MYSQLI_NUM)[0];
 
-		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance_from);
+		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_from);
 
 		//Concludo l'activity precedente
 		$sql="update activity_instances set date_completed=now(), id_user_completed=".$this->getCurrentUID()." where id=$id_activity_instance_from";
