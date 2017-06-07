@@ -1958,13 +1958,13 @@ class BPME {
 				if (!array_key_exists("id",$params)) {
 					throw new Exception("Missing 'id' params", 0);
 				}
-				return($this->getProcessInstanceData($params["id"]));
+				return($this->getProcessInstanceData($params["id"],true,false));
 				break;
 			case 'getProcessInstanceIDFromActivityInstanceID':
 				if (!array_key_exists("id",$params)) {
 					throw new Exception("Missing 'id' params", 0);
 				}
-				return($this->getProcessInstanceFromActivityInstance($params["id"],true,false));
+				return($this->getProcessInstanceFromActivityInstance($params["id"]));
 				break;
 			default:
 				throw new Exception("Function $function not present");
