@@ -1116,7 +1116,7 @@ class BPME {
 		return true;
 	}
 
-	private function getProcessInstanceData($id_process_instance) {
+	private function getProcessInstanceData($id_process_instance,$all=true) {
 		$this->doLog("Requested with process instance $id_process_instance");
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
@@ -1137,7 +1137,7 @@ class BPME {
 		$i=0;
 		$data=array();
 		foreach($d as $key => $value) {
-			if (substr($key, 0, 1) !== "_") {
+			if (substr($key, 0, 1) !== "_" and !$all) {
 				if (substr($value, 0, 1) === "@") {
 					$value=json_encode($this->getProcessDataFieldFromDB($value));
 				}
