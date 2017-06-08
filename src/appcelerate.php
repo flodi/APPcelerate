@@ -1156,14 +1156,11 @@ class BPME {
 				if (substr($value, 0, 1) === "@") {
 					$value=json_encode($this->getProcessDataFieldFromDB($value));
 				}
-				if ($block) {
-					$data[$i]["key"]=$key;
-					$data[$i++]["value"]=$value;
-				}
-				else {
-					$data[$key]=$value;
-				}
+				$data[$key]=$value;
 			}
+		}
+		if ($block) {
+			$data=array($data);
 		}
 		return($data);
 	}
@@ -1543,7 +1540,6 @@ class BPME {
 		$TBSC = new clsTinyButStrong;
 		$TBSC->LoadTemplate($this->app_name."/bpme/templates/STEP_COUNT_EMAIL.htm");
 		$data=$this->getProcessInstanceData($id_process_instance,true,true);
-echo "<pre>"; print_r($data); echo "</pre>";	
 		$TBSC->MergeBlock("bPdata",$data);
 		
 		$sql="select * from activities where code='".$this->getActivityCodeFromActivityInstance($id_activity_instance)."' and id_process=".$this->getProcessIDFromProcessInstance($id_process_instance);
