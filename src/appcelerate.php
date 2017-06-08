@@ -1513,10 +1513,10 @@ class BPME {
 				}
 				return($new_id_activity_instance);
 				break;
-			case 'S':
-				break;
 			case 'C':
 				$this->executeCounterpartActivity($id_activity_instance);
+				break;
+			case 'E':
 				break;
 		}
 
@@ -1675,14 +1675,23 @@ $to=array("flodi@e-scientia.eu");
 
 	private function checkActionCondition($id_activity_instance,$id_action,$condition) {
 		$this->doLog("Call $id_activity_instance $id_action $condition");
-		return array("",true);
+
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_action_instance not valid", 0);
+		}
+
+		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
+		$data=$this->getProcessInstanceData($id_process_instance,true,false);
+		$confirm=$data["lastconfirm"];
+
+		return(array($confirm,$confirm==$condition));
 	}
 
 	private function executeAction($id_action_instance,$ui=false) {
 		$this->doLog("Requested with action instance $id_action_instance and ui $ui");
 
 		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
-			throw new Exception("Activity instance id $id_action_instance not valid", 0);
+			throw new Exception("Action instance id $id_action_instance not valid", 0);
 		}
 
 		$sql="select id_activity_instance_from from action_instances where id=$id_action_instance";
