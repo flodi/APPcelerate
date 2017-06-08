@@ -1668,7 +1668,7 @@ $to=array("flodi@e-scientia.eu");
 					throw new Exception("Query Error", 0);
 				}
 				if (!$ok) {
-					break;
+					continue;
 				}
 			}
 			$this->executeAction($id_action_instance,$ui);
