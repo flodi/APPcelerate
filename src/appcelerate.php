@@ -1543,6 +1543,7 @@ class BPME {
 		$TBSC = new clsTinyButStrong;
 		$TBSC->LoadTemplate($this->app_name."/bpme/templates/STEP_COUNT_EMAIL.htm");
 		$data=$this->getProcessInstanceData($id_process_instance,true,true);
+echo "<pre>"; print_r($data); echo "</pre>";	
 		$TBSC->MergeBlock("bPdata",$data);
 		
 		$sql="select * from activities where code='".$this->getActivityCodeFromActivityInstance($id_activity_instance)."' and id_process=".$this->getProcessIDFromProcessInstance($id_process_instance);
