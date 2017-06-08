@@ -1638,7 +1638,7 @@ $to=array("flodi@e-scientia.eu");
 			$id_action_instance=$this->createActionInstance($id_process_instance,$id_activity_instance_from,$id_action);
 
 			if (!empty($r["entry_condition"])) {
-				list($evaluation,$ok)=checkActionCondition($id_activity_instance_from,$id_action,$r["entry_condition"]);
+				list($evaluation,$ok)=$this->checkActionCondition($id_activity_instance_from,$id_action,$r["entry_condition"]);
 				$sql="update action_instances set entry_condition_evaluation='$evaluation' where id=$id_action_instance";
 				$rs1=$this->db->query($sql);
 				try {
