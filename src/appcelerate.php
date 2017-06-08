@@ -1705,7 +1705,7 @@ $to=array("flodi@e-scientia.eu");
 	}
 
 	private function checkActionCondition($id_activity_instance,$id_action,$condition) {
-		$this->doLog("Call $id_activity_instance $id_action $condition");
+		$this->doLog("Requested with $id_activity_instance $id_action $condition");
 
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_action_instance not valid", 0);
