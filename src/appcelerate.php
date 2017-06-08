@@ -1616,7 +1616,9 @@ $to=array("flodi@e-scientia.eu");
 		$this->fw->AddMerge("block","process_data",$data);
 		$this->fw->AddMerge("field","piid",$id_process_instance);
 		$this->fw->AddMerge("field","aiid",$id_activity_instance);
-		$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm","+");
+		$tmpl=$this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm";
+echo $tmpl;
+		$this->fw->app["TBS"]->LoadTemplate($tmpl,"+");
 	}
 
 	private function followActions($id_activity_instance_from,$ui=false) {
