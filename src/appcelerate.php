@@ -99,6 +99,9 @@ class APPcelerate {
 	
 		$this->app["loglevel"]=getenv('LOGLEVEL');
 
+		$this->app["aws_key"]=getenv('AWS_KEY');
+		$this->app["aws_code"]=getenv('AWS_CODE');
+
 		$this->app["favicon"]=getenv('FAVICON');
 		if (!empty($this->app["favicon"])) {
 			$cmd=$this->app["base_path"]."/vendor/bin/favicon generate --ico-64 --ico-48 ".$this->app["base_path"]."/include/img/".$this->app["favicon"]." ".$this->app["base_path"];
@@ -588,7 +591,7 @@ class APPcelerate {
 		$m->addBCC($bcc);
 		$m->setSubject($subject);
 		$m->setMessageFromString(strip_tags($body), $body);
-		$ses = new SimpleEmailService('AKIAISOPAR4V3TEUGUPA', '3w+Mh74AYf2Lu9HFgQUSK5A19wzZvhdQKNcGrv3H', 'email.eu-west-1.amazonaws.com', true);
+		$ses = new SimpleEmailService($this->app["aws_key"], $this->app["aws_code"], 'email.eu-west-1.amazonaws.com', true);
 		$result = $ses->sendEmail($m);
 		$ses_messageid = $result['MessageId'];
 		$ses_requestid = $result['RequestId'];
