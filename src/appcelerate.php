@@ -1608,7 +1608,16 @@ $to=array("flodi@e-scientia.eu");
 		$this->doLog("Requested with activty instance $id_activity_instance");
 
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
-		$data=$this->getProcessInstanceData($id_process_instance,false,"list");
+
+		$type=$this->getActivityTypeFromActivityInstance($id_activity_instance);
+
+		switch($type) {
+			case "C":
+				$data=$this->getProcessInstanceData($id_process_instance,false,"block");
+				break;
+			default:
+				$data=$this->getProcessInstanceData($id_process_instance,false,"list");
+		}
 
 		$context=$this->getActivityInstanceContext($id_activity_instance);
 
@@ -1617,7 +1626,6 @@ $to=array("flodi@e-scientia.eu");
 		$this->fw->AddMerge("field","piid",$id_process_instance);
 		$this->fw->AddMerge("field","aiid",$id_activity_instance);
 		$tmpl=$this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm";
-echo $tmpl;
 		$this->fw->app["TBS"]->LoadTemplate($tmpl,"+");
 	}
 
