@@ -1441,7 +1441,7 @@ class BPME {
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
 
-		$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_actor_executed) values (%d,%d,%d,%d)",$id_process,$id_action,$id_activity_instance_from,$this->getCurrentUID($id_activity_instance));
+		$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_actor_executed) values (%d,%d,%d,%d)",$id_process,$id_action,$id_activity_instance_from,$this->getCurrentUID($id_activity_instance_from));
 		$rs1=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs1);
