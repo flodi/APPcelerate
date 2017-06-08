@@ -1497,7 +1497,7 @@ class BPME {
 
 		$TBSC = new clsTinyButStrong;
 		$TBSC->LoadTemplate($this->app_name."/bpme/templates/STEP_COUNT_EMAIL.htm");
-		$data=$this->getProcessInstanceData($id_process_instance,true,false);
+		$data=$this->getProcessInstanceData($id_process_instance,true,true);
 		$TBSC->MergeBlock("bPdata",$data);
 		
 		$sql="select * from activities where code='".$this->getActivityCodeFromActivityInstance($id_activity_instance)."' and id_process=".$this->getProcessIDFromProcessInstance($id_process_instance);
@@ -1510,7 +1510,7 @@ class BPME {
 			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
-		$activity=$rs->fetch_array(MYSQLI_ASSOC);
+		$activity[0]=$rs->fetch_array(MYSQLI_ASSOC);
 		$TBSC->MergeBlock("bActivity",$activity);
 
 		$sql="select * from ospiti where id=".$data["_id_ospite"];
@@ -1523,7 +1523,7 @@ class BPME {
 			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
-		$counterpart=$rs->fetch_array(MYSQLI_ASSOC);
+		$counterpart[0]=$rs->fetch_array(MYSQLI_ASSOC);
 		$TBSC->MergeBlock("bCount",$counterpart);
 
 		$TBSC->MergeField("user",$this->fw->getUserFullName($this->fw->app["uid"]));
@@ -1753,7 +1753,7 @@ $to=array("flodi@e-scientia.eu");
 		if ($id_process_instance!==0) {
 			$sql.=" and activity_instances.id_process_instance=$id_process_instance";
 		}
-
+echo $sql;
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
