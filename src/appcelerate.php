@@ -1765,7 +1765,7 @@ $to=array("flodi@e-scientia.eu");
 			from activity_instances join activities on activities.id=activity_instances.id_activity join processes on processes.id=activity_instances.id_process where activity_instances.date_completed is null and activities.activity_type in ('U')
 		";
 		if ($uid!==0) {
-			$sql.=" and activity_instances.id_actor_assigned=$uid or activity_instances.id_actor_assigned is null";			
+			$sql.=" and activity_instances.id_actor_assigned=$uid";			
 		}
 		else {
 			$sql.=" and activity_instances.id_actor_assigned is null";			
