@@ -1671,12 +1671,7 @@ $to=array("flodi@e-scientia.eu");
 					break;
 				}
 			}
-			else {
-				$ok=true;
-			}
-			if ($ok) {
-				$this->executeAction($id_action_instance,$ui);
-			}
+			$this->executeAction($id_action_instance,$ui);
 		}
 
 		if ($ui) {
