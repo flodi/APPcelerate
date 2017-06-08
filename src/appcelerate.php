@@ -1301,6 +1301,27 @@ class BPME {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
+	private function setProcessInstanceCounterpart($id_process_instance,$id_actor) {
+		$this->doLog("Requested with process instance $id_process_instance and actor $id_actor");
+		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
+			throw new Exception("Process instance id $id_process_instance not valid", 0);
+		}
+		if (!is_numeric($id_actor) and !is_int($id_actor)) {
+			throw new Exception("Actor id $id_actor not valid", 0);
+		}
+
+		$sql="update process_instances set id_counterpart=$id_actor where id=$id_process_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+	}
+
 	private function getActivityNameFromActivityInstance($id_activity_instance) {
 		$this->doLog("Requested with activity instance $id_activity_instance");
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
@@ -1370,13 +1391,13 @@ class BPME {
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
 
 		if ($ui) {
-			$id_user_assigned=$uid;
+			$id_actor_assigned=$uid;
 		}
 		else {
-			$id_user_assigned="null";
+			$id_actor_assigned="null";
 		}
 
-		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_user_assigned) values (%d,%d,%d,%d,%s)",$id_activity,$id_process,$id_process_instance,$uid,$id_user_assigned);
+		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_actor_assigned) values (%d,%d,%d,%d,%s)",$id_activity,$id_process,$id_process_instance,$uid,$id_actor_assigned);
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1744,10 +1765,10 @@ $to=array("flodi@e-scientia.eu");
 			from activity_instances join activities on activities.id=activity_instances.id_activity join processes on processes.id=activity_instances.id_process where activity_instances.date_completed is null and activities.activity_type in ('U') and activity_instances.date_completed is not null
 		";
 		if ($uid!==0) {
-			$sql.=" and activity_instances.id_user_assigned=$uid or activity_instances.id_user_assigned is null";			
+			$sql.=" and activity_instances.id_actor_assigned=$uid or activity_instances.id_actor_assigned is null";			
 		}
 		else {
-			$sql.=" and activity_instances.id_user_assigned is null";			
+			$sql.=" and activity_instances.id_actor_assigned is null";			
 		}
 
 		if ($id_process_instance!==0) {
@@ -1877,7 +1898,7 @@ echo $sql;
 				join processes on activity_instances.id_process=processes.id
 				join process_instances on activity_instances.id_process_instance=process_instances.id
 			where
-				(activity_instances.id_user_assigned=$uid or activity_instances.id_user_assigned is null) and 
+				(activity_instances.id_actor_assigned=$uid or activity_instances.id_actor_assigned is null) and 
 				activity_instances.date_completed is null and
 				activities.activity_type in ('U')
 		";
@@ -1978,6 +1999,15 @@ echo $sql;
 					throw new Exception("Missing 'id' params", 0);
 				}
 				return($this->getProcessInstanceFromActivityInstance($params["id"]));
+				break;
+			case 'setProcessInstanceCounterpart':
+				if (!array_key_exists("id_process_instance",$params)) {
+					throw new Exception("Missing 'id_process_instance' params", 0);
+				}
+				if (!array_key_exists("id_actor",$params)) {
+					throw new Exception("Missing 'id_actor' params", 0);
+				}
+				$this->setProcessInstanceCounterpart($id_process_instance,$id_actor);
 				break;
 			default:
 				throw new Exception("Function $function not present");
