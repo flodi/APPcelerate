@@ -1661,7 +1661,7 @@ $to=array("flodi@e-scientia.eu");
 
 			$this->fw->AddMerge("block","context",$context);
 
-			$tasks=$this->getAvailableActivities($this->fw->app["uid"],$id_process_instance);
+			$tasks=$this->getAvailableActivities($this->getCurrentUID($id_activity_instance_from),$id_process_instance);
 
 			$this->fw->AddMerge("field","piid",$id_process_instance);
 			$this->fw->AddMerge("field","aiid","$id_activity_instance_from");
