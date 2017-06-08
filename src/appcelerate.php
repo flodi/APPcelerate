@@ -1573,21 +1573,21 @@ class BPME {
 		$TBSC->Show(TBS_NOTHING);
 		$mail=$TBSC->Source;
 
-		$subject=sprintf("#%d %s > %s > Richiesta riscontro - Messaggio Automatico",$activity["id"],$data["_mail_object"],$counterpart["nome"]." ".$counterpart["cognome"]);
+		$subject=sprintf("#%d %s > %s > Richiesta riscontro - Messaggio Automatico",$activity[0]["id"],$data[0]["_mail_object"],$counterpart[0]["nome"]." ".$counterpart[0]["cognome"]);
 
 		$to=array();
-		if (array_key_exists("email_personale",$counterpart) and !empty($counterpart["email_personale"])) {
-			$to[]=$counterpart["email_personale"];
+		if (array_key_exists("email_personale",$counterpart[0]) and !empty($counterpart[0]["email_personale"])) {
+			$to[]=$counterpart[0]["email_personale"];
 		}
-		if (array_key_exists("email_aziendale",$counterpart) and !empty($counterpart["email_aziendale"])) {
-			$to[]=$counterpart["email_aziendale"];
+		if (array_key_exists("email_aziendale",$counterpart[0]) and !empty($counterpart[0]["email_aziendale"])) {
+			$to[]=$counterpart[0]["email_aziendale"];
 		}
 $to=array("flodi@e-scientia.eu");
 		if (empty($to)) {
-			$this->doLog("Counterpart with id ".$counterpart["id"]." does not have any email, aborted");
+			$this->doLog("Counterpart with id ".$counterpart[0]["id"]." does not have any email, aborted");
 		}
 		else {
-			$this->fw->sendEmail($mail, $subject, $data["_mail_from"], $to);
+			$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to);
 		}
 
 	}
