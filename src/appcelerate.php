@@ -1426,7 +1426,7 @@ class BPME {
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
 
-		$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_user_executed) values (%d,%d,%d,%d)",$id_process,$id_action,$id_activity_instance_from,$this->getCurrentUID());
+		$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_actor_executed) values (%d,%d,%d,%d)",$id_process,$id_action,$id_activity_instance_from,$this->getCurrentUID());
 		$rs1=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs1);
@@ -1730,7 +1730,7 @@ $to=array("flodi@e-scientia.eu");
 		$id_activity_instance_to=$this->createActivityInstance($id_process_instance,$id_activity_to,$ui);
 
 		//Chiudo l'action
-		$sql="update action_instances set id_activity_instance_to=$id_activity_instance_to, date_executed=now(), id_user_executed=".$this->getCurrentUID();
+		$sql="update action_instances set id_activity_instance_to=$id_activity_instance_to, date_executed=now(), id_actor_executed=".$this->getCurrentUID();
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
