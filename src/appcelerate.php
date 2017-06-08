@@ -1401,7 +1401,7 @@ class BPME {
 			throw new Exception("Activity id $id_activity not valid", 0);
 		}
 
-		$uid=$this->getCurrentUID(id_activity_instance_prec);
+		$uid=$this->getCurrentUID($id_activity_instance_prec);
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
 
@@ -1816,13 +1816,13 @@ $to=array("flodi@e-scientia.eu");
 		return($this->fw->fetchAllAssoc($rs));
 	}
 
-	private function getCurrentUID($id_activity=0) {
+	private function getCurrentUID($id_activity_instance=0) {
 
-		if ($id_activity==0) {
+		if ($id_activity_instance==0) {
 			return $this->fw->app["uid"];
 		}
 		else {
-			return $this->getActivityInstanceAssignedActor($id_activity);
+			return $this->getActivityInstanceAssignedActor($id_activity_instance);
 		}
 		
 	}
