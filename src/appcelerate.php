@@ -1128,7 +1128,7 @@ class BPME {
 	}
 
 	private function getProcessInstanceData($id_process_instance,$all=true,$block=true) {
-		$this->doLog("Requested with process instance $id_process_instance and ".print_r($all,true));
+		$this->doLog("Requested with process instance $id_process_instance and all $all and $block $block");
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
@@ -1600,7 +1600,7 @@ $to=array("flodi@e-scientia.eu");
 		$this->doLog("Requested with activty instance $id_activity_instance");
 
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
-		$data=$this->getProcessInstanceData($id_process_instance,false);
+		$data=$this->getProcessInstanceData($id_process_instance,false,true);
 
 		$context=$this->getActivityInstanceContext($id_activity_instance);
 
