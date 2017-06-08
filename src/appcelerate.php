@@ -1127,7 +1127,7 @@ class BPME {
 		return true;
 	}
 
-	private function getProcessInstanceData($id_process_instance,$all=true,$block=true) {
+	private function getProcessInstanceData($id_process_instance,$all=true,$type) {
 		$this->doLog("Requested with process instance $id_process_instance and all $all and $block $block");
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
@@ -1152,10 +1152,16 @@ class BPME {
 				if (substr($value, 0, 1) === "@") {
 					$value=json_encode($this->getProcessDataFieldFromDB($value));
 				}
-				$data[$key]=$value;
+				if ($type==="list") {
+					$data[$i]["key"]=$key;
+					$data[$i++]["value"]=$value;
+				}
+				else {
+					$data[$key]=$value;
+				}
 			}
 		}
-		if ($block) {
+		if ($type==="block") {
 			$data=array($data);
 		}
 		return($data);
@@ -1535,7 +1541,7 @@ class BPME {
 
 		$TBSC = new clsTinyButStrong;
 		$TBSC->LoadTemplate($this->app_name."/bpme/templates/STEP_COUNT_EMAIL.htm");
-		$data=$this->getProcessInstanceData($id_process_instance,true,true);
+		$data=$this->getProcessInstanceData($id_process_instance,true,"block");
 		$TBSC->MergeBlock("bPdata",$data);
 		
 		$sql="select * from activities where code='".$this->getActivityCodeFromActivityInstance($id_activity_instance)."' and id_process=".$this->getProcessIDFromProcessInstance($id_process_instance);
@@ -1602,7 +1608,7 @@ $to=array("flodi@e-scientia.eu");
 		$this->doLog("Requested with activty instance $id_activity_instance");
 
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
-		$data=$this->getProcessInstanceData($id_process_instance,false,true);
+		$data=$this->getProcessInstanceData($id_process_instance,false,"list");
 
 		$context=$this->getActivityInstanceContext($id_activity_instance);
 
@@ -1696,7 +1702,7 @@ $to=array("flodi@e-scientia.eu");
 		}
 
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
-		$data=$this->getProcessInstanceData($id_process_instance,true,false);
+		$data=$this->getProcessInstanceData($id_process_instance,true,"array");
 		$confirm=$data["lastconfirm"];
 
 		return(array($confirm,$confirm==$condition));
@@ -2089,7 +2095,7 @@ $to=array("flodi@e-scientia.eu");
 				if (!array_key_exists("id",$params)) {
 					throw new Exception("Missing 'id' params", 0);
 				}
-				return($this->getProcessInstanceData($params["id"],true,false));
+				return($this->getProcessInstanceData($params["id"],true,"array"));
 				break;
 			case 'getProcessInstanceIDFromActivityInstanceID':
 				if (!array_key_exists("id",$params)) {
