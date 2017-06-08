@@ -449,6 +449,13 @@ class APPcelerate {
 		return($token);
 	}
 
+	public function getUserFullName($uid) {
+		$sql="select fullname from users where id=$id";
+		$rs=$this->app["db_".$token]->query($sql);
+		$this->sqlError($rs,$sql);
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
 	public function genSSO($token) {
 		if (array_key_exists($token."_ap_uid",$_SESSION)) {
 			$uid=$_SESSION[$token."_ap_uid"];
@@ -1521,6 +1528,8 @@ class BPME {
 		}
 		$counterpart=$rs->fetch_array(MYSQLI_ASSOC);
 		$TBSC->MergeBlock("bCount",$counterpart);
+
+		$TBSC->MergeField("user",$this->fw->getUserFullName($this->fw->app["uid"]));
 
 		$subject=sprintf("#%d %s > %s > Richiesta riscontro - Messaggio Automatico",$activity["id"],$data["_mail_object"],$counterpart["nome"]." ".$counterpart["cognome"]);
 
