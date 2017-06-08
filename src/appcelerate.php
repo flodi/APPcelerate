@@ -1657,6 +1657,7 @@ $to=array("flodi@e-scientia.eu");
 		}
 
 		if ($ui) {
+			$type=$this->getActivityTypeFromActivityInstance($id_activity_instance_from);
 			$context=$this->getActivityInstanceContext($id_activity_instance_from);
 
 			$this->fw->AddMerge("block","context",$context);
@@ -1666,7 +1667,15 @@ $to=array("flodi@e-scientia.eu");
 			$this->fw->AddMerge("field","piid",$id_process_instance);
 			$this->fw->AddMerge("field","aiid","$id_activity_instance_from");
 			$this->fw->AddMerge("block","bTasks",$tasks);
-			$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT.htm","+");
+
+			switch ($type) {
+				case "U":
+					$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT.htm","+");
+					break;
+				case "C":
+					$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT_COUNTERPART.htm","+");
+					break;
+			}
 		}
 
 		return true;
@@ -1876,6 +1885,34 @@ $to=array("flodi@e-scientia.eu");
 		}
 
 		$sql="select activity_type from activities where id=$id_activity";
+		$rs=$this->db->query($sql);
+		if ($rs->num_rows===0) {
+			throw new Exception("Activity id $id_activity not found", 0);
+		}
+
+		return ($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
+	private function getActivityTypeFromActivityInstance($id_activity_instance) {
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$sql="select activity_type from activities where id=".$this->getActivityFromActivityInstance($id_activity_instance);
+		$rs=$this->db->query($sql);
+		if ($rs->num_rows===0) {
+			throw new Exception("Activity id $id_activity not found", 0);
+		}
+
+		return ($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
+	private function getActivityFromActivityInstance($id_activity_instance) {
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$sql="select id_activity from activity_instances where id=$id_activity_instance";
 		$rs=$this->db->query($sql);
 		if ($rs->num_rows===0) {
 			throw new Exception("Activity id $id_activity not found", 0);
