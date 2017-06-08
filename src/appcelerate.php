@@ -450,8 +450,8 @@ class APPcelerate {
 	}
 
 	public function getUserFullName($uid) {
-		$sql="select fullname from users where id=$id";
-		$rs=$this->app["db_".$token]->query($sql);
+		$sql="select fullname from users where id=$uid";
+		$rs=$this->app["db_".$this->app["name"]]->query($sql);
 		$this->sqlError($rs,$sql);
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
