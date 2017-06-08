@@ -2007,7 +2007,7 @@ echo $sql;
 				if (!array_key_exists("id_actor",$params)) {
 					throw new Exception("Missing 'id_actor' params", 0);
 				}
-				$this->setProcessInstanceCounterpart($params["id_process_instance"],$$params["id_actor"]);
+				$this->setProcessInstanceCounterpart($params["id_process_instance"],$params["id_actor"]);
 				break;
 			default:
 				throw new Exception("Function $function not present");
