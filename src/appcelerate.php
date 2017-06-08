@@ -92,7 +92,6 @@ class APPcelerate {
 	
 		$this->app["apps"]=explode("|",getenv('APPS'));
 	
-		$this->app["base_app"]=getenv('BASE_APP');
 		$this->app["default_app"]=getenv('DEFAULT_APP');
 	
 		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
@@ -756,9 +755,6 @@ class APPcelerate {
 
 		$this->app["router"] = new AltoRouter();
 		$this->app["router"]->addMatchTypes(array('l' => '(.+,)*.+'));
-		if (!empty($this->app["base_app"]) or $this->app["base_app"]!=="") {
-			$this->app["router"]->setBasePath($this->app["base_app"]);
-		}
 		
 		include_once("routes.php");
 		
@@ -1570,10 +1566,14 @@ class BPME {
 
 		$TBSC->MergeField("user",$this->fw->getUserFullName($this->fw->app["uid"]));
 
+		$url=$this->fw->app["base_url"]."/bpme/case/$id_activity_instance/";
+		$TBSC->MergeField("url","$url");
+
 		$TBSC->Show(TBS_NOTHING);
 		$mail=$TBSC->Source;
 
-		$subject=sprintf("#%d %s > %s > Richiesta riscontro - Messaggio Automatico",$activity[0]["id"],$data[0]["_mail_object"],$counterpart[0]["nome"]." ".$counterpart[0]["cognome"]);
+		$subject=sprintf("#%d %s > %s > Richiesta riscontro - Messaggio Automatico",$id_activity_instance,$data[0]["_mail_object"],$counterpart[0]["nome"]." ".$counterpart[0]["cognome"]);
+
 
 		$to=array();
 		if (array_key_exists("email_personale",$counterpart[0]) and !empty($counterpart[0]["email_personale"])) {
