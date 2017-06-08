@@ -1714,14 +1714,14 @@ $to=array("flodi@e-scientia.eu");
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 		$data=$this->getProcessInstanceData($id_process_instance,true,"array");
 		$confirm=$data["lastconfirm"];
-
+echo "$confirm === $condition ->";
 		if ($confirm===$condition) {
 			$r=true;
 		}
 		else {
 			$r=false;
 		}
-
+echo $r;
 		return(array($confirm,$r));
 	}
 
