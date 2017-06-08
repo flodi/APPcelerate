@@ -1794,7 +1794,6 @@ $to=array("flodi@e-scientia.eu");
 		if ($id_process_instance!==0) {
 			$sql.=" and activity_instances.id_process_instance=$id_process_instance";
 		}
-echo $sql;
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
