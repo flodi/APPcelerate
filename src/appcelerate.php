@@ -1301,6 +1301,25 @@ class BPME {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
+	private function getProcessInstanceCounterpart($id_process_instance) {
+		$this->doLog("Requested with process instance $id_process_instance");
+		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
+			throw new Exception("Process instance id $id_process_instance not valid", 0);
+		}
+
+		$sql="select id_counterpart from process_instances where id=$id_process_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
 	private function setProcessInstanceCounterpart($id_process_instance,$id_actor) {
 		$this->doLog("Requested with process instance $id_process_instance and actor $id_actor");
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
@@ -1516,6 +1535,8 @@ class BPME {
 
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 
+		$id_counterpart=$this->getProcessInstanceCounterpart($id_process_instance);
+
 		$TBSC = new clsTinyButStrong;
 		$TBSC->LoadTemplate($this->app_name."/bpme/templates/STEP_COUNT_EMAIL.htm");
 		$data=$this->getProcessInstanceData($id_process_instance,true,true);
@@ -1534,7 +1555,7 @@ class BPME {
 		$activity[0]=$rs->fetch_array(MYSQLI_ASSOC);
 		$TBSC->MergeBlock("bActivity",$activity);
 
-		$sql="select * from ospiti where id=".$data["_id_ospite"];
+		$sql="select * from ospiti where id=$id_counterpart";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1551,7 +1572,6 @@ class BPME {
 
 		$TBSC->Show(TBS_NOTHING);
 		$mail=$TBSC->Source;
-
 
 		$subject=sprintf("#%d %s > %s > Richiesta riscontro - Messaggio Automatico",$activity["id"],$data["_mail_object"],$counterpart["nome"]." ".$counterpart["cognome"]);
 
