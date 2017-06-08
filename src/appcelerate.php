@@ -1500,9 +1500,6 @@ class BPME {
 		$data=$this->getProcessInstanceData($id_process_instance,true,false);
 		$TBSC->MergeBlock("bPdata",$data);
 		
-		$TBSC->Show(TBS_NOTHING);
-		$mail=$TBSC->Source;
-
 		$sql="select * from activities where code='".$this->getActivityCodeFromActivityInstance($id_activity_instance)."' and id_process=".$this->getProcessIDFromProcessInstance($id_process_instance);
 		$rs=$this->db->query($sql);
 		try {
@@ -1530,6 +1527,10 @@ class BPME {
 		$TBSC->MergeBlock("bCount",$counterpart);
 
 		$TBSC->MergeField("user",$this->fw->getUserFullName($this->fw->app["uid"]));
+
+		$TBSC->Show(TBS_NOTHING);
+		$mail=$TBSC->Source;
+
 
 		$subject=sprintf("#%d %s > %s > Richiesta riscontro - Messaggio Automatico",$activity["id"],$data["_mail_object"],$counterpart["nome"]." ".$counterpart["cognome"]);
 
