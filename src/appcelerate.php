@@ -1073,7 +1073,7 @@ class BPME {
 		}
 
 
-		$id_activity_instance=$this->createActivityInstance($id_process_instance,$id_activity,$ui);
+		$id_activity_instance=$this->createActivityInstance(0,$id_process_instance,$id_activity,$ui);
 
 		$id_activity_instance=$this->followActions($id_activity_instance,$ui);
 
@@ -1390,7 +1390,7 @@ class BPME {
 		return($context);		
 	}
 
-	private function createActivityInstance($id_process_instance,$id_activity,$ui=false) {
+	private function createActivityInstance($id_activity_instance_prec,$id_process_instance,$id_activity,$ui=false) {
 
 		$this->doLog("Requested with process instance  $id_process_instance and activity $id_activity");
 
@@ -1401,7 +1401,7 @@ class BPME {
 			throw new Exception("Activity id $id_activity not valid", 0);
 		}
 
-		$uid=$this->getCurrentUID();
+		$uid=$this->getCurrentUID(id_activity_instance_prec);
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
 
@@ -1441,7 +1441,7 @@ class BPME {
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
 
-		$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_actor_executed) values (%d,%d,%d,%d)",$id_process,$id_action,$id_activity_instance_from,$this->getCurrentUID());
+		$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_actor_executed) values (%d,%d,%d,%d)",$id_process,$id_action,$id_activity_instance_from,$this->getCurrentUID($id_activity_instance));
 		$rs1=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs1);
@@ -1709,7 +1709,7 @@ $to=array("flodi@e-scientia.eu");
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_from);
 
 		//Concludo l'activity precedente
-		$sql="update activity_instances set date_completed=now(), id_user_completed=".$this->getCurrentUID()." where id=$id_activity_instance_from";
+		$sql="update activity_instances set date_completed=now(), id_user_completed=".$this->getCurrentUID($id_activity_instance_from)." where id=$id_activity_instance_from";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1756,10 +1756,10 @@ $to=array("flodi@e-scientia.eu");
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 
 		//Creo l'istanza di activity di arrivo
-		$id_activity_instance_to=$this->createActivityInstance($id_process_instance,$id_activity_to,$ui);
+		$id_activity_instance_to=$this->createActivityInstance($id_activity_instance_from,$id_process_instance,$id_activity_to,$ui);
 
 		//Chiudo l'action
-		$sql="update action_instances set id_activity_instance_to=$id_activity_instance_to, date_executed=now(), id_actor_executed=".$this->getCurrentUID();
+		$sql="update action_instances set id_activity_instance_to=$id_activity_instance_to, date_executed=now(), id_actor_executed=".$this->getCurrentUID($id_activity_instance_from);
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1816,9 +1816,35 @@ $to=array("flodi@e-scientia.eu");
 		return($this->fw->fetchAllAssoc($rs));
 	}
 
-	private function getCurrentUID() {
-		return $this->fw->app["uid"];
+	private function getCurrentUID($id_activity=0) {
+
+		if ($id_activity==0) {
+			return $this->fw->app["uid"];
+		}
+		else {
+			return $this->getActivityInstanceAssignedActor($id_activity);
+		}
+		
 	}
+
+	private function getActivityInstanceAssignedActor($id_activity_instance) {
+		$this->doLog("Requested with Activity instance id  $id_activity_instance");
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+		$sql="select id_actor_assigned from activity_instances where id=$id_activity_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
 
 	private function getActivityID($process_code,$activity_code) {
 		$this->doLog("Requested with process_code $process_code and activity_code $activity_code");
