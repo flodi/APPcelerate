@@ -1582,7 +1582,9 @@ class BPME {
 		if (array_key_exists("email_aziendale",$counterpart[0]) and !empty($counterpart[0]["email_aziendale"])) {
 			$to[]=$counterpart[0]["email_aziendale"];
 		}
+
 $to=array("flodi@e-scientia.eu");
+
 		if (empty($to)) {
 			$this->doLog("Counterpart with id ".$counterpart[0]["id"]." does not have any email, aborted");
 		}
@@ -1669,11 +1671,15 @@ $to=array("flodi@e-scientia.eu");
 			$this->fw->AddMerge("block","bTasks",$tasks);
 
 			switch ($type) {
+				case "S":
 				case "U":
 					$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT.htm","+");
 					break;
 				case "C":
 					$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT_COUNTERPART.htm","+");
+					break;
+				case "F":
+					$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_LAST.htm","+");
 					break;
 			}
 		}
