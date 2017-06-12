@@ -1502,8 +1502,9 @@ class BPME {
 		if ($rs->num_rows===0) {
 			throw new Exception("Activity instance $id_activity_instance not found", 0);
 		}
-		$id_activity=$rs->fetch_array(MYSQLI_NUM)[0];
-		$id_user_created=$rs->fetch_array(MYSQLI_NUM)[1];
+		$r=$rs->fetch_array(MYSQLI_NUM);
+		$id_activity=$r[0];
+		$id_user_created=$r[1];
 
 		$activity_type=$this->getActivityType($id_activity);
 
