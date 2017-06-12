@@ -1407,6 +1407,7 @@ class BPME {
 		}
 
 		$sql="update activity_instances set id_actor_assigned=$id_actor where id=$id_activity_instance";
+		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
 		}
