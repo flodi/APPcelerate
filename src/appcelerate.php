@@ -1403,7 +1403,7 @@ class BPME {
 			throw new Exception("Activity instance id $id_process_instance not valid", 0);
 		}
 		if (!is_numeric($id_actor) and !is_int($id_actor)) {
-			throw new Exception("Actor id $id_activity not valid", 0);
+			throw new Exception("Actor id $id_actor not valid", 0);
 		}
 
 		$sql="update activity_instances set id_actor_assigned=$id_actor where id=$id_activity_instance";
