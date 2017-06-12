@@ -1543,7 +1543,7 @@ class BPME {
 				}
 
 				try {
-					$this->dispatchActivity($new_id_activity_instance);
+					$this->dispatchActivity($new_id_activity_instance,$ui);
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
@@ -1839,7 +1839,7 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 			throw new Exception("Query Error", 0);
 		}
 
-		$this->dispatchActivity($id_activity_instance_to);
+		$this->dispatchActivity($id_activity_instance_to,$ui);
 
 	}
 
