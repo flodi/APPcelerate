@@ -1428,7 +1428,12 @@ class BPME {
 			throw new Exception("Activity id $id_activity not valid", 0);
 		}
 
-		$uid=$this->getCurrentUID($id_activity_instance_prec);
+		if ($ui) {
+			$uid=$this->getCurrentUID();
+		}
+		else {
+			$uid=$this->getCurrentUID($id_activity_instance_prec);
+		}
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
 
@@ -1498,7 +1503,6 @@ class BPME {
 		}
 		$id_activity=$rs->fetch_array(MYSQLI_NUM)[0];
 		$id_user_created=$rs->fetch_array(MYSQLI_NUM)[1];
-echo "$id_user_created<br>";
 		$activity_type=$this->getActivityType($id_activity);
 
 		if (!array_key_exists($activity_type,$this->activity_types)) {
@@ -1509,7 +1513,6 @@ echo "$id_user_created<br>";
 
 		switch ($activity_type) {
 			case 'S':
-echo "$id_user_created<br>";
 				$this->assignActivity($id_activity_instance,$id_user_created);
 				try {
 					$this->followActions($id_activity_instance,$ui);
