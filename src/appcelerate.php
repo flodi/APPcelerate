@@ -1853,6 +1853,11 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 	}
 
 	private function getCurrentUID($id_activity_instance=0) {
+		$this->doLog("Requested with Activity instance id $id_activity_instance");
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
 		if ($id_activity_instance==0) {
 			return $this->fw->app["uid"];
 		}
