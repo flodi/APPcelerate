@@ -1498,7 +1498,7 @@ class BPME {
 		}
 		$id_activity=$rs->fetch_array(MYSQLI_NUM)[0];
 		$id_user_created=$rs->fetch_array(MYSQLI_NUM)[1];
-
+echo "$id_user_created<br>";
 		$activity_type=$this->getActivityType($id_activity);
 
 		if (!array_key_exists($activity_type,$this->activity_types)) {
@@ -1509,6 +1509,7 @@ class BPME {
 
 		switch ($activity_type) {
 			case 'S':
+echo "$id_user_created<br>";
 				$this->assignActivity($id_activity_instance,$id_user_created);
 				try {
 					$this->followActions($id_activity_instance,$ui);
