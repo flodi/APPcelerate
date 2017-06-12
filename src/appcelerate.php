@@ -490,7 +490,7 @@ class APPcelerate {
 		<script src="/vendor/flodi/appcelerate/src/include/datatables/datatables.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/select2.full.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap-editable.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/twitter.typeahead.bundle.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/typeahead.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/appcelerate.js"></script>
 					';
 					break;
@@ -507,6 +507,7 @@ class APPcelerate {
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.treetable.theme.default.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/datatables/datatables.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/select2-bootstrap.min.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/typeahead.js-bootstrap.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap-editable.css">
 					';
 					$c.=favicon(FAVICON_ENABLE_ALL,array(
