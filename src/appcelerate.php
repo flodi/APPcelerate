@@ -490,7 +490,7 @@ class APPcelerate {
 		<script src="/vendor/flodi/appcelerate/src/include/datatables/datatables.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/select2.full.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap-editable.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/typeahead.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/typeaheadjs.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/appcelerate.js"></script>
 					';
 					break;
