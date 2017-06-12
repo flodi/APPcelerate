@@ -1396,6 +1396,27 @@ class BPME {
 		return($context);		
 	}
 
+	private function assignActivity($id_activity_instance,$id_actor) {
+		$this->doLog("Requested with activity instance  $id_activity_instance and actor id $id_actor");
+
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_process_instance not valid", 0);
+		}
+		if (!is_numeric($id_actor) and !is_int($id_actor)) {
+			throw new Exception("Actor id $id_activity not valid", 0);
+		}
+
+		$sql="update activity_instances set id_actor_assigned=$id_actor where id=$id_activity_instance";
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+	}
+
 	private function createActivityInstance($id_activity_instance_prec,$id_process_instance,$id_activity,$ui=false) {
 
 		$this->doLog("Requested with process instance  $id_process_instance and activity $id_activity");
@@ -1470,12 +1491,13 @@ class BPME {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 
-		$sql="select id_activity from activity_instances where id=$id_activity_instance";
+		$sql="select id_activity,id_user_created from activity_instances where id=$id_activity_instance";
 		$rs=$this->db->query($sql);
 		if ($rs->num_rows===0) {
 			throw new Exception("Activity instance $id_activity_instance not found", 0);
 		}
 		$id_activity=$rs->fetch_array(MYSQLI_NUM)[0];
+		$id_user_created=$rs->fetch_array(MYSQLI_NUM)[1];
 
 		$activity_type=$this->getActivityType($id_activity);
 
@@ -1488,6 +1510,7 @@ class BPME {
 		switch ($activity_type) {
 			case 'S':
 				try {
+					$this->assignActivity($id_activity_instance,$id_user_create);
 					$this->followActions($id_activity_instance,$ui);
 				}
 				catch (Exception $e) {
@@ -1497,13 +1520,16 @@ class BPME {
 				return($id_activity_instance);
 				break;
 			case 'F':
+				$this->assignActivity($id_activity_instance,$id_user_create);
 				break;
 			case 'U':
+				$this->assignActivity($id_activity_instance,$id_user_create);
 				return($id_activity_instance);
 				break;
 			case 'A':
 				try {
 					$new_id_activity_instance=$this->executeActivity($id_activity_instance);
+					$this->assignActivity($id_activity_instance,$id_user_create);
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
@@ -1596,6 +1622,7 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 		}
 		else {
 			$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to);
+			$this->assignActivity($id_activity_instance,$id_counterpart);
 		}
 
 	}
