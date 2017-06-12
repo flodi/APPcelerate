@@ -1075,7 +1075,7 @@ class BPME {
 
 		$id_activity_instance=$this->createActivityInstance(0,$id_process_instance,$id_activity,$ui);
 
-		$id_activity_instance=$this->followActions($id_activity_instance,$ui);
+		$id_action_instance=$this->dispatchActivity($id_activity_instance,$ui);
 
 		$this->doLog("Returning process instance $id_process_instance and activity instance $id_activity_instance");
 
