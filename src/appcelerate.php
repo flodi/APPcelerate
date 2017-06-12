@@ -1033,6 +1033,8 @@ class BPME {
 
 		$uid=$this->getCurrentUID();
 
+echo $uid;
+
 		$sql="select * from processes where code='$code'";
 		$rs=$this->db->query($sql);
 		try {
@@ -1853,9 +1855,9 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 	}
 
 	private function getCurrentUID($id_activity_instance=0) {
-echo $id_activity_instance;
+echo $id_activity_instance."<br>";
 		if ($id_activity_instance==0) {
-echo $this->fw->app["uid"];
+echo $this->fw->app["uid"]."<br>";
 			return $this->fw->app["uid"];
 		}
 		else {
