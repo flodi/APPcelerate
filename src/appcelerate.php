@@ -485,13 +485,12 @@ class APPcelerate {
 		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/parsley.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/i18n/it.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.keepFormData.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.simple-popup.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.form.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.treetable.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/datatables/datatables.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap-editable.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/select2.full.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap-editable.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/twitter.typeahead.bundle.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/appcelerate.js"></script>
 					';
 					break;
@@ -506,11 +505,9 @@ class APPcelerate {
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/parsley.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.treetable.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.treetable.theme.default.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.simple-popup.min.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.simple-popup.settings.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/datatables/datatables.min.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap-editable.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/select2-bootstrap.min.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap-editable.css">
 					';
 					$c.=favicon(FAVICON_ENABLE_ALL,array(
 						'application_name' => $this->app["name"]
