@@ -1510,7 +1510,7 @@ class BPME {
 		switch ($activity_type) {
 			case 'S':
 				try {
-					$this->assignActivity($id_activity_instance,$id_user_create);
+					$this->assignActivity($id_activity_instance,$id_user_created);
 					$this->followActions($id_activity_instance,$ui);
 				}
 				catch (Exception $e) {
