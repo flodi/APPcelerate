@@ -754,7 +754,7 @@ class APPcelerate {
 
 
 		$this->app["router"] = new AltoRouter();
-		$this->app["router"]->addMatchTypes(array('l' => '(.+,)*.+'));
+		$this->app["router"]->addMatchTypes(array('l' => '(\d+?,?)+'));
 		
 		include_once("routes.php");
 		
