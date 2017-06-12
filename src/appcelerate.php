@@ -1033,8 +1033,6 @@ class BPME {
 
 		$uid=$this->getCurrentUID();
 
-echo $uid;
-
 		$sql="select * from processes where code='$code'";
 		$rs=$this->db->query($sql);
 		try {
@@ -1053,7 +1051,7 @@ echo $uid;
 
 		$serialized_data=$this->db->real_escape_string(json_encode($initial_data));
 
-		$sql=sprintf("insert into process_instances (id_process,id_user_created,status,data) values (%d,%d,'R','%s')",$id_process,$uid,$serialized_data);
+		$sql=sprintf("insert into process_instances (id_process,id_user_created,id_user_assigned,status,data) values (%d,%d,%d,'R','%s')",$id_process,$uid,$uid,$serialized_data);
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
