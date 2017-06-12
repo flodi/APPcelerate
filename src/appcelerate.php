@@ -1526,16 +1526,16 @@ class BPME {
 				return($id_activity_instance);
 				break;
 			case 'F':
-				$this->assignActivity($id_activity_instance,$id_user_create);
+				$this->assignActivity($id_activity_instance,$id_user_created);
 				break;
 			case 'U':
-				$this->assignActivity($id_activity_instance,$id_user_create);
+				$this->assignActivity($id_activity_instance,$id_user_created);
 				return($id_activity_instance);
 				break;
 			case 'A':
 				try {
 					$new_id_activity_instance=$this->executeActivity($id_activity_instance);
-					$this->assignActivity($id_activity_instance,$id_user_create);
+					$this->assignActivity($id_activity_instance,$id_user_created);
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
