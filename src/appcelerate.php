@@ -1853,7 +1853,7 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 	}
 
 	private function getCurrentUID($id_activity_instance=0) {
-
+echo $id_activity_instance;
 		if ($id_activity_instance==0) {
 			return $this->fw->app["uid"];
 		}
