@@ -1213,6 +1213,24 @@ class BPME {
 		return($value);
 	}
 
+	private function getActorType($id_actor) {
+		$this->doLog("Requested with actor id $id_actor");
+		if (!is_numeric($id_actor) and !is_int($id_actor)) {
+			throw new Exception("Actor id $id_actor not valid", 0);
+		}
+		$sql="select type from actors where id=$id_actor";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
 	private function getProcessIDFromProcessInstance($id_process_instance) {
 		$this->doLog("Requested with process instance $id_process_instance");
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
@@ -1455,6 +1473,9 @@ class BPME {
 			$uid=$this->getCurrentUID();
 			if (!$uid or $uid==0) {
 				$uid=$this->getActivityInstanceAssignedActor($id_activity_instance_prec);
+				if ($this->getActorType($uid)==='O') {
+					$uid=$this->getActivityInstanceCreatedUser($id_activity_instance_prec);
+				}
 			}
 		}
 		else {
@@ -1952,6 +1973,23 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
+	private function getActivityInstanceCreatedUser($id_activity_instance) {
+		$this->doLog("Requested with Activity instance id  $id_activity_instance");
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+		$sql="select id_user_created from activity_instances where id=$id_activity_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
 
 	private function getActivityID($process_code,$activity_code) {
 		$this->doLog("Requested with process_code $process_code and activity_code $activity_code");
