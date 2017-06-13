@@ -1722,11 +1722,12 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 		}
 
 		$context=$this->getActivityInstanceContext($id_activity_instance);
-
+		$note=$this->getProcessInstanceNote($id_activity_instance);
+		
 		$this->fw->AddMerge("block","context",$context);
 		$this->fw->AddMerge("block","process_data",$data);
 		$this->fw->AddMerge("field","piid",$id_process_instance);
-		$this->fw->AddMerge("field","note",$this->getProcessInstanceNote($id_activity_instance));
+		$this->fw->AddMerge("field","note",$note);
 		$this->fw->AddMerge("field","aiid",$id_activity_instance);
 		$tmpl=$this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm";
 		$this->fw->app["TBS"]->LoadTemplate($tmpl,"+");
