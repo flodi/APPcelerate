@@ -1572,7 +1572,6 @@ class BPME {
 				$this->assignActivity($id_activity_instance,$id_actor_created);
 				break;
 			case 'U':
-				$this->assignActivity($id_activity_instance,$id_actor_created);
 				return($id_activity_instance);
 				break;
 			case 'A':
@@ -1683,6 +1682,11 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 
 	private function showActivity($id_activity_instance) {
 		$this->doLog("Requested with activty instance $id_activity_instance");
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$this->assignActivity($id_activity_instance,$this->getCurrentUID());
 
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 
