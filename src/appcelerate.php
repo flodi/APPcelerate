@@ -1804,7 +1804,7 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_from);
 
 		//Concludo l'activity precedente
-		$sql="update activity_instances set date_completed=now(), id_user_completed=".$this->getCurrentUID($id_activity_instance_from)." where id=$id_activity_instance_from";
+		$sql="update activity_instances set date_completed=now(), id_actor_completed=".$this->getCurrentUID($id_activity_instance_from)." where id=$id_activity_instance_from";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
