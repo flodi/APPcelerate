@@ -1127,6 +1127,25 @@ class BPME {
 		return true;
 	}
 
+	private function getProcessInstanceNote($id_process_instance,$all=true,$type) {
+		$this->doLog("Requested with process instance $id_process_instance and all $all and type $type");
+
+		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
+			throw new Exception("Process instance id $id_process_instance not valid", 0);
+		}
+		$sql="select note from process_instances where id=$id_process_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
 	private function getProcessInstanceData($id_process_instance,$all=true,$type) {
 		$this->doLog("Requested with process instance $id_process_instance and all $all and type $type");
 
@@ -1707,6 +1726,7 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 		$this->fw->AddMerge("block","context",$context);
 		$this->fw->AddMerge("block","process_data",$data);
 		$this->fw->AddMerge("field","piid",$id_process_instance);
+		$this->fw->AddMerge("field","note",$this->getProcessInstanceNote($id_activity_instance));
 		$this->fw->AddMerge("field","aiid",$id_activity_instance);
 		$tmpl=$this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm";
 		$this->fw->app["TBS"]->LoadTemplate($tmpl,"+");
