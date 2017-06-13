@@ -1480,16 +1480,15 @@ class BPME {
 		}
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
-echo "act $uid type".$this->getActorType($uid);
 		if ($ui and $this->getActorType($uid)=='U') {
 			$id_actor_assigned=$uid;
 		}
 		else {
 			$id_actor_assigned="null";
 		}
-echo $id_actor_assigned;
-die();
 		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_actor_created,id_actor_assigned) values (%d,%d,%d,%d,%s)",$id_activity,$id_process,$id_process_instance,$uid,$id_actor_assigned);
+
+echo $sql;
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
