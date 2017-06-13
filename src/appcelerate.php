@@ -1127,7 +1127,7 @@ class BPME {
 		return true;
 	}
 
-	private function getProcessInstanceNote($id_process_instance,$all=true,$type) {
+	private function getProcessInstanceNote($id_process_instance) {
 		$this->doLog("Requested with process instance $id_process_instance");
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
@@ -1146,7 +1146,7 @@ class BPME {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
-	private function getProcessInstanceData($id_process_instance) {
+	private function getProcessInstanceData($id_process_instance,$all=true,$type) {
 		$this->doLog("Requested with process instance $id_process_instance and all $all and type $type");
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
