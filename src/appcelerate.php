@@ -1453,6 +1453,9 @@ class BPME {
 
 		if ($ui) {
 			$uid=$this->getCurrentUID();
+			if (!$uid) {
+				$uid=$this->getActivityInstanceAssignedActor($id_activity_instance_prec);
+			}
 		}
 		else {
 			$uid=$this->getCurrentUID($id_activity_instance_prec);
