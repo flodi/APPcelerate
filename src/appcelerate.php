@@ -1508,7 +1508,10 @@ class BPME {
 		else {
 			$id_actor_assigned="null";
 		}
-		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_actor_created,id_actor_assigned) values (%d,%d,%d,%d,%s)",$id_activity,$id_process,$id_process_instance,$uid,$id_actor_assigned);
+
+		$fingerprint=uniqid();
+
+		$sql=sprintf("insert into activity_instances (fingerprint,id_activity,id_process,id_process_instance,id_actor_created,id_actor_assigned) values ('%s',%d,%d,%d,%d,%s)",$fingerprint,$id_activity,$id_process,$id_process_instance,$uid,$id_actor_assigned);
 
 		$rs=$this->db->query($sql);
 		try {
@@ -1520,7 +1523,17 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		$id_activity_instance=$this->db->insert_id;
+		$sql="select id from action_instances where fingerprint='$fingerprint'";
+		$rs1=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs1);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		$id_activity_instance=$rs1->fetch_array(MYSQLI_NUM)[0];
 
 		return($id_activity_instance);
 	}
