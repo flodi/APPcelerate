@@ -1479,8 +1479,11 @@ class BPME {
 
 	private function createActivityInstance($id_activity_instance_prec,$id_process_instance,$id_activity,$ui=false) {
 
-		$this->doLog("Requested with process instance  $id_process_instance and activity $id_activity");
+		$this->doLog("Requested with activity instance prec id $id_activity_instance_prec and process instance id $id_process_instance and activity id $id_activity and ui $ui");
 
+		if (!is_numeric($id_activity_instance_prec) and !is_int($id_activity_instance_prec)) {
+			throw new Exception("Activity instance prec id $id_activity_instance_prec not valid", 0);
+		}
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
 		}
@@ -1535,6 +1538,7 @@ class BPME {
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
 
+		$this->db->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
 		$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_actor_executed) values (%d,%d,%d,%d)",$id_process,$id_action,$id_activity_instance_from,$this->getCurrentUID($id_activity_instance_from));
 		$rs1=$this->db->query($sql);
 		try {
@@ -1546,6 +1550,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 		$id_action_instance=$this->db->insert_id;
+		$this->db->commit();
 		return($id_action_instance);
 	}
 
