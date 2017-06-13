@@ -1413,7 +1413,7 @@ class BPME {
 			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
-		$code=$this->fw->fetch_array(MYSQLI_NUM)[0];
+		$code=$rs->fetch_array(MYSQLI_NUM)[0];
 
 		return($code);		
 	}
