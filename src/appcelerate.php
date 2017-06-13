@@ -1523,7 +1523,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		$sql="select id from action_instances where fingerprint='$fingerprint'";
+		$sql="select id from activity_instances where fingerprint='$fingerprint'";
 		$rs1=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs1);
