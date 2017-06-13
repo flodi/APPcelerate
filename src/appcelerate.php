@@ -1928,7 +1928,7 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 		$id_activity_instance_to=$this->createActivityInstance($id_activity_instance_from,$id_process_instance,$id_activity_to,$ui);
 
 		//Chiudo l'action
-		$sql="update action_instances set id_activity_instance_to=$id_activity_instance_to, date_executed=now(), id_actor_executed=".$this->getCurrentUID($id_activity_instance_from);
+		$sql="update action_instances set id_activity_instance_to=$id_activity_instance_to, date_executed=now(), id_actor_executed=".$this->getCurrentUID($id_activity_instance_from)." where id=$id_action_instance";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
