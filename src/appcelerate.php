@@ -1051,7 +1051,7 @@ class BPME {
 
 		$serialized_data=$this->db->real_escape_string(json_encode($initial_data));
 
-		$sql=sprintf("insert into process_instances (id_process,id_user_created,id_user_assigned,status,data) values (%d,%d,%d,'R','%s')",$id_process,$uid,$uid,$serialized_data);
+		$sql=sprintf("insert into process_instances (id_process,id_actor_created,id_user_assigned,status,data) values (%d,%d,%d,'R','%s')",$id_process,$uid,$uid,$serialized_data);
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1473,9 +1473,6 @@ class BPME {
 			$uid=$this->getCurrentUID();
 			if (!$uid or $uid==0) {
 				$uid=$this->getActivityInstanceAssignedActor($id_activity_instance_prec);
-				if ($this->getActorType($uid)==='O') {
-					$uid=$this->getActivityInstanceCreatedUser($id_activity_instance_prec);
-				}
 			}
 		}
 		else {
@@ -1483,15 +1480,15 @@ class BPME {
 		}
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
-
-		if ($ui) {
+echo $this->getActorType($uid);
+		if ($ui and $this->getActorType($uid)=='U') {
 			$id_actor_assigned=$uid;
 		}
 		else {
 			$id_actor_assigned="null";
 		}
-
-		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_user_created,id_actor_assigned) values (%d,%d,%d,%d,%s)",$id_activity,$id_process,$id_process_instance,$uid,$id_actor_assigned);
+die();
+		$sql=sprintf("insert into activity_instances (id_activity,id_process,id_process_instance,id_actor_created,id_actor_assigned) values (%d,%d,%d,%d,%s)",$id_activity,$id_process,$id_process_instance,$uid,$id_actor_assigned);
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1543,14 +1540,14 @@ class BPME {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 
-		$sql="select id_activity,id_user_created from activity_instances where id=$id_activity_instance";
+		$sql="select id_activity,id_actor_created from activity_instances where id=$id_activity_instance";
 		$rs=$this->db->query($sql);
 		if ($rs->num_rows===0) {
 			throw new Exception("Activity instance $id_activity_instance not found", 0);
 		}
 		$r=$rs->fetch_array(MYSQLI_NUM);
 		$id_activity=$r[0];
-		$id_user_created=$r[1];
+		$id_actor_created=$r[1];
 
 		$activity_type=$this->getActivityType($id_activity);
 
@@ -1573,16 +1570,16 @@ class BPME {
 				return($id_activity_instance);
 				break;
 			case 'F':
-				$this->assignActivity($id_activity_instance,$id_user_created);
+				$this->assignActivity($id_activity_instance,$id_actor_created);
 				break;
 			case 'U':
-				$this->assignActivity($id_activity_instance,$id_user_created);
+				$this->assignActivity($id_activity_instance,$id_actor_created);
 				return($id_activity_instance);
 				break;
 			case 'A':
 				try {
 					$new_id_activity_instance=$this->executeActivity($id_activity_instance);
-					$this->assignActivity($id_activity_instance,$id_user_created);
+					$this->assignActivity($id_activity_instance,$id_actor_created);
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
@@ -1978,7 +1975,7 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
-		$sql="select id_user_created from activity_instances where id=$id_activity_instance";
+		$sql="select id_actor_created from activity_instances where id=$id_activity_instance";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
