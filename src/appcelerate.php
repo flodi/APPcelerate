@@ -1918,7 +1918,12 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 		}
 
 		if ($id_activity_instance==0) {
-			return $this->fw->app["uid"];
+			if (array_key_exists("uid",$this->fw->app)) {
+				return $this->fw->app["uid"];
+			}
+			else {
+				return ("null");
+			}
 		}
 		else {
 			return $this->getActivityInstanceAssignedActor($id_activity_instance);
