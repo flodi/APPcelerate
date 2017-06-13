@@ -2221,6 +2221,12 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 				}
 				return($this->getProcessInstanceData($params["id"],true,"array"));
 				break;
+			case 'getProcessInstanceCounterpart':
+				if (!array_key_exists("id",$params)) {
+					throw new Exception("Missing 'id' params", 0);
+				}
+				return($this->getProcessInstanceCounterpart($params["id"]));
+				break;
 			case 'getProcessInstanceIDFromActivityInstanceID':
 				if (!array_key_exists("id",$params)) {
 					throw new Exception("Missing 'id' params", 0);
