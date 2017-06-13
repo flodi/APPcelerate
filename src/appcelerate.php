@@ -1722,8 +1722,8 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 		}
 
 		$context=$this->getActivityInstanceContext($id_activity_instance);
-		$note=$this->getProcessInstanceNote($id_activity_instance);
-		
+		$note=$this->getProcessInstanceNote($id_process_instance);
+
 		$this->fw->AddMerge("block","context",$context);
 		$this->fw->AddMerge("block","process_data",$data);
 		$this->fw->AddMerge("field","piid",$id_process_instance);
