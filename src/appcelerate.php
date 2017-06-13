@@ -1480,6 +1480,7 @@ class BPME {
 		}
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
+echo "act $uid type".$this->getActorType($uid);
 		if ($ui and $this->getActorType($uid)=='U') {
 			$id_actor_assigned=$uid;
 		}
