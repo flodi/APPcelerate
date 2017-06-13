@@ -1538,8 +1538,9 @@ class BPME {
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
 
-		$this->db->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
-		$sql=sprintf("insert into action_instances (id_process,id_action,id_activity_instance_from,id_actor_executed) values (%d,%d,%d,%d)",$id_process,$id_action,$id_activity_instance_from,$this->getCurrentUID($id_activity_instance_from));
+		$fingerprint=uniqid();
+
+		$sql=sprintf("insert into action_instances (fingerprint,id_process,id_action,id_activity_instance_from,id_actor_executed) values (%d,%d,%d,%d)",$fingerprint,$id_process,$id_action,$id_activity_instance_from,$this->getCurrentUID($id_activity_instance_from));
 		$rs1=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs1);
@@ -1549,9 +1550,18 @@ class BPME {
 			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
-		$id_action_instance=$this->db->insert_id;
-		$this->db->commit();
-		$id_action_instance=-1;
+
+		$sql="select id from action_instances where fingerprint='$fingerprint'";
+		$rs1=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs1);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		$id_action_instance=$rs1->fetch_array(MYSQLI_NUM)[0];
 		return($id_action_instance);
 	}
 
