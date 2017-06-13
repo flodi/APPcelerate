@@ -1551,6 +1551,7 @@ class BPME {
 		}
 		$id_action_instance=$this->db->insert_id;
 		$this->db->commit();
+		$id_action_instance=-1;
 		return($id_action_instance);
 	}
 
