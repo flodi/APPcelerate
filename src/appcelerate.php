@@ -1396,6 +1396,28 @@ class BPME {
 		return($context);		
 	}
 
+	private function getCounterpartCodeFromActivityInstance($id_activity_instance) {
+		$this->doLog("Requested with activity instance  $id_activity_instance");
+
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_process_instance not valid", 0);
+		}
+
+		$sql="select id_actor_assigned from activity_instances where id=$id_activity_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		$code=$this->fw->fetch_array(MYSQLI_NUM)[0];
+
+		return($code);		
+	}
+
 	private function assignActivity($id_activity_instance,$id_actor) {
 		$this->doLog("Requested with activity instance  $id_activity_instance and actor id $id_actor");
 
@@ -1572,6 +1594,8 @@ class BPME {
 
 		$id_counterpart=$this->getProcessInstanceCounterpart($id_process_instance);
 
+		$this->assignActivity($id_activity_instance,$id_counterpart);
+
 		$TBSC = new clsTinyButStrong;
 		$TBSC->LoadTemplate($this->app_name."/bpme/templates/STEP_COUNT_EMAIL.htm");
 		$data=$this->getProcessInstanceData($id_process_instance,true,"block");
@@ -1647,6 +1671,8 @@ $to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@mete
 		switch($type) {
 			case "C":
 				$data=$this->getProcessInstanceData($id_process_instance,false,"block");
+				$code=$this->getCounterpartCodeFromActivityInstance($id_activity_instance);
+				$this->fw->AddMerge("field","ccode",$code);
 				break;
 			default:
 				$data=$this->getProcessInstanceData($id_process_instance,false,"list");
