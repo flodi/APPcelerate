@@ -395,7 +395,10 @@ class APPcelerate {
 	}
 
 	public function DBsqlError($recordset,$query) {
-		sqlError($recordset,$query);
+		if (!$recordset) {
+			$this->doLog("Failed SQL query - Query => $query, Error => ".$this->app["db_".$this->app["name"]]->error);
+			throw new Exception("Database error, please contact support", 1);
+		}
 	}
 
 	// DEPRECATED
