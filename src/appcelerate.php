@@ -432,6 +432,7 @@ class APPcelerate {
 		}
 		return $data;
 	}
+	
 	public function fetchAllAssoc ($recordset) {
 		$data = [];
 		while ($row = $recordset->fetch_array(MYSQLI_ASSOC)) {
