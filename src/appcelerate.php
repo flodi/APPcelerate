@@ -513,6 +513,7 @@ class APPcelerate {
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/select2-bootstrap.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/typeahead.js-bootstrap.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap-editable.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.filtertable.min.css">
 					';
 					$c.=favicon(FAVICON_ENABLE_ALL,array(
 						'application_name' => $this->app["name"]
