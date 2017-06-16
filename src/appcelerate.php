@@ -637,12 +637,16 @@ class APPcelerate {
 		}
 	}
 	
-	public function logged($app) {
-		if (!empty($_SESSION[$app."_ap_uid"])) {
-			return (true);
+	public function logged($app="") {
+		foreach ($this->app["apps"] as $app_name) {
+			if (!empty($app) and $app_name!==$app) {
+				continue;
+			}
+			if (!empty($_SESSION[$app_name."_ap_uid"])) {
+				return (true);
+			}
 		}
 		return (false);
-
 	}
 
 	public function doSecurity() {
