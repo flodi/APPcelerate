@@ -993,7 +993,7 @@ class BPME {
 	private $logger;
 
 	private $is_alarm_func_set=false;
-	private $alarm_func;
+	public $alarm_func;
 
 	private $activity_types = array(
 		"S" => "Start",
