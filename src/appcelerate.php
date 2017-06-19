@@ -1051,7 +1051,7 @@ class BPME {
 	}
 
 	private function getAlerts() {
-		$sql="select * from alerts where alert_done=false";
+		$sql="select * from alerts where alert_done=false order by severity desc";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1089,6 +1089,30 @@ class BPME {
 			$i++;
 		}
 		return($alerts);
+	}
+
+	private function getLastActivities() {
+		$uid=$getCurrentUID();
+		$sql="select * from activity_instances where date_completed is null and (id_actor_assigned is null or id_actor_assigned=$uid) order by date_created desc limit 10";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("Error getting alerts | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+		$i=0;
+		$last=array();
+		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
+			$last[$i]["id"]=$r["id"];
+			$last[$i]["id_process_instance"]=$r["id_process_instance"];
+			$last[$i]["process"]=getProcessNameFromProcessInstance($r["id_process_instance"]);
+			$last[$i]["activity"]=getActivityNameFromActivityInstance($r["id"]);
+			$i++;
+		}
+		return($last);
 	}
 
 	// Ritorna l'id dell'istanza dell'ultima attività eseguita
@@ -2377,6 +2401,10 @@ class BPME {
 			case 'getAlerts':
 				$alerts=$this->getAlerts();
 				return($alerts);
+				break;
+			case 'getLastActivities':
+				$last=$this->getLastActivities();
+				return($last);
 				break;
 			default:
 				throw new Exception("Function $function not present");
