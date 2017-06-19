@@ -1723,6 +1723,9 @@ class BPME {
 		$subject=sprintf("#%d %s > %s > Richiesta riscontro - Messaggio Automatico",$id_activity_instance,$data[0]["_mail_object"],$counterpart[0]["nome"]." ".$counterpart[0]["cognome"]);
 
 
+		$from=$data[0]["_mail_from"];
+		$bcc[0]=$data[0]["_mail_from"];
+
 		$to=array();
 		if (array_key_exists("email",$counterpart[0]) and !empty($counterpart[0]["email"])) {
 			$to[]=$counterpart[0]["email"];
@@ -1732,7 +1735,7 @@ class BPME {
 			$this->doLog("Counterpart with id ".$counterpart[0]["id"]." does not have any email, aborted");
 		}
 		else {
-			$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to);
+			$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$bcc);
 			$this->assignActivity($id_activity_instance,$id_counterpart);
 		}
 
