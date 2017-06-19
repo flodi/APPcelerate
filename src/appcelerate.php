@@ -1745,6 +1745,8 @@ class BPME {
 	}
 
 	private function showActivity($id_activity_instance) {
+		$this->alert_func(array("type" => "error","activity"=>$id_activity_instance));
+
 		$this->doLog("Requested with activty instance $id_activity_instance");
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
