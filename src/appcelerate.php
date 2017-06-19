@@ -1036,9 +1036,9 @@ class BPME {
 
 	}
 
-	private function makeAlert($id_process_instance,$id_activity_instance='null',$id_action_instance='null',$data=array()) {
+	private function makeAlert($severity,$id_process_instance,$id_activity_instance='null',$id_action_instance='null',$data=array()) {
 		$data=json_encode($data);
-		$sql=sprintf("insert into alerts (id_process_instance,id_activity_instance,id_action_instance,local_data) values (%d,%s,%s,'%s')",$id_process_instance,$id_activity_instance,$id_action_instance,$data);
+		$sql=sprintf("insert into alerts (severity,id_process_instance,id_activity_instance,id_action_instance,local_data) values ('%s',%d,%s,%s,'%s')",$severity,$id_process_instance,$id_activity_instance,$id_action_instance,$data);
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1798,7 +1798,7 @@ class BPME {
 		if (empty($to)) {
 			$this->doLog("Counterpart with id ".$counterpart[0]["id"]." does not have any email, sent to myself");
 			$to[0]=$from;
-			$this->makeAlert($id_process_instance,$id_activity_instance,"null",array("counterpart" => $counterpart[0]["nome"]." ".$counterpart[0]["cognome"]));
+			$this->makeAlert("1",$id_process_instance,$id_activity_instance,"null",array("counterpart" => $counterpart[0]["nome"]." ".$counterpart[0]["cognome"]));
 		}
 
 		$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$bcc);
