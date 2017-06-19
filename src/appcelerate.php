@@ -2373,6 +2373,10 @@ class BPME {
 				}
 				$this->setProcessInstanceCounterpart($params["id_process_instance"],$params["id_actor"]);
 				break;
+			case 'getAlertsUI':
+				$alerts=$this->getAlerts();
+				$this->fw->AddMerge("block","alerts",$alerts);
+				break;
 			default:
 				throw new Exception("Function $function not present");
 		}
