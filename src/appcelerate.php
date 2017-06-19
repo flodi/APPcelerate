@@ -1724,11 +1724,8 @@ class BPME {
 
 
 		$to=array();
-		if (array_key_exists("email_personale",$counterpart[0]) and !empty($counterpart[0]["email_personale"])) {
-			$to[]=$counterpart[0]["email_personale"];
-		}
-		if (array_key_exists("email_aziendale",$counterpart[0]) and !empty($counterpart[0]["email_aziendale"])) {
-			$to[]=$counterpart[0]["email_aziendale"];
+		if (array_key_exists("email",$counterpart[0]) and !empty($counterpart[0]["email"])) {
+			$to[]=$counterpart[0]["email"];
 		}
 
 		if (empty($to)) {
