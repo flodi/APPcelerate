@@ -1726,18 +1726,17 @@ class BPME {
 		$from=$data[0]["_mail_from"];
 		$bcc[0]=$data[0]["_mail_from"];
 
-		$to=array();
 		if (array_key_exists("email",$counterpart[0]) and !empty($counterpart[0]["email"])) {
-			$to[]=$counterpart[0]["email"];
+			$to[0]=$counterpart[0]["email"];
 		}
 
 		if (empty($to)) {
-			$this->doLog("Counterpart with id ".$counterpart[0]["id"]." does not have any email, aborted");
+			$this->doLog("Counterpart with id ".$counterpart[0]["id"]." does not have any email, sent to myself");
+			$to[0]=$from;
 		}
-		else {
-			$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$bcc);
-			$this->assignActivity($id_activity_instance,$id_counterpart);
-		}
+
+		$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$bcc);
+		$this->assignActivity($id_activity_instance,$id_counterpart);
 
 	}
 
