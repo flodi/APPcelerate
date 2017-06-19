@@ -1040,7 +1040,7 @@ class BPME {
 	}
 
 	// Definisce la funzione di alarm, accetta un array associativo come parametro
-	public function setAlarmFunc(&$func) {
+	public function setAlarmFunc($func) {
 		$this->is_alarm_func_set=true;
 		$this->alarm_func=$func;
 	}
