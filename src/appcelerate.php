@@ -1040,11 +1040,9 @@ class BPME {
 	}
 
 	// Definisce la funzione di alarm, accetta un array associativo come parametro
-	public function setAlarmFunc($funcname) {
-		if (function_exists($funcname)) {
-			$this->is_alarm_func_set=true;
-			$this->alarm_func=$funcname;
-		}
+	public function setAlarmFunc(&$func) {
+		$this->is_alarm_func_set=true;
+		$this->alarm_func=$func;
 	}
 
 	// Ritorna l'id dell'istanza dell'ultima attività eseguita
