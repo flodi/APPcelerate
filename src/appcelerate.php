@@ -1108,8 +1108,8 @@ class BPME {
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			$last[$i]["id"]=$r["id"];
 			$last[$i]["id_process_instance"]=$r["id_process_instance"];
-			$last[$i]["process"]=getProcessNameFromProcessInstance($r["id_process_instance"]);
-			$last[$i]["activity"]=getActivityNameFromActivityInstance($r["id"]);
+			$last[$i]["process"]=$this->getProcessNameFromProcessInstance($r["id_process_instance"]);
+			$last[$i]["activity"]=$this->getActivityNameFromActivityInstance($r["id"]);
 			$i++;
 		}
 		return($last);
