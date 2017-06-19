@@ -992,9 +992,6 @@ class BPME {
 	private $db;
 	private $logger;
 
-	private $is_alert_func_set=false;
-	private $alert_func;
-
 	private $activity_types = array(
 		"S" => "Start",
 		"F" => "Finish",
@@ -1039,10 +1036,58 @@ class BPME {
 
 	}
 
-	// Definisce la funzione di alarm, accetta un array associativo come parametro
-	public function setAlertFunc($func) {
-		$this->is_alert_func_set=true;
-		$this->alert_func=$func;
+	private function makeAlert($id_process_instance,$id_activity_instance='null',$id_action_instance='null',$data=array()) {
+		$data=json_encode($data);
+		$sql=sprintf("insert into alerts (id_process_instance,id_activity_instance,id_action_instance,local_data) values (%d,%s,%s,'%s')",$id_process_instance,$id_activity_instance,$id_action_instance,$data);
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("Error creating alert | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+	}
+
+	private function getAlerts() {
+		$sql="select * from alerts where alert_done=false";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("Error getting alerts | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
+		$alerts=array();
+		$i=0;
+		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
+			$alerts[$i]["local_data"]=json_decode($r["local_data"],true);
+			$alerts[$i]["id_process_instance"]=$r["id_process_instance"];
+			$alerts[$i]["id_activity_instance"]=$r["id_activity_instance"];
+			$alerts[$i]["id_action_instance"]=$r["id_action_instance"];
+			if (!empty($r["id_process_instance"])) {
+				$alerts[$i]["process"]=$this->getProcessNameFromProcessInstance($id_process_instance);
+			}
+			else {
+				$alerts[$i]["process"]="";
+			}
+			if (!empty($r["id_activity_instance"])) {
+				$alerts[$i]["activity"]=$this->getActivityNameFromActivityInstance($id_activity_instance);
+			}
+			else {
+				$alerts[$i]["activity"]="";
+			}
+			if (!empty($r["id_action_instance"])) {
+				$alerts[$i]["action"]=$this->getActionNameFromActionInstance($id_action_instance);
+			}
+			else {
+				$alerts[$i]["action"]="";
+			}
+			$i++;
+		}
 	}
 
 	// Ritorna l'id dell'istanza dell'ultima attività eseguita
@@ -1307,6 +1352,7 @@ class BPME {
 
 	private function getProcessNameFromProcessInstance($id_process_instance) {
 		$this->doLog("Requested with process instance $id_process_instance");
+
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
 		}
@@ -1450,6 +1496,24 @@ class BPME {
 		$context=$this->fw->fetchAllAssoc($rs);
 
 		return($context);		
+	}
+
+	private function getActionNameFromActionInstance($id_action_instance) {
+		$this->doLog("Requested with action instance $id_action_instance");
+		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
+			throw new Exception("Activity instance id $id_action_instance not valid", 0);
+		}
+		$sql="select actions.name from actions join action_instances on actions.id=activity_instances.id_activity where action_instances.id=$id_action_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getCounterpartCodeFromActivityInstance($id_activity_instance) {
@@ -1733,6 +1797,7 @@ class BPME {
 		if (empty($to)) {
 			$this->doLog("Counterpart with id ".$counterpart[0]["id"]." does not have any email, sent to myself");
 			$to[0]=$from;
+			$this->makeAlert($id_process_instance,$id_activity_instance,"null",array("counterpart" => $counterpart[0]["nome"]." ".$counterpart[0]["cognome"]));
 		}
 
 		$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$bcc);
@@ -1745,8 +1810,6 @@ class BPME {
 	}
 
 	private function showActivity($id_activity_instance) {
-		call_user_func($this->alert_func,array("type" => "error","activity"=>$id_activity_instance));
-
 		$this->doLog("Requested with activty instance $id_activity_instance");
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
