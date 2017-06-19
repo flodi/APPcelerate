@@ -1092,7 +1092,7 @@ class BPME {
 	}
 
 	private function getLastActivities() {
-		$uid=getCurrentUID();
+		$uid=$this->getCurrentUID();
 		$sql="select * from activity_instances where date_completed is null and (id_actor_assigned is null or id_actor_assigned=$uid or id_actor_created=$uid) order by date_created desc limit 10";
 		$rs=$this->db->query($sql);
 		try {
