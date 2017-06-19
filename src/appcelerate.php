@@ -991,6 +991,10 @@ class BPME {
 	private $fw;
 	private $db;
 	private $logger;
+
+	private $is_alarm_func_set=false;
+	private $alarm_func;
+
 	private $activity_types = array(
 		"S" => "Start",
 		"F" => "Finish",
@@ -1033,6 +1037,14 @@ class BPME {
 		$this->fw->app["TBS"]->ObjectRef['bpme_obj'] = $this;
 		$this->fw->app["TBS"]->MergeField('bpme', '~bpme_obj.bpmeTBS', true);
 
+	}
+
+	// Definisce la funzione di alarm, accetta un array associativo come parametro
+	public function setAlarmFunc($funcname) {
+		if (function_exists($funcname)) {
+			$this->is_alarm_func_set=true;
+			$this->alarm_func=$funcname;
+		}
 	}
 
 	// Ritorna l'id dell'istanza dell'ultima attività eseguita
@@ -1720,8 +1732,6 @@ class BPME {
 		if (array_key_exists("email_aziendale",$counterpart[0]) and !empty($counterpart[0]["email_aziendale"])) {
 			$to[]=$counterpart[0]["email_aziendale"];
 		}
-
-$to=array("flodi@e-scientia.eu","azeroli@e-scientia.eu","emanuelaalberghini@metetravelandevents.com");
 
 		if (empty($to)) {
 			$this->doLog("Counterpart with id ".$counterpart[0]["id"]." does not have any email, aborted");
