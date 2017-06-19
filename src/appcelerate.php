@@ -1088,6 +1088,7 @@ class BPME {
 			}
 			$i++;
 		}
+		return($alerts);
 	}
 
 	// Ritorna l'id dell'istanza dell'ultima attività eseguita
