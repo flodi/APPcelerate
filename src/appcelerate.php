@@ -572,7 +572,7 @@ class APPcelerate {
 		
 	}
 	
-	public function  sendEmail($body, $subject, $from, $to, $bcc=array(), $files=array()) {
+	public function  sendEmail($body, $subject, $from, $to, $cc=array(),$bcc=array(), $files=array()) {
 
 		if (!is_array($to)) {
 			$to=array($to);
@@ -592,6 +592,7 @@ class APPcelerate {
 		}
 
 		$m->addTo($to);
+		$m->addCC($cc);
 		$m->addBCC($bcc);
 		$m->setSubject($subject);
 		$m->setMessageFromString(strip_tags($body), $body);
@@ -1825,7 +1826,15 @@ class BPME {
 			$this->makeAlert("1",$id_process_instance,$id_activity_instance,"null",array("counterpart" => $counterpart[0]["nome"]." ".$counterpart[0]["cognome"]));
 		}
 
-		$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$bcc);
+		$cc=array();
+		if (array_key_exists("email_aziendale",$counterpart[0]) and !empty($counterpart[0]["email_aziendale"])) {
+			$cc[]=$counterpart[0]["email_aziendale"];
+		}
+		if (array_key_exists("email_personale",$counterpart[0]) and !empty($counterpart[0]["email_personale"])) {
+			$cc[]=$counterpart[0]["email_personale"];
+		}
+
+		$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$cc,$bcc);
 		$this->assignActivity($id_activity_instance,$id_counterpart);
 
 	}
