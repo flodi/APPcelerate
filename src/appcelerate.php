@@ -52,7 +52,7 @@ class APPcelerate {
 			$uname="NOLOGGEDUSER";
 		}
 
-		$debug=debug_backtrace()[2];
+		$debug=debug_backtrace()[1];
 		$caller_file=str_replace($_SERVER["DOCUMENT_ROOT"],"",$debug["file"]);
 		$caller_line=$debug["line"];
 		$caller_function=$debug["function"];
