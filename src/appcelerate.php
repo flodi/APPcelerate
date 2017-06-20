@@ -2274,7 +2274,7 @@ class BPME {
 
 		$msg="$where ".$msg;
 
-		$this->fw->writeLog($this->logger,$level,$msg,$context);
+		$this->fw->writeLog($this->logger,$level,$msg,$acontext);
 		
 	}
 
