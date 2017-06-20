@@ -44,7 +44,7 @@ class APPcelerate {
 		
 	}
 
-	private function writeLog($logger,$level,$msg,$context) {
+	public function writeLog($logger,$level,$msg,$context) {
 		if (array_key_exists("uname",$this->app)) {
 			$uname=$this->app["uname"];
 		}
