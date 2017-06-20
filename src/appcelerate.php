@@ -40,11 +40,29 @@ class APPcelerate {
 			$context=array("main");
 		}
 	
+		$this->writeLog($this->app[$app_name."_logger"],$level,$msg,$context);
+		
+	}
+
+	private function writeLog($logger,$level,$msg,$context) {
+		if (array_key_exists("uname",$this->app)) {
+			$uname=$this->app["uname"];
+		}
+		else {
+			$uname="NOLOGGEDUSER";
+		}
+
+		$debug=debug_backtrace()[1];
+		$caller_file=str_replace($_SERVER["DOCUMENT_ROOT"],"",$debug["file"]);
+		$caller_line=$debug["line"];
+		$caller_function=$debug["function"];
+
+		$msg="$uname ; $caller_file $caller_line $caller_function ; ".$msg;
+
 		switch($level) {
 			default:
-				$this->app[$app_name."_logger"]->addRecord($level,$msg,$context);
+				$logger->addRecord($level,$msg,$context);
 		}
-		
 	}
 
 	public function setBPME($v) {
@@ -2227,11 +2245,6 @@ class BPME {
 			throw new Exception("ID instance $id_instance not valid", 0);
 		}
 
-		$debug=debug_backtrace()[1];
-		$caller_file=str_replace($_SERVER["DOCUMENT_ROOT"],"",$debug["file"]);
-		$caller_line=$debug["line"];
-		$caller_function=$debug["function"];
-
 		switch ($context) {
 			case "P":
 				$where="Process";
@@ -2251,22 +2264,17 @@ class BPME {
 		}
 		$rs=$this->db->query($sql);
 		list($code,$process,$action,$activity)=$rs->fetch_array(MYSQLI_NUM);
-		if (array_key_exists("uname",$this->fw->app)) {
-			$uname=$this->fw->app["uname"];
-		}
-		else {
-			$uname="NOLOGGEDUSER";
-		}
 
 		$acontext=array(
+			$code,
+			$process,
+			$activity,
+			$action
 		);
 
-		$msg="$uname ; $caller_file $caller_line $caller_function ; $where ; $code ; $process; $activity ; $action ; ".$msg;
+		$msg="$where ".$msg;
 
-		switch($level) {
-			default:
-				$this->logger->addRecord($level,$msg,$acontext);
-		}
+		$this->fw->writeLog($this->logger,$level,$msg,$context);
 		
 	}
 
