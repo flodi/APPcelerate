@@ -117,7 +117,7 @@ class APPcelerate {
 	
 		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
 	
-		$this->app["loglevel"]=eval("echo APPcelerate::L_".getenv('LOGLEVEL').";");
+		$this->app["loglevel"]=eval("echo APPcelerate::L_".strtoupper(getenv('LOGLEVEL')).";");
 
 		$this->app["aws_key"]=getenv('AWS_KEY');
 		$this->app["aws_code"]=getenv('AWS_CODE');
