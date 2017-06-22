@@ -123,11 +123,6 @@ class APPcelerate {
 		$this->app["aws_key"]=getenv('AWS_KEY');
 		$this->app["aws_code"]=getenv('AWS_CODE');
 
-		$this->app["favicon"]=getenv('FAVICON');
-		if (!empty($this->app["favicon"])) {
-			$cmd=$this->app["base_path"]."/vendor/bin/favicon generate --ico-64 --ico-48 ".$this->app["base_path"]."/include/img/".$this->app["favicon"]." ".$this->app["base_path"];
-		}
-
 		$this->app["from_email"]=getenv('FROM_EMAIL');
 
 		#Default template folders
@@ -537,9 +532,6 @@ class APPcelerate {
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/typeahead.js-bootstrap.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap-editable.css">
 					';
-					$c.=favicon(FAVICON_ENABLE_ALL,array(
-						'application_name' => $this->app["name"]
-					));
 					break;					
 			}
 			

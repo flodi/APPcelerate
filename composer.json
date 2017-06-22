@@ -9,7 +9,6 @@
         "php-console/php-console": "*",
         "tinybutstrong/tinybutstrong": "*",
         "altorouter/altorouter": "*",
-        "hieu-le/favicon" : "*",
         "nuovo/spreadsheet-reader" : "*",
         "daniel-zahariev/php-aws-ses" : "*"
     },
