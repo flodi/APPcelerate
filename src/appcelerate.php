@@ -45,23 +45,26 @@ class APPcelerate {
 	}
 
 	public function writeLog($logger,$level,$msg,$context) {
-		if (array_key_exists("uname",$this->app)) {
-			$uname=$this->app["uname"];
-		}
-		else {
-			$uname="NOLOGGEDUSER";
-		}
 
-		$debug=debug_backtrace()[2];
-		$caller_file=str_replace($_SERVER["DOCUMENT_ROOT"],"",$debug["file"]);
-		$caller_line=$debug["line"];
-		$caller_function=$debug["function"];
+		if ($level>=$this->app["loglevel"]) {
+			if (array_key_exists("uname",$this->app)) {
+				$uname=$this->app["uname"];
+			}
+			else {
+				$uname="NOLOGGEDUSER";
+			}
 
-		$msg="$uname ; $caller_file $caller_line $caller_function ; ".$msg;
+			$debug=debug_backtrace()[2];
+			$caller_file=str_replace($_SERVER["DOCUMENT_ROOT"],"",$debug["file"]);
+			$caller_line=$debug["line"];
+			$caller_function=$debug["function"];
 
-		switch($level) {
-			default:
-				$logger->addRecord($level,$msg,$context);
+			$msg="$uname ; $caller_file $caller_line $caller_function ; ".$msg;
+
+			switch($level) {
+				default:
+					$logger->addRecord($level,$msg,$context);
+			}
 		}
 	}
 
@@ -114,7 +117,7 @@ class APPcelerate {
 	
 		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
 	
-		$this->app["loglevel"]=getenv('LOGLEVEL');
+		$this->app["loglevel"]=eval("echo APPcelerate::L_".getenv('LOGLEVEL').";");
 
 		$this->app["aws_key"]=getenv('AWS_KEY');
 		$this->app["aws_code"]=getenv('AWS_CODE');
