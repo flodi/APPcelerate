@@ -117,6 +117,7 @@ class APPcelerate {
 	
 		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
 	
+		$tmp="";
 		eval("$tmp=APPcelerate::L_".strtoupper(getenv('LOGLEVEL')).";");
 		$this->app["loglevel"]=$tmp;
 
