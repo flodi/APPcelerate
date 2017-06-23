@@ -61,7 +61,7 @@ class APPcelerate {
 			else {
 				$caller_file="-";
 			}
-			if (array_key_exists("line",$deubg)) {
+			if (array_key_exists("line",$debug)) {
 				$caller_line=$debug["line"];
 			}
 			else {
