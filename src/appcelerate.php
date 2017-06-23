@@ -55,8 +55,18 @@ class APPcelerate {
 			}
 
 			$debug=debug_backtrace()[2];
-			$caller_file=str_replace($_SERVER["DOCUMENT_ROOT"],"",$debug["file"]);
-			$caller_line=$debug["line"];
+			if (array_key_exists("file",$debug)) {
+				$caller_file=str_replace($_SERVER["DOCUMENT_ROOT"],"",$debug["file"]);
+			}
+			else {
+				$caller_file="-";
+			}
+			if (array_key_exists("line",$deubg)) {
+				$caller_line=$debug["line"];
+			}
+			else {
+				$caller_line="-";
+			}
 			$caller_function=$debug["function"];
 
 			$msg="$uname ; $caller_file $caller_line $caller_function ; ".$msg;
