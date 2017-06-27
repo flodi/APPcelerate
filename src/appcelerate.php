@@ -673,6 +673,18 @@ class APPcelerate {
 		return (false);
 	}
 
+	public function userAppAble($uid,$app) {
+		$sql="select * from users where id=$uid and app like '%|$app|%'";
+		$rs=$this->app["db_".$this->app["name"]]->query($sql);
+		$this->DBsqlError($rs,$sql);
+		if ($rs->num_rows>0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public function doSecurity() {
 
 		$secredir=$this->app["secredir"][$this->app["name"]];
@@ -1875,7 +1887,7 @@ class BPME {
 		if($this->getActivityTypeFromActivityInstance($id_activity_instance)==("U")) {
 			$this->assignActivity($id_activity_instance,$this->getCurrentUID());
 		}
-		
+
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 
 		$type=$this->getActivityTypeFromActivityInstance($id_activity_instance);
