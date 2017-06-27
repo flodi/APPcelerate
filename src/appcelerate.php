@@ -2311,7 +2311,7 @@ class BPME {
 				processes.name as pname,
 				processes.code as pcode,
 				process_instances.data as data,
-				process_instance.id as caseid
+				process_instances.id as caseid
 			from
 			activity_instances
 				join activities on activity_instances.id_activity=activities.id
