@@ -1872,8 +1872,10 @@ class BPME {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 
-		$this->assignActivity($id_activity_instance,$this->getCurrentUID());
-
+		if($this->getActivityTypeFromActivityInstance($id_activity_instance)==("U")) {
+			$this->assignActivity($id_activity_instance,$this->getCurrentUID());
+		}
+		
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 
 		$type=$this->getActivityTypeFromActivityInstance($id_activity_instance);
