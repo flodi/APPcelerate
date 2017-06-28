@@ -1347,6 +1347,20 @@ class BPME {
 
 	}
 
+	public function getProcessInstanceGraph($id_process_instance) {
+		$graph = new Fhaculty\Graph\Graph();
+$rome = $graph->createVertex('Rome');
+$madrid = $graph->createVertex('Madrid');
+$cologne = $graph->createVertex('Cologne');
+$cologne->createEdgeTo($madrid);
+$madrid->createEdgeTo($rome);
+$rome->createEdgeTo($rome);
+		$graphviz = new Graphp\GraphViz\GraphViz();
+		$graphviz->setFormat("png");
+		$html=$graphviz->createImageHtml($graph);
+		echo $html;
+	}
+
 	public function engine($function,$params) {
 		$this->doLog("Requested with function $function and params ".print_r($params,true));
 
