@@ -11,7 +11,9 @@
         "altorouter/altorouter": "*",
         "nuovo/spreadsheet-reader" : "*",
         "daniel-zahariev/php-aws-ses" : "*",
-        "clue/graph": "*"
+        "clue/graph": "*",
+        "graphp/graphviz": "*",
+        "graphp/algorithms": "*"
     },
     "authors": [
         {
