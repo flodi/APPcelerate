@@ -10,7 +10,8 @@
         "tinybutstrong/tinybutstrong": "*",
         "altorouter/altorouter": "*",
         "nuovo/spreadsheet-reader" : "*",
-        "daniel-zahariev/php-aws-ses" : "*"
+        "daniel-zahariev/php-aws-ses" : "*",
+        "clue/graph": "*"
     },
     "authors": [
         {
