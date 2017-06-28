@@ -23,7 +23,8 @@
     ],
  	"autoload": {
 		"classmap": [
-			"src/appcelerate.php"
+			"src/framework.php",
+            "src/bpme.php"
 		]
 	}
 }
