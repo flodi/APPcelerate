@@ -887,7 +887,7 @@ class BPME {
 		return($id_action_instance);
 	}
 
-	private function testActivity($activity,$process_data="",$context="") {
+	private function testActivity($activity,$process_data=array(),$context=array()) {
 		$this->doLog("Requested with activty $activity");
 
 		$id_activity=$this->getActivityIDFromActivityCode($activity);
