@@ -23,13 +23,13 @@ class BPME {
 	);
 
 	//
-	// $fw - Istanza di framework attiva
+	// $this->fw - Istanza di framework attiva
 	// $name - Nome dell'applicazione sotto la quale gestire i processi 
 	//
     public function __construct($fw,$name) {
-    	$this->fw=$fw;
+    	$this->fw=$this->fw;
     	$this->app_name=$name;
-    	$this->db=$fw->app["db_".$name];
+    	$this->db=$this->fw->app["db_".$name];
 
     	$this->fw->setBPME(true);
 
@@ -39,7 +39,7 @@ class BPME {
 		$output = "%datetime% ; %level_name% ; %message% ; %context%\n";
 		$formatter = new Monolog\Formatter\LineFormatter($output, $dateFormat);
 		
-		switch($fw->app["loglevel"]) {
+		switch($this->fw->app["loglevel"]) {
 			case "info":
 				$ll=Monolog\Logger::INFO;
 				break;
@@ -47,7 +47,7 @@ class BPME {
 				$ll=Monolog\Logger::DEBUG;
 		}
 		
-		$mainstream=new Monolog\Handler\StreamHandler($fw->app["base_path"]."/logs/bpme.log", $ll);
+		$mainstream=new Monolog\Handler\StreamHandler($this->fw->app["base_path"]."/logs/bpme.log", $ll);
 		$mainstream->setFormatter($formatter);
 		
 		$this->logger->pushHandler($mainstream);
@@ -1352,13 +1352,13 @@ class BPME {
 		$graph->setAttribute("graphviz.graph.bgcolor","transparent");
 
 		$sql="select * from activity_instances where id_process_instance=$id_process_instance";
-		$rs=$fw->app["db_programmi"]->query($sql);
-		$fw->DBsqlError($rs,$sql);
+		$rs=$this->fw->app["db_programmi"]->query($sql);
+		$this->fw->DBsqlError($rs,$sql);
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			
 			$sql="select * from activities where id=".$r["id_activity"];
-			$rs1=$fw->app["db_programmi"]->query($sql);
-			$fw->DBsqlError($rs1,$sql);
+			$rs1=$this->fw->app["db_programmi"]->query($sql);
+			$this->fw->DBsqlError($rs1,$sql);
 			$activity=$rs1->fetch_array(MYSQLI_ASSOC);
 
 
@@ -1370,8 +1370,8 @@ class BPME {
 
 			if(!empty($r["id_actor_assigned"])) {
 				$sql="select * from actors where id=".$r["id_actor_assigned"];
-				$rs1=$fw->app["db_programmi"]->query($sql);
-				$fw->DBsqlError($rs1,$sql);
+				$rs1=$this->fw->app["db_programmi"]->query($sql);
+				$this->fw->DBsqlError($rs1,$sql);
 				$actor=$rs1->fetch_array(MYSQLI_ASSOC);
 
 				if ($actor["type"]==="U") {
@@ -1381,8 +1381,8 @@ class BPME {
 					$sql="select concat(nome,' ',cognome) from ospiti where id=".$actor["id"];
 				}
 
-				$rs1=$fw->app["db_programmi"]->query($sql);
-				$fw->DBsqlError($rs1,$sql);
+				$rs1=$this->fw->app["db_programmi"]->query($sql);
+				$this->fw->DBsqlError($rs1,$sql);
 				$user_name=$rs1->fetch_array(MYSQLI_NUM)[0];
 
 				$label.=" - ".$user_name;
@@ -1395,8 +1395,8 @@ class BPME {
 		}
 
 		$sql="select * from action_instances where id_activity_instance_from in (select id from activity_instances where id_process_instance=id_process_instance)";
-		$rs=$fw->app["db_programmi"]->query($sql);
-		$fw->DBsqlError($rs,$sql);
+		$rs=$this->fw->app["db_programmi"]->query($sql);
+		$this->fw->DBsqlError($rs,$sql);
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 
 			if (!empty($r["id_activity_instance_to"])) {
