@@ -1394,7 +1394,7 @@ class BPME {
 
 		}
 
-		$sql="select * from action_instances where id_activity_instance_from in (select id from activity_instances where id_process_instance=id_process_instance)";
+		$sql="select * from action_instances where id_activity_instance_from in (select id from activity_instances where id_process_instance=$id_process_instance)";
 		$rs=$this->fw->app["db_programmi"]->query($sql);
 		$this->fw->DBsqlError($rs,$sql);
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
