@@ -1257,7 +1257,7 @@ class BPME {
 
 		$res=$rs->fetch_array(MYSQLI_NUM)[0];
 
-		if(!empty($res)) {
+		if(empty($res)) {
 			return (true);
 		}
 		else {
