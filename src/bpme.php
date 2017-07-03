@@ -664,9 +664,10 @@ class BPME {
 		}
 		$id_activity_instance=$rs1->fetch_array(MYSQLI_NUM)[0];
 
+		$id_activity_instance_opening=$id_activity_instance;
 		$opening_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_OPEN.php";
-		if (stream_resolve_include_path($closing_script)) {
-			include($closing_script);
+		if (stream_resolve_include_path($opening_script)) {
+			include($opening_script);
 		}
 
 		return($id_activity_instance);
@@ -1031,6 +1032,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
+		$id_activity_instance_closing=$id_activity_instance_from;
 		$closing_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance_from)."_CLOSE.php";
 		if (stream_resolve_include_path($closing_script)) {
 			include($closing_script);
