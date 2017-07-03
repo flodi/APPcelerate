@@ -1349,16 +1349,67 @@ class BPME {
 
 	public function getProcessInstanceGraph($id_process_instance) {
 		$graph = new Fhaculty\Graph\Graph();
-$rome = $graph->createVertex('Rome');
-$madrid = $graph->createVertex('Madrid');
-$cologne = $graph->createVertex('Cologne');
-$cologne->createEdgeTo($madrid);
-$madrid->createEdgeTo($rome);
-$rome->createEdgeTo($rome);
+		$graph->setAttribute("graphviz.graph.bgcolor","transparent");
+
+		$sql="select * from activity_instances where id_process_instance=$id_process_instance";
+		$rs=$fw->app["db_programmi"]->query($sql);
+		$fw->DBsqlError($rs,$sql);
+		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
+			
+			$sql="select * from activities where id=".$r["id_activity"];
+			$rs1=$fw->app["db_programmi"]->query($sql);
+			$fw->DBsqlError($rs1,$sql);
+			$activity=$rs1->fetch_array(MYSQLI_ASSOC);
+
+
+			$label=$activity["code"]." (".$r["id"].") - ".$r["date_created"];
+
+			if(!empty($r["date_completedd"])) {
+				$label.=" - ".$r["date_completedd"];
+			}
+
+			if(!empty($r["id_actor_assigned"])) {
+				$sql="select * from actors where id=".$r["id_actor_assigned"];
+				$rs1=$fw->app["db_programmi"]->query($sql);
+				$fw->DBsqlError($rs1,$sql);
+				$actor=$rs1->fetch_array(MYSQLI_ASSOC);
+
+				if ($actor["type"]==="U") {
+					$sql="select login from users where id=".$actor["id"];
+				}
+				else {
+					$sql="select concat(nome,' ',cognome) from ospiti where id=".$actor["id"];
+				}
+
+				$rs1=$fw->app["db_programmi"]->query($sql);
+				$fw->DBsqlError($rs1,$sql);
+				$user_name=$rs1->fetch_array(MYSQLI_NUM)[0];
+
+				$label.=" - ".$user_name;
+			}
+
+			$node[$r["id"]]=$graph->createVertex($label);
+			$node[$r["id"]]->setAttribute("graphviz.style","filled");
+			$node[$r["id"]]->setAttribute("graphviz.fillcolor","white");
+
+		}
+
+		$sql="select * from action_instances where id_activity_instance_from in (select id from activity_instances where id_process_instance=id_process_instance)";
+		$rs=$fw->app["db_programmi"]->query($sql);
+		$fw->DBsqlError($rs,$sql);
+		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
+
+			if (!empty($r["id_activity_instance_to"])) {
+				$node[$r["id_activity_instance_from"]]->createEdgeTo($node[$r["id_activity_instance_to"]]);
+			}
+		}
+
 		$graphviz = new Graphp\GraphViz\GraphViz();
 		$graphviz->setFormat("png");
-		$html=$graphviz->createImageHtml($graph);
-		echo $html;
+		$img=$graphviz->createImageSrc($graph);
+
+		return($img);
+
 	}
 
 	public function engine($function,$params) {
@@ -1441,6 +1492,17 @@ $rome->createEdgeTo($rome);
 			case 'getLastActivities':
 				$last=$this->getLastActivities();
 				return($last);
+				break;
+			case 'isActivityInstanceOpen':
+				if (!array_key_exists("id",$params)) {
+					throw new Exception("Missing 'id' params", 0);
+				}
+				if(isActivityInstanceOpen($id)) {
+					return (true);
+				}
+				else {
+					return (false);
+				}
 				break;
 			default:
 				throw new Exception("Function $function not present");
