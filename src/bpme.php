@@ -27,7 +27,7 @@ class BPME {
 	// $name - Nome dell'applicazione sotto la quale gestire i processi 
 	//
     public function __construct($fw,$name) {
-    	$this->fw=$this->fw;
+    	$this->fw=$fw;
     	$this->app_name=$name;
     	$this->db=$this->fw->app["db_".$name];
 
