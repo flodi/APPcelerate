@@ -887,18 +887,17 @@ class BPME {
 		return($id_action_instance);
 	}
 
-	private function testActivity($id_activity,$process_data="",$context="") {
-		$this->doLog("Requested with activty $id_activity");
-		if (!is_numeric($id_activity) and !is_int($id_activity)) {
-			throw new Exception("Activity id $id_activity not valid", 0);
-		}
+	private function testActivity($activity,$process_data="",$context="") {
+		$this->doLog("Requested with activty $activity");
+
+		$id_activity=$this->getActivityIDFromActivityCode($activity);
 
 		$this->fw->AddMerge("block","context",$context);
 		$this->fw->AddMerge("block","process_data",$process_data);
 		$this->fw->AddMerge("field","piid","0");
 		$this->fw->AddMerge("field","note","");
 		$this->fw->AddMerge("field","aiid","0");
-		$tmpl=$this->app_name."/bpme/templates/".$this->getProcessCodeFromActivityID($id_activity)."_".$this->getActivityCode($id_activity).".htm";
+		$tmpl=$this->app_name."/bpme/templates/".$this->getProcessCodeFromActivityID($id_activity)."_".$activity.".htm";
 		$this->fw->app["TBS"]->LoadTemplate($tmpl,"+");
 	}
 
@@ -1270,6 +1269,16 @@ class BPME {
 		return ($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
+	public function getActivityIDFromActivityCode($activity) {
+		$sql="select id from activities where code='$activity'";
+		$rs=$this->db->query($sql);
+		if ($rs->num_rows===0) {
+			throw new Exception("Activity id $id_activity not found", 0);
+		}
+
+		return ($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
 	private function getActivityTypeFromActivityInstance($id_activity_instance) {
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
@@ -1506,10 +1515,10 @@ class BPME {
 				return($this->showActivity($params["id"]));
 				break;
 			case 'testActivity':
-				if (!array_key_exists("id",$params)) {
-					throw new Exception("Missing 'id' params", 0);
+				if (!array_key_exists("code",$params)) {
+					throw new Exception("Missing 'code' params", 0);
 				}
-				return($this->testActivity($params["id"]));
+				return($this->testActivity($params["code"]));
 				break;
 			case 'followActions':
 				if (!array_key_exists("id",$params)) {
