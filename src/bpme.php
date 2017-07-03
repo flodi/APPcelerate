@@ -1244,6 +1244,27 @@ class BPME {
 		return ($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
+	private function isActivityInstanceOpen($id_activity_instance) {
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$sql="select date_completed from activity_instances where id=$id_activity_instance";
+		$rs=$this->db->query($sql);
+		if ($rs->num_rows===0) {
+			throw new Exception("Activity id $id_activity not found", 0);
+		}
+
+		$res=$rs->fetch_array(MYSQLI_NUM)[0];
+
+		if(!empty($res)) {
+			return (true);
+		}
+		else {
+			return (false);
+		}
+	}
+
 	private function doLog($msg,$context='N',$id_instance=0,$level=APPcelerate::L_DEBUG) {
 		if (!is_numeric($id_instance) and !is_int($id_instance)) {
 			throw new Exception("ID instance $id_instance not valid", 0);
