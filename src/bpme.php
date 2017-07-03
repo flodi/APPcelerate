@@ -887,12 +887,12 @@ class BPME {
 		return($id_action_instance);
 	}
 
-	private function testActivity($activity,$process_data=array(),$context=array()) {
+	private function testActivity($activity,$process_data=array(),$context="") {
 		$this->doLog("Requested with activty $activity");
 
 		$id_activity=$this->getActivityIDFromActivityCode($activity);
 
-		$this->fw->AddMerge("block","context",$context);
+		$this->fw->AddMerge("field","context",$context);
 		$this->fw->AddMerge("block","process_data",$process_data);
 		$this->fw->AddMerge("field","piid","0");
 		$this->fw->AddMerge("field","note","");
@@ -1528,7 +1528,7 @@ class BPME {
 					$context="";
 				}
 				else {
-					$contect=$params["context"];
+					$context=$params["context"];
 				}
 				return($this->testActivity($params["code"],$process_data,$context));
 				break;
