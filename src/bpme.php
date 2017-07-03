@@ -1518,7 +1518,7 @@ class BPME {
 				if (!array_key_exists("id",$params)) {
 					throw new Exception("Missing 'id' params", 0);
 				}
-				if(isActivityInstanceOpen($id)) {
+				if($this->isActivityInstanceOpen($id)) {
 					return (true);
 				}
 				else {
