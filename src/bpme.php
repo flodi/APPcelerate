@@ -1519,10 +1519,16 @@ class BPME {
 					throw new Exception("Missing 'code' params", 0);
 				}
 				if (!array_key_exists("process_data",$params)) {
-					$process_data="";
+					$process_data=array();
+				}
+				else {
+					$process_data=$params["process_data"];
 				}
 				if (!array_key_exists("context",$params)) {
 					$context="";
+				}
+				else {
+					$contect=$params["context"];
 				}
 				return($this->testActivity($params["code"],$process_data,$context));
 				break;
