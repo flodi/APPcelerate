@@ -664,6 +664,11 @@ class BPME {
 		}
 		$id_activity_instance=$rs1->fetch_array(MYSQLI_NUM)[0];
 
+		$opening_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_OPEN.php";
+		if (stream_resolve_include_path($closing_script)) {
+			include($closing_script);
+		}
+
 		return($id_activity_instance);
 	}
 
