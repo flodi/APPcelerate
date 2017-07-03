@@ -396,6 +396,24 @@ class BPME {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
+	private function getProcessCodeFromActivityID($id_activity) {
+		$this->doLog("Requested with actvity id $id_activity");
+		if (!is_numeric($id_activity) and !is_int($id_activity)) {
+			throw new Exception("Activity id $id_activity not valid", 0);
+		}
+		$sql="select processes.code from processes join activities on processes.id=activities.id_process where activities.id=$id_activity";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
 	private function getProcessNameFromProcessInstance($id_process_instance) {
 		$this->doLog("Requested with process instance $id_process_instance");
 
@@ -869,6 +887,21 @@ class BPME {
 		return($id_action_instance);
 	}
 
+	private function testActivity($id_activity,$process_data="",$context="") {
+		$this->doLog("Requested with activty $id_activity");
+		if (!is_numeric($id_activity) and !is_int($id_activity)) {
+			throw new Exception("Activity id $id_activity not valid", 0);
+		}
+
+		$this->fw->AddMerge("block","context",$context);
+		$this->fw->AddMerge("block","process_data",$process_data);
+		$this->fw->AddMerge("field","piid","0");
+		$this->fw->AddMerge("field","note","");
+		$this->fw->AddMerge("field","aiid","0");
+		$tmpl=$this->app_name."/bpme/templates/".$this->getProcessCodeFromActivityID($id_activity)."_".$this->getActivityCode($id_activity).".htm";
+		$this->fw->app["TBS"]->LoadTemplate($tmpl,"+");
+	}
+
 	private function showActivity($id_activity_instance) {
 		$this->doLog("Requested with activty instance $id_activity_instance");
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
@@ -1223,6 +1256,20 @@ class BPME {
 		return ($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
+	private function getActivityCode($id_activity) {
+		if (!is_numeric($id_activity) and !is_int($id_activity)) {
+			throw new Exception("Activity id $id_activity not valid", 0);
+		}
+
+		$sql="select code from activities where id=$id_activity";
+		$rs=$this->db->query($sql);
+		if ($rs->num_rows===0) {
+			throw new Exception("Activity id $id_activity not found", 0);
+		}
+
+		return ($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
 	private function getActivityTypeFromActivityInstance($id_activity_instance) {
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
@@ -1457,6 +1504,12 @@ class BPME {
 					throw new Exception("Missing 'id' params", 0);
 				}
 				return($this->showActivity($params["id"]));
+				break;
+			case 'testActivity':
+				if (!array_key_exists("id",$params)) {
+					throw new Exception("Missing 'id' params", 0);
+				}
+				return($this->testActivity($params["id"]));
 				break;
 			case 'followActions':
 				if (!array_key_exists("id",$params)) {
