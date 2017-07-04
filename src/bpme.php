@@ -1461,7 +1461,14 @@ class BPME {
 		if ($id_process_instance!=0) {
 			$sql="select * from processe_instances where id=$id_process_instance";
 			$rs=$this->fw->app["db_programmi"]->query($sql);
-			$this->fw->DBsqlError($rs,$sql);
+			try {
+				$this->fw->DBsqlError($rs,$sql);
+			}
+			catch (Exception $e) {
+				$msg=$e->getMessage();
+				$this->doLog("Sql Error | $sql | $msg");
+				throw new Exception("Query Error", 0);
+			}
 			$process_instance=$rs->fetch_array(MYSQLI_ASSOC);
 		}
 
@@ -1472,7 +1479,14 @@ class BPME {
 
 		$sql="select * from activities where id_process=$id_process";
 		$rs=$this->fw->app["db_programmi"]->query($sql);
-		$this->fw->DBsqlError($rs,$sql);
+		try {
+			$this->fw->DBsqlError($rs,$sql);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("Sql Error | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			
 			$activity=$r;
@@ -1503,7 +1517,14 @@ class BPME {
 			if($id_process_instance!=0) {
 				$sql="select * from activity_instances where id_process_instance=$id_process_instance and id_activity=".$activity["id"]." order by date_created desc limit 1";
 				$rs1=$this->fw->app["db_programmi"]->query($sql);
-				$this->fw->DBsqlError($rs1,$sql);
+				try {
+					$this->fw->DBsqlError($rs1,$sql);
+				}
+				catch (Exception $e) {
+					$msg=$e->getMessage();
+					$this->doLog("Sql Error | $sql | $msg");
+					throw new Exception("Query Error", 0);
+				}
 				$activity_instance=$rs1->fetch_array(MYSQLI_ASSOC);
 				$label=$node[$activity["id"]]->getLabel();
 
@@ -1513,7 +1534,14 @@ class BPME {
 
 				$sql="select * from actors where id=".$acivity["id_actor_created"];
 				$rs1=$this->fw->app["db_programmi"]->query($sql);
-				$this->fw->DBsqlError($rs1,$sql);
+				try {
+					$this->fw->DBsqlError($rs1,$sql);
+				}
+				catch (Exception $e) {
+					$msg=$e->getMessage();
+					$this->doLog("Sql Error | $sql | $msg");
+					throw new Exception("Query Error", 0);
+				}
 				$actor=$rs1->fetch_array(MYSQLI_ASSOC);
 				if($actor["type"]==="U") {
 					$sql="select login from users where id=".$actor["id"];
@@ -1522,7 +1550,14 @@ class BPME {
 					$sql="select concat(nome,' ',cognome) from ospiti where id=".$actor["id"];
 				}
 				$rs1=$this->fw->app["db_programmi"]->query($sql);
-				$this->fw->DBsqlError($rs1,$sql);
+				try {
+					$this->fw->DBsqlError($rs1,$sql);
+				}
+				catch (Exception $e) {
+					$msg=$e->getMessage();
+					$this->doLog("Sql Error | $sql | $msg");
+					throw new Exception("Query Error", 0);
+				}
 				$nome=$rs1->fetch_array(MYSQLI_NUM)[0];
 				$label.=" by ".$nome;
 
@@ -1544,7 +1579,14 @@ class BPME {
 
 		$sql="select * from actions where id_process=$id_process";
 		$rs=$this->fw->app["db_programmi"]->query($sql);
-		$this->fw->DBsqlError($rs,$sql);
+		try {
+			$this->fw->DBsqlError($rs1,$sql);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("Sql Error | $sql | $msg");
+			throw new Exception("Query Error", 0);
+		}
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 
 			$edge=$node[$r["id_activity_from"]]->createEdgeTo($node[$r["id_activity_to"]]);
