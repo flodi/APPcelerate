@@ -1566,7 +1566,7 @@ class BPME {
 					if(!empty($activity_instance["date_completed"])) {
 						$d=date_parse_from_format("Y-m-d H:i:s",$activity_instance["date_completed"]);
 						$v=$d["day"]."/".$d["month"]."/".$d["year"];
-						$label.="\Completed ".$v;
+						$label.="\nCompleted ".$v;
 						$node[$activity["id"]]->setAttribute("graphviz.fillcolor","grey");
 					}
 					else {
