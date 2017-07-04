@@ -1545,6 +1545,12 @@ class BPME {
 				}
 				return($this->followActions($params["id"],true));
 				break;
+			case 'excuteAActivity':
+				if (!array_key_exists("id",$params)) {
+					throw new Exception("Missing 'id' params", 0);
+				}
+				return($this->executeActivity($params["id"],true));
+				break;
 			case 'dispatchActivity':
 				if (!array_key_exists("id",$params)) {
 					throw new Exception("Missing 'id' params", 0);
