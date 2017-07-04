@@ -625,7 +625,8 @@ class BPME {
 	}
 
 	private function createActivityInstance($id_activity_instance_prec,$id_process_instance,$id_activity,$ui=false) {
-
+		global $id_activity_instance_opening;
+		
 		$this->doLog("Requested with activity instance prec id $id_activity_instance_prec and process instance id $id_process_instance and activity id $id_activity and ui $ui");
 
 		if (!is_numeric($id_activity_instance_prec) and !is_int($id_activity_instance_prec)) {
@@ -1032,6 +1033,8 @@ class BPME {
 	}
 
 	private function executeAction($id_action_instance,$ui=false) {
+		global $id_activity_instance_closing;
+
 		$this->doLog("Requested with action instance $id_action_instance and ui $ui");
 
 		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
