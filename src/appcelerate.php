@@ -263,8 +263,6 @@ class APPcelerate {
 					}
 				}
 				if (count($colno)!=count($columns)) {
-					echo "<pre>"; print_r($columns); echo "</pre>";
-					echo "<pre>"; print_r($colno); echo "</pre>";
 					throw new Exception("Missing columns: ".implode(",",array_diff(array_keys($columns),$colno)));
 				}
 			}
