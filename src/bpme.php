@@ -185,7 +185,7 @@ class BPME {
 
 		$id_activity_instance=$this->createActivityInstance(0,$id_process_instance,$id_activity,$ui);
 
-		$id_action_instance=$this->dispatchActivity($id_activity_instance,$ui);
+		$this->dispatchActivity($id_activity_instance,$ui);
 
 		$this->doLog("Returning process instance $id_process_instance and activity instance $id_activity_instance");
 
@@ -768,18 +768,15 @@ class BPME {
 					$msg=$e->getMessage();
 					$this->doLog("Cannot follow actions from instance $id_activity_instance ( $msg )");
 				}
-				return($id_activity_instance);
 				break;
 			case 'F':
 				$this->assignActivity($id_activity_instance,$id_actor_created);
 				break;
 			case 'U':
-				return($id_activity_instance);
 				break;
 			case 'A':
 				try {
-					$new_id_activity_instance=$this->executeActivity($id_activity_instance);
-					$this->assignActivity($id_activity_instance,$id_actor_created);
+					$this->executeActivity($id_activity_instance);
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
@@ -787,13 +784,12 @@ class BPME {
 				}
 
 				try {
-					$this->dispatchActivity($new_id_activity_instance,$ui);
+					$this->followActions($id_activity_instance,$ui);
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
-					$this->doLog("Cannot dispatch activity instance $id_activity_instance ( $msg )");
+					$this->doLog("Cannot follow actions from activity instance $id_activity_instance ( $msg )");
 				}
-				return($new_id_activity_instance);
 				break;
 			case 'C':
 				$this->executeCounterpartActivity($id_activity_instance);
@@ -885,7 +881,19 @@ class BPME {
 	}
 
 	private function executeActivity($id_activity_instance) {
-		return($id_action_instance);
+		global $id_activity_instance_action;
+		$this->doLog("Requested with activty instance $id_activity_instance");
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$this->assignActivity($id_activity_instance,$this->getCurrentUID($id_activity_instance));
+
+		$id_activity_instance_action=$id_activity_instance;
+		$auto_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_AUTO.php";
+		if (stream_resolve_include_path($auto_script)) {
+			include($auto_script);
+		}
 	}
 
 	private function testActivity($activity,$process_data=array(),$context="") {
