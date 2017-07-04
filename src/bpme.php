@@ -1450,13 +1450,13 @@ class BPME {
 
 
 			$d=date_parse_from_format("Y-m-d H:i:s",$r["date_created"]);
-			$v=$d["day"]."/".$d["month"]."/".$d["year"]." ".$d["hour"].":".$d["minute"];
+			$v=$d["day"]."/".$d["month"]."/".$d["year"];
 			$label=$activity["code"]." (".$r["id"].") - ".$v;
 
 			if(!empty($r["date_completed"])) {
 				$d=date_parse_from_format("Y-m-d H:i:s",$r["date_completed"]);
-				$v=$d["day"]."/".$d["month"]."/".$d["year"]." ".$d["hour"].":".$d["minute"];
-				$label.=" - ".$v;
+				$v=$d["day"]."/".$d["month"]."/".$d["year"];
+				$label.=" -> ".$v;
 			}
 
 			if(!empty($r["id_actor_assigned"])) {
