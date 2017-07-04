@@ -1441,65 +1441,120 @@ class BPME {
 
 	}
 
-	public function getProcessInstanceGraph($id_process_instance) {
+	public function getProcessInstanceGraph($id_process_instance,$type="R") {
 		$graph = new Fhaculty\Graph\Graph();
 		$graph->setAttribute("graphviz.graph.bgcolor","transparent");
 
-		$sql="select * from activity_instances where id_process_instance=$id_process_instance";
-		$rs=$this->fw->app["db_programmi"]->query($sql);
-		$this->fw->DBsqlError($rs,$sql);
+		if ($type==="R") {
+			$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
+		}
+		else {
+			$id_process=$id_process_instance;
+			$id_process_instance=0;
+		}
+
+		$sql="select * from processes where id=$id_process";
+		$rs=$fw->app["db_programmi"]->query($sql);
+		$fw->DBsqlError($rs,$sql);
+		$process=$rs->fetch_array(MYSQLI_ASSOC);
+
+		if ($id_process_instance!=0) {
+			$sql="select * from processe_instances where id=$id_process_instance";
+			$rs=$fw->app["db_programmi"]->query($sql);
+			$fw->DBsqlError($rs,$sql);
+			$process_instance=$rs->fetch_array(MYSQLI_ASSOC);
+		}
+
+		$graph = new Fhaculty\Graph\Graph();
+		$graph->setAttribute("graphviz.graph.bgcolor","transparent");
+		$graph->setAttribute("graphviz.graph.labelloc","t");
+		$graph->setAttribute("graphviz.graph.label",$process["code"]." - ".$process["name"]);
+
+		$sql="select * from activities where id_process=$id_process";
+		$rs=$fw->app["db_programmi"]->query($sql);
+		$fw->DBsqlError($rs,$sql);
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			
-			$sql="select * from activities where id=".$r["id_activity"];
-			$rs1=$this->fw->app["db_programmi"]->query($sql);
-			$this->fw->DBsqlError($rs1,$sql);
-			$activity=$rs1->fetch_array(MYSQLI_ASSOC);
+			$activity=$r;
 
+			$label=$activity["code"]."\n".$activity["name"];
 
-			$d=date_parse_from_format("Y-m-d H:i:s",$r["date_created"]);
-			$v=$d["day"]."/".$d["month"]."/".$d["year"];
-			$label=$activity["code"]." (".$r["id"].") - ".$v;
+			$node[$activity["id"]]=$graph->createVertex($label);
+			$node[$activity["id"]]->setAttribute("graphviz.fontsize","10");
+			$node[$activity["id"]]->setAttribute("graphviz.style","filled");
+			$node[$activity["id"]]->setAttribute("graphviz.splines","curved");
 
-			if(!empty($r["date_completed"])) {
-				$d=date_parse_from_format("Y-m-d H:i:s",$r["date_completed"]);
-				$v=$d["day"]."/".$d["month"]."/".$d["year"];
-				$label.=" -> ".$v;
+			if($activity["activity_type"]==="S") {
+				$node[$activity["id"]]->setAttribute("graphviz.shape","proteinstab");
+			}
+			else if($activity["activity_type"]==="F") {
+				$node[$activity["id"]]->setAttribute("graphviz.shape","proteasesite");				
+			}
+			else if($activity["activity_type"]==="A") {
+				$node[$activity["id"]]->setAttribute("graphviz.shape","component");				
+			}
+			else if($activity["activity_type"]==="C") {
+				$node[$activity["id"]]->setAttribute("graphviz.shape","cds");				
+			}
+			else {
+				$node[$activity["id"]]->setAttribute("graphviz.shape","box");				
 			}
 
-			if(!empty($r["id_actor_assigned"])) {
-				$sql="select * from actors where id=".$r["id_actor_assigned"];
-				$rs1=$this->fw->app["db_programmi"]->query($sql);
-				$this->fw->DBsqlError($rs1,$sql);
-				$actor=$rs1->fetch_array(MYSQLI_ASSOC);
+			if($id_process_instance!=0) {
+				$sql="select * from activity_instances where id_process_instance=$id_process_instance and id_activity=".$activity["id"]." order by date_created desc limit 1";
+				$rs1=$fw->app["db_programmi"]->query($sql);
+				$fw->DBsqlError($rs1,$sql);
+				$activity_instance=$rs1->fetch_array(MYSQLI_ASSOC);
+				$label=$node[$activity["id"]]->getLabel();
 
-				if ($actor["type"]==="U") {
+				$d=date_parse_from_format("Y-m-d H:i:s",$activity["date_created"]);
+				$v=$d["day"]."/".$d["month"]."/".$d["year"];
+				$label.="\nStarted ".$v;
+
+				$sql="select * from actors where id=".$acivity["id_actor_created"];
+				$rs1=$fw->app["db_programmi"]->query($sql);
+				$fw->DBsqlError($rs1,$sql);
+				$actor=$rs1->fetch_array(MYSQLI_ASSOC);
+				if($actor["type"]==="U") {
 					$sql="select login from users where id=".$actor["id"];
 				}
 				else {
 					$sql="select concat(nome,' ',cognome) from ospiti where id=".$actor["id"];
 				}
+				$rs1=$fw->app["db_programmi"]->query($sql);
+				$fw->DBsqlError($rs1,$sql);
+				$nome=$rs1->fetch_array(MYSQLI_NUM)[0];
+				$label.=" by ".$nome;
 
-				$rs1=$this->fw->app["db_programmi"]->query($sql);
-				$this->fw->DBsqlError($rs1,$sql);
-				$user_name=$rs1->fetch_array(MYSQLI_NUM)[0];
-
-				$label.=" - ".$user_name;
+				if(!empty($activity_instances["date_completed"])) {
+					$d=date_parse_from_format("Y-m-d H:i:s",$activity["date_completed"]);
+					$v=$d["day"]."/".$d["month"]."/".$d["year"];
+					$label.="\Completed ".$v;
+					$node[$activity["id"]]->setAttribute("graphviz.fillcolor","grey");
+				}
+				else {
+					$node[$activity["id"]]->setAttribute("graphviz.fillcolor","green");
+				}
 			}
-
-			$node[$r["id"]]=$graph->createVertex($label);
-			$node[$r["id"]]->setAttribute("graphviz.style","filled");
-			$node[$r["id"]]->setAttribute("graphviz.fillcolor","white");
+			else {
+				$node[$activity["id"]]->setAttribute("graphviz.fillcolor","white");
+			}
 
 		}
 
-		$sql="select * from action_instances where id_activity_instance_from in (select id from activity_instances where id_process_instance=$id_process_instance)";
-		$rs=$this->fw->app["db_programmi"]->query($sql);
-		$this->fw->DBsqlError($rs,$sql);
+		$sql="select * from actions where id_process=$id_process";
+		$rs=$fw->app["db_programmi"]->query($sql);
+		$fw->DBsqlError($rs,$sql);
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 
-			if (!empty($r["id_activity_instance_to"])) {
-				$node[$r["id_activity_instance_from"]]->createEdgeTo($node[$r["id_activity_instance_to"]]);
+			$edge=$node[$r["id_activity_from"]]->createEdgeTo($node[$r["id_activity_to"]]);
+			if (!empty($r["entry_condition"])) {
+				$edge->setAttribute("graphviz.label",$r["entry_condition"]);
+				$edge->setAttribute("graphviz.minlen","2");
 			}
+
+			$edge->setAttribute("graphviz.style","diagonals");
+
 		}
 
 		$graphviz = new Graphp\GraphViz\GraphViz();
