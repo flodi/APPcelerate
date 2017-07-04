@@ -1527,11 +1527,11 @@ class BPME {
 				}
 				$activity_instance=$rs1->fetch_array(MYSQLI_ASSOC);
 
-				$d=date_parse_from_format("Y-m-d H:i:s",$activity["date_created"]);
+				$d=date_parse_from_format("Y-m-d H:i:s",$activity_instance["date_created"]);
 				$v=$d["day"]."/".$d["month"]."/".$d["year"];
 				$label.="\nStarted ".$v;
 
-				$sql="select * from actors where id=".$acivity["id_actor_created"];
+				$sql="select * from actors where id=".$activity_instance["id_actor_created"];
 				$rs1=$this->fw->app["db_programmi"]->query($sql);
 				try {
 					$this->fw->DBsqlError($rs1,$sql);
