@@ -1459,7 +1459,7 @@ class BPME {
 		$process=$rs->fetch_array(MYSQLI_ASSOC);
 
 		if ($id_process_instance!=0) {
-			$sql="select * from processe_instances where id=$id_process_instance";
+			$sql="select * from process_instances where id=$id_process_instance";
 			$rs=$this->fw->app["db_programmi"]->query($sql);
 			try {
 				$this->fw->DBsqlError($rs,$sql);
