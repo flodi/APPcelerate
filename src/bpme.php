@@ -626,7 +626,7 @@ class BPME {
 
 	private function createActivityInstance($id_activity_instance_prec,$id_process_instance,$id_activity,$ui=false) {
 		global $id_activity_instance_opening;
-		
+
 		$this->doLog("Requested with activity instance prec id $id_activity_instance_prec and process instance id $id_process_instance and activity id $id_activity and ui $ui");
 
 		if (!is_numeric($id_activity_instance_prec) and !is_int($id_activity_instance_prec)) {
@@ -1451,7 +1451,7 @@ class BPME {
 
 			$label=$activity["code"]." (".$r["id"].") - ".$r["date_created"];
 
-			if(!empty($r["date_completedd"])) {
+			if(!empty($r["date_completed"])) {
 				$label.=" - ".$r["date_completedd"];
 			}
 
