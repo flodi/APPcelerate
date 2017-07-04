@@ -1526,7 +1526,6 @@ class BPME {
 					throw new Exception("Query Error", 0);
 				}
 				$activity_instance=$rs1->fetch_array(MYSQLI_ASSOC);
-				$label=$node[$activity["id"]]->getLabel();
 
 				$d=date_parse_from_format("Y-m-d H:i:s",$activity["date_created"]);
 				$v=$d["day"]."/".$d["month"]."/".$d["year"];
