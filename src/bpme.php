@@ -1525,49 +1525,56 @@ class BPME {
 					$this->doLog("Sql Error | $sql | $msg");
 					throw new Exception("Query Error", 0);
 				}
-				$activity_instance=$rs1->fetch_array(MYSQLI_ASSOC);
 
-				$d=date_parse_from_format("Y-m-d H:i:s",$activity_instance["date_created"]);
-				$v=$d["day"]."/".$d["month"]."/".$d["year"];
-				$label.="\nStarted ".$v;
+				if($rs1->num_rows>0) {
 
-				$sql="select * from actors where id=".$activity_instance["id_actor_created"];
-				$rs1=$this->fw->app["db_programmi"]->query($sql);
-				try {
-					$this->fw->DBsqlError($rs1,$sql);
-				}
-				catch (Exception $e) {
-					$msg=$e->getMessage();
-					$this->doLog("Sql Error | $sql | $msg");
-					throw new Exception("Query Error", 0);
-				}
-				$actor=$rs1->fetch_array(MYSQLI_ASSOC);
-				if($actor["type"]==="U") {
-					$sql="select login from users where id=".$actor["id"];
-				}
-				else {
-					$sql="select concat(nome,' ',cognome) from ospiti where id=".$actor["id"];
-				}
-				$rs1=$this->fw->app["db_programmi"]->query($sql);
-				try {
-					$this->fw->DBsqlError($rs1,$sql);
-				}
-				catch (Exception $e) {
-					$msg=$e->getMessage();
-					$this->doLog("Sql Error | $sql | $msg");
-					throw new Exception("Query Error", 0);
-				}
-				$nome=$rs1->fetch_array(MYSQLI_NUM)[0];
-				$label.=" by ".$nome;
+					$activity_instance=$rs1->fetch_array(MYSQLI_ASSOC);
 
-				if(!empty($activity_instances["date_completed"])) {
-					$d=date_parse_from_format("Y-m-d H:i:s",$activity["date_completed"]);
+					$d=date_parse_from_format("Y-m-d H:i:s",$activity_instance["date_created"]);
 					$v=$d["day"]."/".$d["month"]."/".$d["year"];
-					$label.="\Completed ".$v;
-					$node[$activity["id"]]->setAttribute("graphviz.fillcolor","grey");
+					$label.="\nStarted ".$v;
+
+					$sql="select * from actors where id=".$activity_instance["id_actor_created"];
+					$rs1=$this->fw->app["db_programmi"]->query($sql);
+					try {
+						$this->fw->DBsqlError($rs1,$sql);
+					}
+					catch (Exception $e) {
+						$msg=$e->getMessage();
+						$this->doLog("Sql Error | $sql | $msg");
+						throw new Exception("Query Error", 0);
+					}
+					$actor=$rs1->fetch_array(MYSQLI_ASSOC);
+					if($actor["type"]==="U") {
+						$sql="select login from users where id=".$actor["id"];
+					}
+					else {
+						$sql="select concat(nome,' ',cognome) from ospiti where id=".$actor["id"];
+					}
+					$rs1=$this->fw->app["db_programmi"]->query($sql);
+					try {
+						$this->fw->DBsqlError($rs1,$sql);
+					}
+					catch (Exception $e) {
+						$msg=$e->getMessage();
+						$this->doLog("Sql Error | $sql | $msg");
+						throw new Exception("Query Error", 0);
+					}
+					$nome=$rs1->fetch_array(MYSQLI_NUM)[0];
+					$label.=" by ".$nome;
+
+					if(!empty($activity_instances["date_completed"])) {
+						$d=date_parse_from_format("Y-m-d H:i:s",$activity["date_completed"]);
+						$v=$d["day"]."/".$d["month"]."/".$d["year"];
+						$label.="\Completed ".$v;
+						$node[$activity["id"]]->setAttribute("graphviz.fillcolor","grey");
+					}
+					else {
+						$node[$activity["id"]]->setAttribute("graphviz.fillcolor","green");
+					}
 				}
 				else {
-					$node[$activity["id"]]->setAttribute("graphviz.fillcolor","green");
+					$node[$activity["id"]]->setAttribute("graphviz.fillcolor","white");
 				}
 			}
 			else {
