@@ -1454,14 +1454,14 @@ class BPME {
 		}
 
 		$sql="select * from processes where id=$id_process";
-		$rs=$fw->app["db_programmi"]->query($sql);
-		$fw->DBsqlError($rs,$sql);
+		$rs=$this->fw->app["db_programmi"]->query($sql);
+		$this->fw->DBsqlError($rs,$sql);
 		$process=$rs->fetch_array(MYSQLI_ASSOC);
 
 		if ($id_process_instance!=0) {
 			$sql="select * from processe_instances where id=$id_process_instance";
-			$rs=$fw->app["db_programmi"]->query($sql);
-			$fw->DBsqlError($rs,$sql);
+			$rs=$this->fw->app["db_programmi"]->query($sql);
+			$this->fw->DBsqlError($rs,$sql);
 			$process_instance=$rs->fetch_array(MYSQLI_ASSOC);
 		}
 
@@ -1471,8 +1471,8 @@ class BPME {
 		$graph->setAttribute("graphviz.graph.label",$process["code"]." - ".$process["name"]);
 
 		$sql="select * from activities where id_process=$id_process";
-		$rs=$fw->app["db_programmi"]->query($sql);
-		$fw->DBsqlError($rs,$sql);
+		$rs=$this->fw->app["db_programmi"]->query($sql);
+		$this->fw->DBsqlError($rs,$sql);
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			
 			$activity=$r;
@@ -1502,8 +1502,8 @@ class BPME {
 
 			if($id_process_instance!=0) {
 				$sql="select * from activity_instances where id_process_instance=$id_process_instance and id_activity=".$activity["id"]." order by date_created desc limit 1";
-				$rs1=$fw->app["db_programmi"]->query($sql);
-				$fw->DBsqlError($rs1,$sql);
+				$rs1=$this->fw->app["db_programmi"]->query($sql);
+				$this->fw->DBsqlError($rs1,$sql);
 				$activity_instance=$rs1->fetch_array(MYSQLI_ASSOC);
 				$label=$node[$activity["id"]]->getLabel();
 
@@ -1512,8 +1512,8 @@ class BPME {
 				$label.="\nStarted ".$v;
 
 				$sql="select * from actors where id=".$acivity["id_actor_created"];
-				$rs1=$fw->app["db_programmi"]->query($sql);
-				$fw->DBsqlError($rs1,$sql);
+				$rs1=$this->fw->app["db_programmi"]->query($sql);
+				$this->fw->DBsqlError($rs1,$sql);
 				$actor=$rs1->fetch_array(MYSQLI_ASSOC);
 				if($actor["type"]==="U") {
 					$sql="select login from users where id=".$actor["id"];
@@ -1521,8 +1521,8 @@ class BPME {
 				else {
 					$sql="select concat(nome,' ',cognome) from ospiti where id=".$actor["id"];
 				}
-				$rs1=$fw->app["db_programmi"]->query($sql);
-				$fw->DBsqlError($rs1,$sql);
+				$rs1=$this->fw->app["db_programmi"]->query($sql);
+				$this->fw->DBsqlError($rs1,$sql);
 				$nome=$rs1->fetch_array(MYSQLI_NUM)[0];
 				$label.=" by ".$nome;
 
@@ -1543,8 +1543,8 @@ class BPME {
 		}
 
 		$sql="select * from actions where id_process=$id_process";
-		$rs=$fw->app["db_programmi"]->query($sql);
-		$fw->DBsqlError($rs,$sql);
+		$rs=$this->fw->app["db_programmi"]->query($sql);
+		$this->fw->DBsqlError($rs,$sql);
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 
 			$edge=$node[$r["id_activity_from"]]->createEdgeTo($node[$r["id_activity_to"]]);
