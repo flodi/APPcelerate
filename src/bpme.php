@@ -706,7 +706,7 @@ class BPME {
 
 		$fingerprint=uniqid();
 
-		$sql=sprintf("insert into action_instances (fingerprint,id_process,id_action,id_activity_instance_from,id_actor_executed) values ('%s',%d,%d,%d,%d)",$fingerprint,$id_process,$id_action,$id_activity_instance_from,$this->getCurrentUID($id_activity_instance_from));
+		$sql=sprintf("insert into action_instances (fingerprint,id_process,id_action,id_process_instance,id_activity_instance_from,id_actor_executed) values ('%s',%d,%d,%d,%d,%d)",$fingerprint,$id_process,$id_action,$id_process_instance,$id_activity_instance_from,$this->getCurrentUID($id_activity_instance_from));
 		$rs1=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs1);
