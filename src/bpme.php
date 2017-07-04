@@ -1449,10 +1449,14 @@ class BPME {
 			$activity=$rs1->fetch_array(MYSQLI_ASSOC);
 
 
-			$label=$activity["code"]." (".$r["id"].") - ".$r["date_created"];
+			$d=date_parse_from_format("Y-m-d H:i:s",$r["date_created"]);
+			$v=$d["day"]."/".$d["month"]."/".$d["year"]." ".$d["hour"].":".$d["minute"];
+			$label=$activity["code"]." (".$r["id"].") - ".$v;
 
 			if(!empty($r["date_completed"])) {
-				$label.=" - ".$r["date_completedd"];
+				$d=date_parse_from_format("Y-m-d H:i:s",$r["date_completed"]);
+				$v=$d["day"]."/".$d["month"]."/".$d["year"]." ".$d["hour"].":".$d["minute"];
+				$label.=" - ".$v;
 			}
 
 			if(!empty($r["id_actor_assigned"])) {
