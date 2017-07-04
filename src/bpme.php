@@ -1563,7 +1563,7 @@ class BPME {
 					$nome=$rs1->fetch_array(MYSQLI_NUM)[0];
 					$label.=" by ".$nome;
 
-					if(!empty($activity_instances["date_completed"])) {
+					if(!empty($activity_instance["date_completed"])) {
 						$d=date_parse_from_format("Y-m-d H:i:s",$activity["date_completed"]);
 						$v=$d["day"]."/".$d["month"]."/".$d["year"];
 						$label.="\Completed ".$v;
@@ -1572,6 +1572,7 @@ class BPME {
 					else {
 						$node[$activity["id"]]->setAttribute("graphviz.fillcolor","green");
 					}
+					$node[$activity["id"]]->setLabel($label);
 				}
 				else {
 					$node[$activity["id"]]->setAttribute("graphviz.fillcolor","white");
