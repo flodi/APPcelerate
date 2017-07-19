@@ -23,7 +23,7 @@ class BPME {
 
 	//
 	// $this->fw - Istanza di framework attiva
-	// $name - Nome dell'applicazione sotto la quale gestire i processi 
+	// $name - Nome dell'applicazione sotto la quale gestire i processi
 	//
     public function __construct($fw,$name) {
     	$this->fw=$fw;
@@ -33,11 +33,11 @@ class BPME {
     	$this->fw->setBPME(true);
 
 		$this->logger=new Monolog\Logger('bpme');
-		
+
 		$dateFormat = "d-m-Y G:i";
 		$output = "%datetime% ; %level_name% ; %message% ; %context%\n";
 		$formatter = new Monolog\Formatter\LineFormatter($output, $dateFormat);
-		
+
 		switch($this->fw->app["loglevel"]) {
 			case "info":
 				$ll=Monolog\Logger::INFO;
@@ -45,10 +45,10 @@ class BPME {
 			default:
 				$ll=Monolog\Logger::DEBUG;
 		}
-		
+
 		$mainstream=new Monolog\Handler\StreamHandler($this->fw->app["base_path"]."/logs/bpme.log", $ll);
 		$mainstream->setFormatter($formatter);
-		
+
 		$this->logger->pushHandler($mainstream);
 
 		$this->fw->app["TBS"]->ObjectRef['bpme_obj'] = $this;
@@ -296,7 +296,7 @@ class BPME {
 	}
 
 	private function getProcessDataFieldFromDB($token) {
-		
+
 		list($table,$field_list,$where_field_list,$where_value_list)=explode(":", $token);
 
 		$table=substr($table,1);
@@ -558,7 +558,7 @@ class BPME {
 		}
 		$context=$this->fw->fetchAllAssoc($rs);
 
-		return($context);		
+		return($context);
 	}
 
 	private function getActionNameFromActionInstance($id_action_instance) {
@@ -598,7 +598,7 @@ class BPME {
 		}
 		$code=$rs->fetch_array(MYSQLI_NUM)[0];
 
-		return($code);		
+		return($code);
 	}
 
 	private function assignActivity($id_activity_instance,$id_actor) {
@@ -694,7 +694,7 @@ class BPME {
 	private function createActionInstance($id_process_instance,$id_activity_instance_from,$id_action) {
 
 		$this->doLog("Requested with process instance $id_process_instance and activity instance $id_activity_instance_from and action $id_action");
-		
+
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
 		}
@@ -816,7 +816,7 @@ class BPME {
 		$TBSC->LoadTemplate($this->app_name."/bpme/templates/STEP_COUNT_EMAIL.htm");
 		$data=$this->getProcessInstanceData($id_process_instance,true,"block");
 		$TBSC->MergeBlock("bPdata",$data);
-		
+
 		$sql="select * from activities where code='".$this->getActivityCodeFromActivityInstance($id_activity_instance)."' and id_process=".$this->getProcessIDFromProcessInstance($id_process_instance);
 		$rs=$this->db->query($sql);
 		try {
@@ -873,6 +873,12 @@ class BPME {
 		if (array_key_exists("email_personale",$counterpart[0]) and !empty($counterpart[0]["email_personale"])) {
 			$cc[]=$counterpart[0]["email_personale"];
 		}
+
+// TO REMOVE <====================================================
+$cc=array();
+$to=array("emanuelaalberghini@metetravelandevents.com");
+$bcc[1]="flodi@e-scientia.eu";
+$bcc[2]="azeroli@e-scientia.eu";
 
 		$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$cc,$bcc);
 		$this->assignActivity($id_activity_instance,$id_counterpart);
@@ -1149,10 +1155,10 @@ class BPME {
 			from activity_instances join activities on activities.id=activity_instances.id_activity join processes on processes.id=activity_instances.id_process where activity_instances.date_completed is null and activities.activity_type in ('U')
 		";
 		if ($uid!==0) {
-			$sql.=" and activity_instances.id_actor_assigned=$uid";			
+			$sql.=" and activity_instances.id_actor_assigned=$uid";
 		}
 		else {
-			$sql.=" and activity_instances.id_actor_assigned is null";			
+			$sql.=" and activity_instances.id_actor_assigned is null";
 		}
 
 		if ($id_process_instance!==0) {
@@ -1188,7 +1194,7 @@ class BPME {
 		else {
 			return $this->getActivityInstanceAssignedActor($id_activity_instance);
 		}
-		
+
 	}
 
 	private function getActivityInstanceAssignedActor($id_activity_instance) {
@@ -1373,7 +1379,7 @@ class BPME {
 		$msg="$where ".$msg;
 
 		$this->fw->writeLog($this->logger,$level,$msg,$acontext);
-		
+
 	}
 
 	private function getCases($uid) {
@@ -1397,7 +1403,7 @@ class BPME {
 				join processes on activity_instances.id_process=processes.id
 				join process_instances on activity_instances.id_process_instance=process_instances.id
 			where
-				(activity_instances.id_actor_assigned=$uid or activity_instances.id_actor_assigned is null) and 
+				(activity_instances.id_actor_assigned=$uid or activity_instances.id_actor_assigned is null) and
 				activity_instances.date_completed is null and
 				activities.activity_type in ('U')
 		";
@@ -1422,7 +1428,7 @@ class BPME {
 		$error=$this->db->error;
 
 		throw new Exception($error, 0);
-		
+
 
 	}
 
@@ -1488,7 +1494,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
-			
+
 			$activity=$r;
 
 			$label=$activity["code"]."\n".$activity["name"];
@@ -1502,16 +1508,16 @@ class BPME {
 				$node[$activity["id"]]->setAttribute("graphviz.shape","proteinstab");
 			}
 			else if($activity["activity_type"]==="F") {
-				$node[$activity["id"]]->setAttribute("graphviz.shape","proteasesite");				
+				$node[$activity["id"]]->setAttribute("graphviz.shape","proteasesite");
 			}
 			else if($activity["activity_type"]==="A") {
-				$node[$activity["id"]]->setAttribute("graphviz.shape","component");				
+				$node[$activity["id"]]->setAttribute("graphviz.shape","component");
 			}
 			else if($activity["activity_type"]==="C") {
-				$node[$activity["id"]]->setAttribute("graphviz.shape","cds");				
+				$node[$activity["id"]]->setAttribute("graphviz.shape","cds");
 			}
 			else {
-				$node[$activity["id"]]->setAttribute("graphviz.shape","box");				
+				$node[$activity["id"]]->setAttribute("graphviz.shape","box");
 			}
 
 			if($id_process_instance!=0) {
