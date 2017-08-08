@@ -699,6 +699,8 @@ class APPcelerate {
 
 		$secredir=$this->app["secredir"][$this->app["name"]];
 
+		session_start();
+
 		if (!empty($_SESSION[$this->app["name"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
 			$this->app['uid']=$_SESSION[$this->app["name"]."_ap_uid"];
@@ -713,8 +715,6 @@ class APPcelerate {
 			if(array_key_exists($this->app["name"]."_ap_locale", $_SESSION)) {
 				$this->app['locale']=$_SESSION[$this->app["name"]."_ap_locale"];
 			}
-
-			session_start();
 
 		}
 		else {
@@ -746,7 +746,6 @@ class APPcelerate {
 							$_SESSION[$this->app["name"]."_ap_locale"]=$this->app['locale'];
 						}
 						$this->doLog("[SECURITY OK] Continuing");
-						session_start();
 						break;
 					case 0:
 						$this->doLog("[SECURITY KO] redirecting to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
@@ -755,7 +754,6 @@ class APPcelerate {
 							die();
 						}
 						else {
-							session_start();
 							$break;
 						}
 					default:
