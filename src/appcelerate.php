@@ -139,8 +139,6 @@ class APPcelerate {
 
 		$this->app["session_mins"]=getenv('SESSION_MINS');
 		ini_set("session.gc_maxlifetime",60*$this->app["session_mins"]);
-		ini_set("session.gc_probability",1);
-		ini_set("session.gc_divisor",1);
 		session_set_cookie_params(60*$this->app["session_mins"],"/");
 
 		#Default template folders
