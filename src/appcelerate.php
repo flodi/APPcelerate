@@ -699,8 +699,6 @@ class APPcelerate {
 
 		$secredir=$this->app["secredir"][$this->app["name"]];
 
-		session_start();
-
 		if (!empty($_SESSION[$this->app["name"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
 			$this->app['uid']=$_SESSION[$this->app["name"]."_ap_uid"];
@@ -805,6 +803,8 @@ class APPcelerate {
 	}
 
 	public function doApp() {
+
+		session_start();
 
 		$this->doLog("Instance Started",$this::L_INFO);
 
