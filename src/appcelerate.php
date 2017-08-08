@@ -142,7 +142,6 @@ class APPcelerate {
 		ini_set("session.gc_probability",1);
 		ini_set("session.gc_divisor",1);
 		session_set_cookie_params(60*$this->app["session_mins"],"/");
-		session_start();
 
 		#Default template folders
 		foreach ($this->app["apps"] as $app_name) {
@@ -714,6 +713,9 @@ class APPcelerate {
 			if(array_key_exists($this->app["name"]."_ap_locale", $_SESSION)) {
 				$this->app['locale']=$_SESSION[$this->app["name"]."_ap_locale"];
 			}
+
+			session_start();
+
 		}
 		else {
 			$this->doLog("Session uid empty");
@@ -744,6 +746,7 @@ class APPcelerate {
 							$_SESSION[$this->app["name"]."_ap_locale"]=$this->app['locale'];
 						}
 						$this->doLog("[SECURITY OK] Continuing");
+						session_start();
 						break;
 					case 0:
 						$this->doLog("[SECURITY KO] redirecting to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
@@ -752,6 +755,7 @@ class APPcelerate {
 							die();
 						}
 						else {
+							session_start();
 							$break;
 						}
 					default:
