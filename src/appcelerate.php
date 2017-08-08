@@ -7,11 +7,11 @@
  */
 
 class APPcelerate {
-	
+
 	public $app;
 
 	private $bpme;
-	
+
 	const L_DEBUG="100";
 	const L_INFO="200";
 	const L_NOTICE="250";
@@ -20,28 +20,28 @@ class APPcelerate {
 	const L_CRITICAL="500";
 	const L_ALERT="550";
 	const L_EMERCENCY="600";
-	
+
 	//
 	// Logger Function
 	//
 	public function doLog($msg,$level=APPcelerate::L_DEBUG) {
-	
+
 		if (isset($this->app) and  array_key_exists("name", $this->app) and $this->app["name"]!=="init") {
 			$app_name=$this->app["name"];
 		}
 		else {
 			$app_name="main";
 		}
-		
+
 		if (array_key_exists("section",$this->app)) {
 			$context=array($this->app["section"]);
 		}
 		else {
 			$context=array("main");
 		}
-	
+
 		$this->writeLog($this->app[$app_name."_logger"],$level,$msg,$context);
-		
+
 	}
 
 	public function writeLog($logger,$level,$msg,$context) {
@@ -86,10 +86,13 @@ class APPcelerate {
 	// INIT
 	//
     public function __construct() {
-	    
+		ini_set('display_errors', 1);
+		ini_set('display_startup_errors', 1);
+		error_reporting(E_ALL);
+
 		register_shutdown_function(function() {
 			$e=error_get_last();
-		
+
 			if ($e['type']) {
 				$msg=sprintf("Type %u File %s Line %u Message %s",$e["type"],$e["file"],$e["line"],$e["message"]);
 				$this->doLog($msg);
@@ -97,7 +100,7 @@ class APPcelerate {
 		});
 
 		$base_path=$_SERVER["DOCUMENT_ROOT"];
-		
+
 		$fwpath=__DIR__;
 
 		$vendor_path=$base_path."/vendor";
@@ -112,27 +115,32 @@ class APPcelerate {
 
 		$this->app["skipui"]=false;
 		$this->app["skipsec"]=false;
-	
+
 		$this->app["apps_path"]=$base_path."/apps";
 
 		$this->app["base_path"]=$base_path;
 		$dotenv = new Dotenv\Dotenv($this->app["base_path"], 'app.config');
 		$dotenv->load();
-	
+
 		$this->app["base_url"]=getenv('BASE_URL');
-	
+
 		$this->app["apps"]=explode("|",getenv('APPS'));
-	
+
 		$this->app["default_app"]=getenv('DEFAULT_APP');
-	
+
 		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
-	
+
 		$this->app["loglevel"]=constant("APPcelerate::L_".strtoupper(getenv('LOGLEVEL')));
 
 		$this->app["aws_key"]=getenv('AWS_KEY');
 		$this->app["aws_code"]=getenv('AWS_CODE');
 
 		$this->app["from_email"]=getenv('FROM_EMAIL');
+
+		$this->app["session_mins"]=getenv('SESSION_MINS');
+		ini_set(‘session.gc_maxlifetime’,30*$this->app["session_mins"]);
+		ini_set(‘session.gc_probability’,1);
+		ini_set(‘session.gc_divisor’,1);
 
 		#Default template folders
 		foreach ($this->app["apps"] as $app_name) {
@@ -170,13 +178,13 @@ class APPcelerate {
 
 		//
 		// Init Log
-		//		
+		//
 		$this->app["main_logger"]=new Monolog\Logger('appcelerate');
-		
+
 		$dateFormat = "d-m-Y G:i";
 		$output = "%datetime% ; %level_name% ; %message% ; %context%\n";
 		$formatter = new Monolog\Formatter\LineFormatter($output, $dateFormat);
-		
+
 		switch($this->app["loglevel"]) {
 			case "info":
 				$ll=Monolog\Logger::INFO;
@@ -184,12 +192,12 @@ class APPcelerate {
 			default:
 				$ll=Monolog\Logger::DEBUG;
 		}
-		
+
 		$mainstream=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/appcelerate.log", $ll);
 		$mainstream->setFormatter($formatter);
-		
+
 		$this->app["main_logger"]->pushHandler($mainstream);
-		
+
 		# Apps Log
 		foreach ($this->app["apps"] as $app_name) {
 			$this->app[$app_name."_logger"]=new Monolog\Logger($app_name);
@@ -197,14 +205,14 @@ class APPcelerate {
 			$this->app[$app_name."_log_stream"]->setFormatter($formatter);
 			$this->app[$app_name."_logger"]->pushHandler($this->app[$app_name."_log_stream"]);
 		}
-		
+
 		//
 		// DB Connection Init
 		//
 		$db_address=getenv('DB_ADDRESS');
 		$db_user=getenv('DB_USER');
 		$db_password=getenv('DB_PASSWORD');
-		
+
 		foreach ($this->app["apps"] as $app_name) {
 			$db_name=getenv('DB_NAME_'.$app_name);
 			$this->app["db_".$app_name] = new mysqli($db_address, $db_user, $db_password, $db_name);
@@ -213,7 +221,7 @@ class APPcelerate {
 			}
 			$this->app["db_".$app_name]->set_charset("utf8");
 		}
-		
+
 		$this->bpme=false;
 
 		$this->doLog("APPCelerate created for http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
@@ -434,10 +442,10 @@ class APPcelerate {
 			die("Database error, please contact support\n");
 		}
 	}
-	
+
 	public function destroySession() {
 		$_SESSION = array();
-		
+
 		if (ini_get("session.use_cookies")) {
 		    $params = session_get_cookie_params();
 		    setcookie(session_name(), '', time() - 42000,
@@ -445,12 +453,12 @@ class APPcelerate {
 		        $params["secure"], $params["httponly"]
 		    );
 		}
-	
+
 		session_destroy();
-	
+
 		return;
 	}
-	
+
 	public function fetchAll ($recordset) {
 		$data = [];
 		while ($row = $recordset->fetch_array(MYSQLI_NUM)) {
@@ -458,7 +466,7 @@ class APPcelerate {
 		}
 		return $data;
 	}
-	
+
 	public function fetchAllAssoc ($recordset) {
 		$data = [];
 		while ($row = $recordset->fetch_array(MYSQLI_ASSOC)) {
@@ -466,7 +474,7 @@ class APPcelerate {
 		}
 		return $data;
 	}
-	
+
 	public function getString($token) {
 		foreach ($this->app["apps"] as $app_name) {
 			$sql="select string from strings where token='$token' and id_language=(select id from languages where locale='".$this->app["locale"]."')";
@@ -502,10 +510,10 @@ class APPcelerate {
 			return("");
 		}
 	}
-	
+
 	public function getInclude($type,$params) {
 		$mode=$params["mode"];
-		
+
 		if ($mode==="std") {
 			switch($type) {
 				case "js":
@@ -542,15 +550,15 @@ class APPcelerate {
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/typeahead.js-bootstrap.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap-editable.css">
 					';
-					break;					
+					break;
 			}
-			
+
 			return($c);
 
 		}
 		else {
 			$file="/include/";
-		
+
 			switch($type) {
 				case "js":
 					$file.="js/";
@@ -559,7 +567,7 @@ class APPcelerate {
 					$file.="css/";
 					break;
 			}
-		
+
 			switch($mode) {
 				case "app":
 					$file.=$this->app["name"];
@@ -568,7 +576,7 @@ class APPcelerate {
 					$file.=$this->app["name"]."_".$this->app["section"];
 					break;
 			}
-	
+
 			switch($type) {
 				case "js":
 					$file.=".js";
@@ -577,9 +585,9 @@ class APPcelerate {
 					$file.=".css";
 					break;
 			}
-					
+
 			if (file_exists($this->app["base_path"].$file)) {
-			
+
 				switch($type) {
 					case "js":
 						$tag="script";
@@ -588,14 +596,14 @@ class APPcelerate {
 						$tag="style";
 						break;
 				}
-				return($this->app["base_path"].$file);		
+				return($this->app["base_path"].$file);
 			}
 		}
-		
+
 		return(NULL);
-		
+
 	}
-	
+
 	public function  sendEmail($body, $subject, $from, $to, $cc=array(),$bcc=array(), $files=array()) {
 
 		if (!is_array($to)) {
@@ -644,8 +652,8 @@ class APPcelerate {
 	public function urlEncode($url) {
 		return urlencode($url);
 	}
-	
-	public function stringForHTML($field,&$value) {	
+
+	public function stringForHTML($field,&$value) {
 		$value=utf8_encode($value);
 	}
 
@@ -661,7 +669,7 @@ class APPcelerate {
 				die("addMerge called with wrong type - $type");
 		}
 	}
-	
+
 	public function logged($app="") {
 		foreach ($this->app["apps"] as $app_name) {
 			if (!empty($app) and $app_name!==$app) {
@@ -768,7 +776,7 @@ class APPcelerate {
 		}
 
 	}
-	
+
 	public function checkRequest($reqs,$vars) {
 		$vals=array();
 		foreach ($reqs as $req) {
@@ -791,37 +799,37 @@ class APPcelerate {
 	public function map($method,$route,$name) {
 		$this->app["router"]->map($method,$route,$name);
 	}
-	
+
 	public function doApp() {
 
 		$this->doLog("Instance Started",$this::L_INFO);
-		
+
 		$this->app["TBS"] = new clsTinyButStrong;
 
 
 		$this->app["router"] = new AltoRouter();
 		$this->app["router"]->addMatchTypes(array('l' => '(\d+?,?)+'));
-		
+
 		include_once("routes.php");
-		
+
 		$match = $this->app["router"]->match();
-		
+
 		$this->doLog("App Start - ".json_encode($match),$this::L_INFO);
-		
+
 		if ($match) {
 			//
 			// If no Section specified, error
 			//
 			if (!array_key_exists(1, explode("#",$match["target"])) or empty(explode("#",$match["target"]))) {
-				die("Error in routes definition: missing section");		
+				die("Error in routes definition: missing section");
 			}
 			$this->app["name"]=explode("#",$match["target"])[0];
 			$this->app["section"]=explode("#",$match["target"])[1];
 			$this->app["params"]=$match["params"];
-		
+
 			$this->doLog("=====> Routing for  ".json_encode($match),$this::L_INFO);
 			$this->doLog("=====> Starting ".$this->app["name"]."/".$this->app["section"]." (".json_encode($this->app["params"]).")",$this::L_INFO);
-		
+
 			//
 			// If no App specified, go to default one
 			//
@@ -829,21 +837,21 @@ class APPcelerate {
 				header("Location: ".$this->app["base_url"]."/".$this->app["default_app"]."/");
 				die();
 			}
-		
+
 			//
 			// Check app name. must be one of defined apps
 			//
 			if (!in_array($this->app["name"],$this->app["apps"])) {
 				die("Error in routes definition: unauthorized app ".$this->app["name"]);
 			}
-							
+
 			//
 			// Set Locale
 			//
 			if (!setlocale(LC_ALL,$this->app['locale'])) {
 				setlocale(LC_ALL,"it_IT");
 			}
-			
+
 			//
 			// Init app variables
 			//
@@ -861,7 +869,7 @@ class APPcelerate {
 			$app_name=$this->app["name"];
 
 			$section_name=$this->app["section"];
-			
+
 			//
 			// Init app (if exists)
 			//
@@ -869,7 +877,7 @@ class APPcelerate {
 				$this->doLog("Initializing app ".$this->app["name"],$this::L_INFO);
 				include_once($app_vws_path."init.php");
 			}
-			
+
 			//
 			// Init section (if exists)
 			//
@@ -889,9 +897,9 @@ class APPcelerate {
 			else {
 				$this->doLog("Accounts Not Active");
 			}
-		
+
 			if ($this->app["skipui"]==false) {
-		
+
 				header('Content-type: text/html; charset=UTF-8');
 
 				//
@@ -904,7 +912,7 @@ class APPcelerate {
 				else {
 					$this->doLog("HEAD template not found for ".$this->app["name"],$this::L_INFO);
 				}
-				
+
 				//
 				// Include section header template (if exists)
 				//
@@ -915,7 +923,7 @@ class APPcelerate {
 				else {
 					$this->doLog("HEAD template not found for ".$this->app["name"]."/".$this->app["section"],$this::L_INFO);
 				}
-		
+
 				//
 				// Include section template (if exists)
 				//
@@ -926,9 +934,9 @@ class APPcelerate {
 				else {
 					$this->doLog("MAIN template not found for ".$this->app["name"]."/".$this->app["section"],$this::L_INFO);
 				}
-		
+
 			}
-			
+
 			//
 			// Execute section (if exists)
 			//
@@ -939,9 +947,9 @@ class APPcelerate {
 			else {
 				$this->doLog("Section main.php for ".$this->app["name"]."/".$this->app["section"]." not found",$this::L_INFO);
 			}
-		
+
 			if (!$this->app["skipui"]) {
-		
+
 				//
 				// Include section tail template (if exists)
 				//
@@ -952,7 +960,7 @@ class APPcelerate {
 				else {
 					$this->doLog("TAIL template not found for ".$this->app["name"]."/".$this->app["section"],$this::L_INFO);
 				}
-				
+
 				//
 				// Include app tail template (if exists)
 				//
@@ -960,7 +968,7 @@ class APPcelerate {
 					$this->doLog("Loading TAIL template for ".$this->app["name"],$this::L_INFO);
 					$this->app["TBS"]->LoadTemplate($app_tpl_path."tail.htm","+");
 				}
-				
+
 				//
 				// Merge default variables
 				//
@@ -981,21 +989,21 @@ class APPcelerate {
 				$this->app["TBS"]->MergeField('sec_tpl_path',$sec_tpl_path);
 				$this->app["TBS"]->MergeField('app',$this->app["name"]);
 				$this->app["TBS"]->MergeField('section',$this->app["section"]);
-		
+
 				if(array_key_exists("tail_blocks", $this->app)) {
 					foreach($this->app["tail_blocks"] as $block_name => $block_data) {
 						$this->doLog("Merging Tail Block $block_name with ".json_encode($block_data));
 						$this->app["TBS"]->MergeBlock("$block_name",$block_data);
 					}
 				}
-		
+
 				if(array_key_exists("tail_fields", $this->app)) {
 					foreach($this->app["tail_fields"] as $field_name => $field_data) {
 						$this->doLog("Merging Tail Field $field_name with '$field_data'");
 						$this->app["TBS"]->MergeField("$field_name",$field_data);
 					}
 				}
-				
+
 				$this->app["TBS"]->ObjectRef['fw_obj'] = $this;
 				$this->app["TBS"]->MergeField('tokens', '~fw_obj.getString', true);
 				$this->app["TBS"]->MergeField('urlencode', '~fw_obj.urlEncode', true);
@@ -1004,17 +1012,17 @@ class APPcelerate {
 				if ($this->bpme) {
 					$this->app["TBS"]->MergeField('bpme', '~bpme_obj.bpmeTBS', true);
 				}
-		
+
 				$this->app["TBS"]->SetOption('render',TBS_OUTPUT);
 				$this->app["TBS"]->Show();
 			}
-		
+
 			$this->doLog("<===== Ending ".$this->app["name"]."/".$this->app["section"]." (".json_encode($this->app["params"]).")",$this::L_INFO);
 		}
 		else {
 			$this->errRoute();
 		}
-		
+
 		$this->doLog("<===== Routed for  ".json_encode($match),$this::L_INFO);
 		die();
 
