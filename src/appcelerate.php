@@ -260,37 +260,62 @@ class APPcelerate {
 
 		$first=true;
 		foreach ($x as $r) {
+			// Se è la prima riga, controllo che ci siano tutte le intestazioni corrette
 			if ($first) {
+
 				$first=false;
 				$colno=array();
-				$missing_error="";
-				foreach ($r as $no => $title) {
-					if (array_key_exists($title, $columns)) {
-						$colno[$no]=$columns[$title];
+				$missings=array();
+
+				foreach ($columns as $excel_field => $table_field) {
+					$found=false;
+					foreach ($r as $excel_field_no => $excel_field_name) {
+						if ($excel_field===$excel_field_name) {
+							$found=true;
+							break;
+						}
+
+						if ($found) {
+							$colno[$excel_field_no]=$table_field;
+						}
+						else {
+							$missinigs[]=$excel_field;
+						}
 					}
+
 				}
-				if (count($colno)!=count($columns)) {
-					throw new Exception("Missing columns: ".implode(",",array_diff(array_keys($columns),$colno)));
+
+				if (count($missings)!=0) {
+					throw new Exception("Missing columns: ".implode(",",$missings));
 				}
 			}
+			// Se non è la prima riga, scrivo i dati
 			else {
 				// Skip empty rows
 				$empty=0;
 				foreach ($r as $key => $value) {
 					if (empty($value)) {
+						// Conto i campi vuoti per vedere se è una riga vuota
 						$empty++;
 					}
 				}
+				// Se è una riga vuota la salto
 				if ($empty==count(array_keys($r))) {
 					break;
 				}
+
+				// Inserisco una riga vuota
 				$sql="insert into $tmptable (mytmpid) values (NULL)";
 				$rs=$this->app["db_".$this->app["name"]]->query($sql);
 				$err=$this->ISsqlError($rs,$sql);
 				if ($err) {
 					throw new Exception("SQL Error $err");
 				}
+
+				// Recuper l'ID della riga
 				$id=$this->app["db_".$this->app["name"]]->insert_id;
+
+				// Inserisco i valori campo per campo
 				foreach ($colno as $i => $col) {
 					if (array_key_exists($i, $r)) {
 						$sql="update $tmptable set `$col`='".$this->app["db_".$this->app["name"]]->escape_string($r[$i])."' where mytmpid=$id";
