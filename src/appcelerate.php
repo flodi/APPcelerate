@@ -289,7 +289,7 @@ class APPcelerate {
 			}
 			// Se non è la prima riga, scrivo i dati
 			else {
-echo "<pre>"; print_r($excel); echo "</pre>";
+
 				// Skip empty rows
 				$empty=0;
 				foreach ($r as $key => $value) {
@@ -318,6 +318,7 @@ echo "<pre>"; print_r($excel); echo "</pre>";
 				foreach ($excel as $i => $name) {
 					if (array_key_exists($i, $r)) {
 						$sql="update $tmptable set `$name`='".$this->app["db_".$this->app["name"]]->escape_string($r[$i])."' where mytmpid=$id";
+echo "<pre>"; print_r($sql;); echo "</pre>";
 						$rs=$this->app["db_".$this->app["name"]]->query($sql);
 						$err=$this->ISsqlError($rs,$sql);
 						if ($err) {
