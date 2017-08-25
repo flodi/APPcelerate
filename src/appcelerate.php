@@ -317,7 +317,7 @@ echo "<pre>"; print_r($excel); echo "</pre>";
 				// Inserisco i valori campo per campo
 				foreach ($excel as $i => $name) {
 					if (array_key_exists($i, $r)) {
-						$sql="update $tmptable set `$col`='".$this->app["db_".$this->app["name"]]->escape_string($r[$i])."' where mytmpid=$id";
+						$sql="update $tmptable set `$name`='".$this->app["db_".$this->app["name"]]->escape_string($r[$i])."' where mytmpid=$id";
 						$rs=$this->app["db_".$this->app["name"]]->query($sql);
 						$err=$this->ISsqlError($rs,$sql);
 						if ($err) {
