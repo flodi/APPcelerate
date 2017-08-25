@@ -264,23 +264,21 @@ class APPcelerate {
 			if ($first) {
 
 				$first=false;
-				$colno=array();
+				$excel=array();
 				$missings=array();
 
 				foreach ($columns as $excel_field => $table_field) {
 					$found=false;
 					foreach ($r as $excel_field_no => $excel_field_name) {
 						if ($excel_field===$excel_field_name) {
+							$excel[$excel_field_no]=$table_field;
 							$found=true;
 							break;
 						}
+					}
 
-						if ($found) {
-							$colno[$excel_field_no]=$table_field;
-						}
-						else {
-							$missinigs[]=$excel_field;
-						}
+					if (!$found) {
+						$missings[]=$excel_field;
 					}
 
 				}
@@ -291,6 +289,7 @@ class APPcelerate {
 			}
 			// Se non è la prima riga, scrivo i dati
 			else {
+echo "<pre>"; print_r($excel); echo "</pre>";
 				// Skip empty rows
 				$empty=0;
 				foreach ($r as $key => $value) {
@@ -316,7 +315,7 @@ class APPcelerate {
 				$id=$this->app["db_".$this->app["name"]]->insert_id;
 
 				// Inserisco i valori campo per campo
-				foreach ($colno as $i => $col) {
+				foreach ($excel as $i => $name) {
 					if (array_key_exists($i, $r)) {
 						$sql="update $tmptable set `$col`='".$this->app["db_".$this->app["name"]]->escape_string($r[$i])."' where mytmpid=$id";
 						$rs=$this->app["db_".$this->app["name"]]->query($sql);
