@@ -313,7 +313,7 @@ class APPcelerate {
 
 				// Recuper l'ID della riga
 				$id=$this->app["db_".$this->app["name"]]->insert_id;
-echo "<pre>"; print_r($r); echo "</pre>";
+
 				// Inserisco i valori campo per campo
 				foreach ($excel as $i => $name) {
 					if (array_key_exists($i, $r)) {
