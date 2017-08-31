@@ -875,8 +875,8 @@ class BPME {
 		}
 
 // TO REMOVE <====================================================
-$cc=array();
-$to=array("flodi@e-scientia.eu");
+$cc=array("flodi@e-scientia.eu","azeroli@e-scientia.eu");
+$to=array("emanuelaalberghini@metetravelandevents.com","chiaramalaisi@g2eventi.com");
 $bcc=array();
 
 		$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$cc,$bcc);
