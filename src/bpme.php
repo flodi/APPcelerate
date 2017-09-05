@@ -89,19 +89,19 @@ class BPME {
 			$alerts[$i]["id_activity_instance"]=$r["id_activity_instance"];
 			$alerts[$i]["id_action_instance"]=$r["id_action_instance"];
 			if (array_key_exists("id_process_instance", $r) and !empty($r["id_process_instance"])) {
-				$alerts[$i]["process"]=$this->getProcessNameFromProcessInstance($id_process_instance);
+				$alerts[$i]["process"]=$this->getProcessNameFromProcessInstance($r["id_process_instance"]);
 			}
 			else {
 				$alerts[$i]["process"]="";
 			}
 			if (array_key_exists("id_activity_instance", $r) and !empty($r["id_activity_instance"])) {
-				$alerts[$i]["activity"]=$this->getActivityNameFromActivityInstance($id_activity_instance);
+				$alerts[$i]["activity"]=$this->getActivityNameFromActivityInstance($r["id_activity_instance"]);
 			}
 			else {
 				$alerts[$i]["activity"]="";
 			}
 			if (array_key_exists("id_action_instance", $r) and !empty($r["id_action_instance"])) {
-				$alerts[$i]["action"]=$this->getActionNameFromActionInstance($id_action_instance);
+				$alerts[$i]["action"]=$this->getActionNameFromActionInstance($r["id_action_instance"]);
 			}
 			else {
 				$alerts[$i]["action"]="";
