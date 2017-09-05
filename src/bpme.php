@@ -831,7 +831,7 @@ class BPME {
 		$activity[0]=$rs->fetch_array(MYSQLI_ASSOC);
 		$TBSC->MergeBlock("bActivity",$activity);
 
-		$sql="select * from ospiti where id=$id_counterpart";
+		$sql="select * from ospiti where id=(select id_ospite from partecipanti where id=$id_counterpart)";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
