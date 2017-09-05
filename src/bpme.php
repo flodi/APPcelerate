@@ -1550,6 +1550,9 @@ $bcc=array();
 						$this->doLog("Sql Error | $sql | $msg");
 						throw new Exception("Query Error", 0);
 					}
+					if ($rs1->num_rows==0) {
+						die("Error: $sql");
+					}
 					$actor=$rs1->fetch_array(MYSQLI_ASSOC);
 					if($actor["type"]==="U") {
 						$sql="select login from users where id=".$actor["id"];
