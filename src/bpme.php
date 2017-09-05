@@ -66,7 +66,7 @@ class BPME {
 		catch (Exception $e) {
 			$msg=$e->getMessage();
 			$this->doLog("Error creating alert | $sql | $msg");
-			throw new Exception("Query Error", 0);
+			throw new Exception("Query Error: $sql", 0);
 		}
 	}
 
