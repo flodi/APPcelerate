@@ -1540,7 +1540,7 @@ $bcc=array();
 					$v=$d["day"]."/".$d["month"]."/".$d["year"];
 					$label.="\nStarted ".$v;
 
-					$sql="select * from partecipanti where id=".$activity_instance["id_actor_created"];
+					$sql="select * from actors where id=".$activity_instance["id_actor_created"];
 					$rs1=$this->fw->app["db_programmi"]->query($sql);
 					try {
 						$this->fw->DBsqlError($rs1,$sql);
