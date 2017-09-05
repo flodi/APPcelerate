@@ -58,7 +58,7 @@ class BPME {
 
 	private function makeAlert($severity,$id_process_instance,$id_activity_instance='null',$id_action_instance='null',$data=array()) {
 		$data=json_encode($data);
-		$sql=sprintf("insert into alerts (severity,id_process_instance,id_activity_instance,id_action_instance,local_data) values ('%s',%d,%s,%s,'%s')",$severity,$id_process_instance,$id_activity_instance,$id_action_instance,$data);
+		$sql=sprintf("insert into alerts (severity,id_process_instance,id_activity_instance,id_action_instance,specific_data) values ('%s',%d,%s,%s,'%s')",$severity,$id_process_instance,$id_activity_instance,$id_action_instance,$data);
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
