@@ -664,6 +664,16 @@ class APPcelerate {
 	public function errRoute($redir=true) {
 		$this->doLog("Route Error, restarting ".$_SERVER["REQUEST_URI"]);
 		if ($redir) {
+			echo "
+<html>
+	<head>
+		<meta http-equiv=\"refresh\" content=\"5;url=".$this->app["base_url"]."\" />
+    </head>
+    <body>
+        <h1>Error: you tried to to something that it is not allowed</h1>
+        <h2>You'll be redirected to home page in 5 seconds...</h2>
+    </body>
+</html>";
 			header("Location: ".$this->app["base_url"]."/");
 			die();
 		}
@@ -826,7 +836,7 @@ class APPcelerate {
 
 	public function doApp() {
 
-		session_start();
+		session_start(array("gc_maxlifetime" =>1800, "cookie_lifetime" => 1800, ));
 
 		$this->doLog("Instance Started",$this::L_INFO);
 
