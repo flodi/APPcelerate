@@ -1555,7 +1555,7 @@ $bcc=array();
 						$sql="select login from users where id=".$actor["id"];
 					}
 					else {
-						$sql="select concat(nome,' ',cognome) from ospiti where id=".$actor["id"];
+						$sql="select concat(nome,' ',cognome) from ospiti where id=(select id_ospite from partecipanti where id=".$actor["id"].")";
 					}
 					$rs1=$this->fw->app["db_programmi"]->query($sql);
 					try {
