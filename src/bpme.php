@@ -84,7 +84,7 @@ class BPME {
 		$alerts=array();
 		$i=0;
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
-			$alerts[$i]["local_data"]=json_decode($r["local_data"],true);
+			$alerts[$i]["local_data"]=json_decode($r["specific_data"],true);
 			$alerts[$i]["id_process_instance"]=$r["id_process_instance"];
 			$alerts[$i]["id_activity_instance"]=$r["id_activity_instance"];
 			$alerts[$i]["id_action_instance"]=$r["id_action_instance"];
@@ -851,7 +851,6 @@ class BPME {
 		$mail=$TBSC->Source;
 
 		$subject=sprintf("#%d %s > %s > Richiesta riscontro - Messaggio Automatico",$id_activity_instance,$data[0]["_mail_object"],$counterpart[0]["nome"]." ".$counterpart[0]["cognome"]);
-
 
 		$from=$data[0]["_mail_from"];
 		$bcc[0]=$data[0]["_mail_from"];
