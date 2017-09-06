@@ -843,7 +843,6 @@ class BPME {
 		}
 		$counterpart=$this->fw->fetchAllAssoc($rs);
 		$TBSC->MergeBlock("bCount",$counterpart);
-		$TBSC->MergeField("user",$this->fw->getUserFullName($this->fw->app["uid"]));
 
 		$url=$this->fw->app["base_url"]."/bpme/case/$id_activity_instance/";
 		$TBSC->MergeField("url","$url");
