@@ -1192,7 +1192,14 @@ $bcc=array();
 			}
 		}
 		else {
-			return $this->getActivityInstanceAssignedActor($id_activity_instance);
+			$uid=$this->getActivityInstanceAssignedActor($id_activity_instance);
+			if ($uid!=-1) {
+				return($uid);
+			}
+			else {
+				$uid=$this->getActivityInstanceCreatedUser($id_activity_instance);
+				return($uid);
+			}
 		}
 
 	}
@@ -1212,11 +1219,17 @@ $bcc=array();
 			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
-		return($rs->fetch_array(MYSQLI_NUM)[0]);
+		$id=$rs->fetch_array(MYSQLI_NUM)[0]);
+		if ($rs->num_rows!=0 and !empty($id)) {
+			return($id);
+		}
+		else {
+			return(-1);
+		}
 	}
 
 	private function getActivityInstanceCreatedUser($id_activity_instance) {
-		$this->doLog("Requested with Activity instance id  $id_activity_instance");
+		$this->doLog("Requested with Activity instance id $id_activity_instance");
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
