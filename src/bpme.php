@@ -683,13 +683,15 @@ class BPME {
 		}
 		$id_activity_instance=$rs1->fetch_array(MYSQLI_NUM)[0];
 
-		$id_activity_instance_opening=$id_activity_instance;
+		return($id_activity_instance);
+	}
+
+	private function executeActivityInstanceOpenCode($id_activity_instance) {
+		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_opening);
 		$opening_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_OPEN.php";
 		if (stream_resolve_include_path($opening_script)) {
 			include($opening_script);
 		}
-
-		return($id_activity_instance);
 	}
 
 	private function createActionInstance($id_process_instance,$id_activity_instance_from,$id_action) {
@@ -891,6 +893,8 @@ $bcc=array();
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 
+		$this->executeActivityInstanceOpenCode($id_activity_instance);
+
 		$this->assignActivity($id_activity_instance,$this->getCurrentUID($id_activity_instance));
 
 		$id_activity_instance_action=$id_activity_instance;
@@ -920,6 +924,8 @@ $bcc=array();
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
+
+		$this->executeActivityInstanceOpenCode($id_activity_instance);
 
 		if($this->getActivityTypeFromActivityInstance($id_activity_instance)==("U")) {
 			$this->assignActivity($id_activity_instance,$this->getCurrentUID());
