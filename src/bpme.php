@@ -1219,7 +1219,7 @@ $bcc=array();
 			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
-		$id=$rs->fetch_array(MYSQLI_NUM)[0]);
+		$id=$rs->fetch_array(MYSQLI_NUM)[0];
 		if ($rs->num_rows!=0 and !empty($id)) {
 			return($id);
 		}
