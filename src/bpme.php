@@ -895,6 +895,7 @@ $bcc=array();
 		$this->assignActivity($id_activity_instance,$this->getCurrentUID($id_activity_instance));
 
 		$id_activity_instance_action=$id_activity_instance;
+		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 		$auto_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_AUTO.php";
 		if (stream_resolve_include_path($auto_script)) {
 			include($auto_script);
