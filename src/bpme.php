@@ -687,7 +687,7 @@ class BPME {
 	}
 
 	private function executeActivityInstanceOpenCode($id_activity_instance) {
-		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_opening);
+		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 		$opening_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_OPEN.php";
 		if (stream_resolve_include_path($opening_script)) {
 			include($opening_script);
