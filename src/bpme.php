@@ -1097,7 +1097,7 @@ $bcc=array();
 			throw new Exception("Query Error", 0);
 		}
 
-		$id_activity_instance_closing=$id_activity_instance_from;
+		$id_activity_instance=$id_activity_instance_from;
 		$closing_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance_from)."_CLOSE.php";
 		if (stream_resolve_include_path($closing_script)) {
 			include($closing_script);
