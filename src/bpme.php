@@ -597,6 +597,18 @@ class BPME {
 			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}
+		$idaa=$rs->fetch_array(MYSQLI_NUM)[0];
+
+		$sql="select code from ospiti where id=(select id_ospite from partecipanti where id=$idaa";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
 		$code=$rs->fetch_array(MYSQLI_NUM)[0];
 
 		return($code);
