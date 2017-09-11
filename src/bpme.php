@@ -599,7 +599,7 @@ class BPME {
 		}
 		$idaa=$rs->fetch_array(MYSQLI_NUM)[0];
 
-		$sql="select code from ospiti where id=(select id_ospite from partecipanti where id=$idaa";
+		$sql="select code from ospiti where id=(select id_ospite from partecipanti where id=$idaa)";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
