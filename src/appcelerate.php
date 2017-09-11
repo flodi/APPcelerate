@@ -835,7 +835,6 @@ class APPcelerate {
 	}
 
 	public function doApp() {
-
 		session_start(array("gc_maxlifetime" =>1800, "cookie_lifetime" => 1800, ));
 
 		$this->doLog("Instance Started",$this::L_INFO);
