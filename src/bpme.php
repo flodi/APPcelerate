@@ -862,6 +862,9 @@ class BPME {
 		$url=$this->fw->app["base_url"]."/bpme/case/$id_activity_instance/";
 		$TBSC->MergeField("url","$url");
 
+		$mitt=$data[0]["_mail_mitt"];
+		$TBSC->MergeField("mitt","$mitt");
+
 		$TBSC->Show(TBS_NOTHING);
 		$mail=$TBSC->Source;
 
