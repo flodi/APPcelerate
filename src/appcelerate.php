@@ -764,6 +764,7 @@ class APPcelerate {
 					case 1:
 						$this->doLog("[SECURITY OK] Found user");
 						$row=$rs->fetch_row();
+echo "<pre>"; print_r($row); echo "</pre>";
 						$this->app['uid']=$row[0];
 						$this->app['uname']=$_REQUEST["login"];
 						$this->app['upwd']=$_REQUEST["password"];
