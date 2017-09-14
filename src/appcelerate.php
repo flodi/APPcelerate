@@ -762,6 +762,7 @@ class APPcelerate {
 				$this->sqlError($rs,$sql);
 				switch ($rs->num_rows) {
 					case 1:
+						$this->doLog("[SECURITY OK] Found user");
 						$row=$rs->fetch_row();
 						$this->app['uid']=$row[0];
 						$this->app['uname']=$_REQUEST["login"];
