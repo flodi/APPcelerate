@@ -1060,7 +1060,6 @@ class APPcelerate {
 		}
 
 		$this->doLog("<===== Routed for  ".json_encode($match),$this::L_INFO);
-		die();
 
 	}
 
