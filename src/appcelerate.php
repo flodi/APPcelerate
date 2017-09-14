@@ -918,7 +918,7 @@ class APPcelerate {
 			// Init section (if exists)
 			//
 			if (stream_resolve_include_path($sec_vws_path."init.php")) {
-				$this->doLog("Initializing section ".$this->app["section"],$this::L_INFO);
+				$this->doLog("Initializing section after security ".$this->app["section"],$this::L_INFO);
 				include_once($sec_vws_path."init.php");
 			}
 
@@ -932,6 +932,14 @@ class APPcelerate {
 			}
 			else {
 				$this->doLog("Accounts Not Active");
+			}
+
+			//
+			// Init app after security (if exists)
+			//
+			if (stream_resolve_include_path($app_vws_path."init_ws.php")) {
+				$this->doLog("Initializing app after security ".$this->app["name"],$this::L_INFO);
+				include_once($app_vws_path."init_ws.php");
 			}
 
 			//
