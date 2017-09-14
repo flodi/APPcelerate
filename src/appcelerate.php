@@ -933,7 +933,6 @@ class APPcelerate {
 			else {
 				$this->doLog("Accounts Not Active");
 			}
-echo "<pre>"; print_r($this->app); echo "</pre>";
 
 			if ($this->app["skipui"]==false) {
 
