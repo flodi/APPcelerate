@@ -745,6 +745,7 @@ class APPcelerate {
 			if(array_key_exists($this->app["name"]."_ap_locale", $_SESSION)) {
 				$this->app['locale']=$_SESSION[$this->app["name"]."_ap_locale"];
 			}
+echo "<pre>"; print_r($this->app); echo "</pre>";
 
 		}
 		else {
