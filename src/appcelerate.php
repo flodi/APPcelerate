@@ -764,10 +764,10 @@ class APPcelerate {
 					case 1:
 						$this->doLog("[SECURITY OK] Found user");
 						$row=$rs->fetch_row();
-echo "<pre>"; print_r($row); echo "</pre>";
 						$this->app['uid']=$row[0];
 						$this->app['uname']=$_REQUEST["login"];
 						$this->app['upwd']=$_REQUEST["password"];
+echo "<pre>"; print_r($this->app); echo "</pre>";
 						$_SESSION[$this->app["name"]."_ap_uid"]=$this->app['uid'];
 						$_SESSION[$this->app["name"]."_ap_uname"]=$this->app['uname'];
 						$sql="select locale from languages where id=(select id_language from users where id=".$this->app["uid"].")";
