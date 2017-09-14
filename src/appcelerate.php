@@ -934,6 +934,15 @@ class APPcelerate {
 				$this->doLog("Accounts Not Active");
 			}
 
+			//
+			// Init section after security (if exists)
+			//
+			if (stream_resolve_include_path($sec_vws_path."init_ws.php")) {
+				$this->doLog("Initializing section ".$this->app["section"],$this::L_INFO);
+				include_once($sec_vws_path."init_ws.php");
+			}
+
+
 			if ($this->app["skipui"]==false) {
 
 				header('Content-type: text/html; charset=UTF-8');
