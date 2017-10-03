@@ -882,7 +882,7 @@ class BPME {
 		$url=$this->fw->app["base_url"]."/bpme/case/$id_activity_instance/";
 		$TBSC->MergeField("url","$url");
 
-		$id_owner=getProcessInstanceOwner($id_process_instance);
+		$id_owner=$this->getProcessInstanceOwner($id_process_instance);
 		$sql="select fullname,mobile from users where id=$id_owner";
 		$rs=$this->db->query($sql);
 		try {
