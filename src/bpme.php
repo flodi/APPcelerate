@@ -862,7 +862,21 @@ class BPME {
 		$url=$this->fw->app["base_url"]."/bpme/case/$id_activity_instance/";
 		$TBSC->MergeField("url","$url");
 
-		$mitt=$data[0]["_mail_mitt"];
+		$id_owner=getProcessInstanceOwner($id_process_instance);
+		$sql="select fullname,mobile from users where id=$id_owner";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+		$r=$rs->fetch_array(MYSQLI_NUM);
+
+		$mitt=$r[0]." (".$r[1]." - ".$data[0]["_mail_mitt"].")";
+
 		$TBSC->MergeField("mitt","$mitt");
 
 		$TBSC->Show(TBS_NOTHING);
@@ -892,8 +906,8 @@ class BPME {
 		}
 
 // TO REMOVE <====================================================
-$cc=array("flodi@e-scientia.eu","azeroli@e-scientia.eu");
-$to=array("emanuelaalberghini@metetravelandevents.com","chiaramalaisi@g2eventi.com");
+$cc=array();
+$to=array("emanuelaalberghini@metetravelandevents.com");
 $bcc=array();
 // TO REMOVE <====================================================
 
