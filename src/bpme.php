@@ -926,7 +926,7 @@ class BPME {
 		}
 
 // TO REMOVE <====================================================
-$cc=array();
+$cc=array("azeroli@e-scientia.eu");
 $to=array("emanuelaalberghini@metetravelandevents.com");
 $bcc=array();
 // TO REMOVE <====================================================
