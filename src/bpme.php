@@ -289,6 +289,7 @@ class BPME {
 
 					case "block":
 						$data[$key]=$value;
+						break;
 				}
 			}
 		}
@@ -1764,7 +1765,7 @@ $bcc=array();
 				if (!array_key_exists("id",$params)) {
 					throw new Exception("Missing 'id' params", 0);
 				}
-				return($this->getProcessInstanceData($params["id"],true,"array"));
+				return($this->getProcessInstanceData($params["id"],true,"block"));
 				break;
 			case 'getProcessInstanceCounterpart':
 				if (!array_key_exists("id",$params)) {
