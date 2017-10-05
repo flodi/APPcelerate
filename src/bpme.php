@@ -994,11 +994,14 @@ $bcc=array();
 				$data=$this->getProcessInstanceData($id_process_instance,false,"list");
 		}
 
+		$data_raw=$this->getProcessInstanceData($id_process_instance);
+
 		$context=$this->getActivityInstanceContext($id_activity_instance);
 		$note=$this->getProcessInstanceNote($id_process_instance);
 
 		$this->fw->AddMerge("block","context",$context);
 		$this->fw->AddMerge("block","process_data",$data);
+		$this->fw->AddMerge("block","process_data_raw",$data_raw);
 		$this->fw->AddMerge("field","piid",$id_process_instance);
 		$this->fw->AddMerge("field","note",$note);
 		$this->fw->AddMerge("field","aiid",$id_activity_instance);
