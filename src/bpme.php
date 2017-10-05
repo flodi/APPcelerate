@@ -281,12 +281,14 @@ class BPME {
 				if (substr($value, 0, 1) === "@") {
 					$value=json_encode($this->getProcessDataFieldFromDB($value));
 				}
-				if ($type==="list") {
-					$data[$i]["key"]=$key;
-					$data[$i++]["value"]=$value;
-				}
-				else {
-					$data[$key]=$value;
+				switch($type) {
+					case "list":
+						$data[$i]["key"]=$key;
+						$data[$i++]["value"]=$value;
+						break;
+
+					case "block":
+						$data[$key]=$value;
 				}
 			}
 		}
@@ -994,7 +996,7 @@ $bcc=array();
 				$data=$this->getProcessInstanceData($id_process_instance,false,"list");
 		}
 
-		$data_raw=$this->getProcessInstanceData($id_process_instance,true,"list");
+		$data_raw=$this->getProcessInstanceData($id_process_instance,true,"block");
 
 		$context=$this->getActivityInstanceContext($id_activity_instance);
 		$note=$this->getProcessInstanceNote($id_process_instance);
