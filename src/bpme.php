@@ -994,7 +994,7 @@ $bcc=array();
 				$data=$this->getProcessInstanceData($id_process_instance,false,"list");
 		}
 
-		$data_raw=$this->getProcessInstanceData($id_process_instance);
+		$data_raw=$this->getProcessInstanceData($id_process_instance,true,"list");
 
 		$context=$this->getActivityInstanceContext($id_activity_instance);
 		$note=$this->getProcessInstanceNote($id_process_instance);
