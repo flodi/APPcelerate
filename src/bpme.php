@@ -1005,7 +1005,6 @@ $bcc=array();
 
 		$this->fw->AddMerge("block","context",$context);
 		$this->fw->AddMerge("block","process_data",$data);
-echo "<pre>";print_r($data_raw);echo "<pre>";
 		$this->fw->AddMerge("block","process_data_raw",$data_raw);
 		$this->fw->AddMerge("field","piid",$id_process_instance);
 		$this->fw->AddMerge("field","note",$note);
