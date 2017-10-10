@@ -1052,7 +1052,7 @@ class APPcelerate {
 
 				if(array_key_exists("tail_fields", $this->app)) {
 					foreach($this->app["tail_fields"] as $field_name => $field_data) {
-						$this->doLog("Merging Tail Field $field_name with '$field_data'");
+						$this->doLog("Merging Tail Field $field_name with '".print_r($field_data,true)."'");
 						$this->app["TBS"]->MergeField("$field_name",$field_data);
 					}
 				}
