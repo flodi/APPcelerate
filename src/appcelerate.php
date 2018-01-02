@@ -443,7 +443,7 @@ class APPcelerate {
 	public function ISsqlError($recordset,$query) {
 		if (!$recordset) {
 			$error=$this->app["db_".$this->app["name"]]->error;
-			$this->doLog("Failed SQL query - Query => $query, Error => ".$error);
+			$this->doLog("Failed SQL query - Query => $query, Error => ".$error,APPcelerate::L_ERROR);
 			return ($error);
 		}
 		else {
@@ -453,7 +453,7 @@ class APPcelerate {
 
 	public function DBsqlError($recordset,$query) {
 		if (!$recordset) {
-			$this->doLog("Failed SQL query - Query => $query, Error => ".$this->app["db_".$this->app["name"]]->error);
+			$this->doLog("Failed SQL query - Query => $query, Error => ".$this->app["db_".$this->app["name"]]->error,APPcelerate::L_ERROR);
 			throw new Exception("Database error, please contact support", 1);
 		}
 	}
@@ -461,7 +461,7 @@ class APPcelerate {
 	// DEPRECATED
 	public function sqlError($recordset,$query) {
 		if (!$recordset) {
-			$this->doLog("Failed SQL query - Query => $query, Error => ".$this->app["db_".$this->app["name"]]->error);
+			$this->doLog("Failed SQL query - Query => $query, Error => ".$this->app["db_".$this->app["name"]]->error,APPcelerate::L_ERROR);
 			die("Database error, please contact support\n");
 		}
 	}
@@ -663,7 +663,7 @@ class APPcelerate {
 	}
 
 	public function errRoute($redir=true) {
-		$this->doLog("Route Error, restarting ".$_SERVER["REQUEST_URI"]);
+		$this->doLog("Route Error, restarting ".$_SERVER["REQUEST_URI"],APPcelerate::L_ERROR);
 		if ($redir) {
 			echo "
 <html>
@@ -801,7 +801,7 @@ class APPcelerate {
 				unset($this->app['uid']);
 				unset($this->app['uname']);
 				if (!(strpos($_SERVER['REQUEST_URI'],"/login/")) and !(strpos($_SERVER['REQUEST_URI'],"/logout/"))) {
-					$this->doLog($_SERVER['REQUEST_URI']." is not login or logout page => Security Error");
+					$this->doLog($_SERVER['REQUEST_URI']." is not login or logout page => Security Error",APPcelerate::L_ERROR);
 					if ($secredir) {
 						$this->doLog("[SECURITY] redirecting to ". $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
 						header("Location: " . $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
@@ -879,7 +879,7 @@ class APPcelerate {
 			// Check app name. must be one of defined apps
 			//
 			if (!in_array($this->app["name"],$this->app["apps"])) {
-				die("Error in routes definition: unauthorized app ".$this->app["name"]);
+				die("Error in routes definition: unauthorized app ".$this->app["name"],APPcelerate::L_ERROR);
 			}
 
 			//
