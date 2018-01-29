@@ -543,7 +543,7 @@ class APPcelerate {
 					$c='
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-2.2.0.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-ui.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/parsley.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/i18n/it.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.form.js"></script>
@@ -563,8 +563,7 @@ class APPcelerate {
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.structure.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.theme.min.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap.min.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap-theme.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/fontawesome-all.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/parsley.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.treetable.css">
@@ -879,7 +878,7 @@ class APPcelerate {
 			// Check app name. must be one of defined apps
 			//
 			if (!in_array($this->app["name"],$this->app["apps"])) {
-				die("Error in routes definition: unauthorized app ".$this->app["name"],APPcelerate::L_ERROR);
+				die("Error in routes definition: unauthorized app ".$this->app["name"]);
 			}
 
 			//
