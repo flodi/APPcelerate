@@ -141,6 +141,8 @@ class APPcelerate {
 		ini_set("session.gc_maxlifetime",60*$this->app["session_mins"]);
 		session_set_cookie_params(60*$this->app["session_mins"],"/");
 
+		$this->app["bootstrap"]=getenv('BOOTSTRAP_VERSION');
+
 		#Default template folders
 		foreach ($this->app["apps"] as $app_name) {
 			$app_path=$base_path."/apps/$app_name";
@@ -542,8 +544,18 @@ class APPcelerate {
 				case "js":
 					$c='
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-2.2.0.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-ui.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-ui.min.js"></script>';
+					if ($this->app["bootstrap"]==3) {
+						$c.='
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+						';
+					}
+					if ($this->app["bootstrap"]==4) {
+						$c.='
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+						';
+					}
+					$c.='		
 		<script src="/vendor/flodi/appcelerate/src/include/js/parsley.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/i18n/it.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.form.js"></script>
@@ -562,8 +574,19 @@ class APPcelerate {
 					$c='
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.structure.min.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.theme.min.css">
+		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.theme.min.css">';
+					if ($this->app["bootstrap"]==3) {
+						$c.='
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+						';
+					}
+					if ($this->app["bootstrap"]==4) {
+						$c.='
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+						';
+					}
+					$c.='
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/fontawesome-all.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/parsley.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.treetable.css">
