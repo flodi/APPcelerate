@@ -652,7 +652,6 @@ class APPcelerate {
 		$m->setSubject($subject);
 		$m->setMessageFromString(strip_tags($body), $body);
 		$ses = new SimpleEmailService($this->app["aws_key"], $this->app["aws_code"], 'email.eu-west-1.amazonaws.com', true);
-print_r($m);
 		$result = $ses->sendEmail($m);
 		$ses_messageid = $result['MessageId'];
 		$ses_requestid = $result['RequestId'];
