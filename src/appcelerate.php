@@ -543,8 +543,9 @@ class APPcelerate {
 			switch($type) {
 				case "js":
 					$c='
-		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-2.2.0.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-ui.min.js"></script>';
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-migrate-3.0.0.min.js"></script>';
 					if ($this->app["bootstrap"]==3) {
 						$c.='
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -555,12 +556,24 @@ class APPcelerate {
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 						';
 					}
-					$c.='		
+					$c.='
+		<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+		<script src="https://cdn.datatables.net/autofill/2.2.2/js/dataTables.autoFill.min.js"></script>
+		<script src="https://https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
+		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+		<script src="https://cdn.datatables.net/colreorder/1.4.1/js/dataTables.colReorder.min.js"></script>
+		<script src="https://cdn.datatables.net/fixedcolumns/3.2.4/js/dataTables.fixedColumns.min.js"></script>
+		<script src="https://cdn.datatables.net/fixedheader/3.1.3/js/dataTables.fixedHeader.min.js"></script>
+		<script src="https://cdn.datatables.net/keytable/2.3.2/js/dataTables.keyTable.min.js"></script>
+		<script src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
+		<script src="https://cdn.datatables.net/rowgroup/1.0.2/js/dataTables.rowGroup.min.js"></script>
+		<script src="https://cdn.datatables.net/scroller/1.4.4/js/dataTables.scroller.min.js"></script>
+		<script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/parsley.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/i18n/it.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.form.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.treetable.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/datatables/datatables.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/select2.full.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap-editable.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/typeaheadjs.js"></script>
@@ -572,9 +585,8 @@ class APPcelerate {
 					break;
 				case "css":
 					$c='
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.min.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.structure.min.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery-ui.theme.min.css">';
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+					';
 					if ($this->app["bootstrap"]==3) {
 						$c.='
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -587,14 +599,26 @@ class APPcelerate {
 						';
 					}
 					$c.='
+		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/autofill/2.2.2/css/autoFill.dataTables.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.4.1/css/colReorder.dataTables.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.2.4/css/fixedColumns.dataTables.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.3/css/fixedHeader.dataTables.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.3.2/css/keyTable.dataTables.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.0.2/css/rowGroup.dataTables.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.2.3/css/rowReorder.dataTables.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/scroller/1.4.4/css/scroller.dataTables.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/fontawesome-all.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/parsley.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.treetable.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.treetable.theme.default.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/datatables/datatables.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/select2-bootstrap.min.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/typeahead.js-bootstrap.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap-editable.css">
+		<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 					';
 					break;
 			}
