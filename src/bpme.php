@@ -1096,9 +1096,11 @@ $bcc=array();
 			throw new Exception("Activity instance id $id_action_instance not valid", 0);
 		}
 
+		$condition=strtoupper($condition);
+
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 		$data=$this->getProcessInstanceData($id_process_instance,true,"array");
-		$confirm=$data["lastconfirm"];
+		$confirm=strtoupper($data["lastconfirm"]);
 		if ($confirm===$condition) {
 			$r=true;
 		}
