@@ -269,8 +269,12 @@ class APPcelerate {
 				$excel=array();
 				$missings=array();
 
+echo "<pre>";
 print_r($r);
+echo "</pre>";
+echo "<pre>";
 print_r($columns);
+echo "</pre>";
 
 				foreach ($columns as $excel_field => $table_field) {
 					$found=false;
