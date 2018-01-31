@@ -1041,7 +1041,7 @@ $bcc=array();
 
 			if (!empty($r["entry_condition"])) {
 				list($evaluation,$ok)=$this->checkActionCondition($id_activity_instance_from,$id_action,$r["entry_condition"]);
-				$this->doLog("Condition evaluation returned with evaluation='$evaluation' and ok='$ok'");
+				$this->doLog("Condition evaluation returned with evaluation='$evaluation' and ok=".(($ok) ? 'true' : 'false'));
 				$sql="update action_instances set entry_condition_evaluation='$evaluation' where id=$id_action_instance";
 				$rs1=$this->db->query($sql);
 				try {
