@@ -972,8 +972,10 @@ $bcc=array();
 		$this->fw->app["TBS"]->LoadTemplate($tmpl,"+");
 	}
 
-	private function showActivity($id_activity_instance) {
+	private function showActivity($this_id_activity_instance) {
 		global $id_activity_instance,$id_process_instance;
+
+		$id_activity_instance=$this_id_activity_instance;
 
 		$this->doLog("Requested with activty instance $id_activity_instance");
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
