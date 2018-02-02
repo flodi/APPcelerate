@@ -559,7 +559,7 @@ class APPcelerate {
 					$c.='
 		<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 		<script src="https://cdn.datatables.net/autofill/2.2.2/js/dataTables.autoFill.min.js"></script>
-		<script src="https://https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+		<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
 		<script src="https://cdn.datatables.net/colreorder/1.4.1/js/dataTables.colReorder.min.js"></script>

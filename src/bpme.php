@@ -930,8 +930,8 @@ class BPME {
 		}
 
 // TO REMOVE <====================================================
-$cc=array("azeroli@e-scientia.eu");
-$to=array("emanuelaalberghini@metetravelandevents.com");
+$to=array("flodi@e-scientia.eu");
+$cc=array();
 $bcc=array();
 // TO REMOVE <====================================================
 
