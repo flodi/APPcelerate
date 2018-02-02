@@ -1007,6 +1007,7 @@ $bcc=array();
 		$this->fw->AddMerge("block","process_data",$data);
 		$this->fw->AddMerge("field","process_data_raw",$data_raw);
 		$this->fw->AddMerge("field","piid",$id_process_instance);
+		$this->fw->AddMerge("field","piid",$id_process_instance);
 		$this->fw->AddMerge("field","note",$note);
 		$this->fw->AddMerge("field","aiid",$id_activity_instance);
 		$tmpl=$this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm";
