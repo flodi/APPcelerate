@@ -930,9 +930,9 @@ class BPME {
 		}
 
 // TO REMOVE <====================================================
-$to=array("flodi@e-scientia.eu");
-$cc=array();
-$bcc=array();
+//$to=array("flodi@e-scientia.eu");
+//$cc=array();
+//$bcc=array();
 // TO REMOVE <====================================================
 
 		$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$cc,$bcc);
