@@ -557,19 +557,7 @@ class APPcelerate {
 						';
 					}
 					$c.='
-		<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-		<script src="https://cdn.datatables.net/autofill/2.2.2/js/dataTables.autoFill.min.js"></script>
-		<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
-		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
-		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
-		<script src="https://cdn.datatables.net/colreorder/1.4.1/js/dataTables.colReorder.min.js"></script>
-		<script src="https://cdn.datatables.net/fixedcolumns/3.2.4/js/dataTables.fixedColumns.min.js"></script>
-		<script src="https://cdn.datatables.net/fixedheader/3.1.3/js/dataTables.fixedHeader.min.js"></script>
-		<script src="https://cdn.datatables.net/keytable/2.3.2/js/dataTables.keyTable.min.js"></script>
-		<script src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
-		<script src="https://cdn.datatables.net/rowgroup/1.0.2/js/dataTables.rowGroup.min.js"></script>
-		<script src="https://cdn.datatables.net/scroller/1.4.4/js/dataTables.scroller.min.js"></script>
-		<script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/3.3.3/js/tabulator.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/parsley.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/i18n/it.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.form.js"></script>
@@ -599,18 +587,7 @@ class APPcelerate {
 						';
 					}
 					$c.='
-		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
-		<link rel="stylesheet" href="https://cdn.datatables.net/autofill/2.2.2/css/autoFill.dataTables.min.css">
-		<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
-		<link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.4.1/css/colReorder.dataTables.min.css">
-		<link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.2.4/css/fixedColumns.dataTables.min.css">
-		<link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.3/css/fixedHeader.dataTables.min.css">
-		<link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.3.2/css/keyTable.dataTables.min.css">
-		<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css">
-		<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.0.2/css/rowGroup.dataTables.min.css">
-		<link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.2.3/css/rowReorder.dataTables.min.css">
-		<link rel="stylesheet" href="https://cdn.datatables.net/scroller/1.4.4/css/scroller.dataTables.min.css">
-		<link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/3.3.3/css/tabulator.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/parsley.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.treetable.css">
 		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.treetable.theme.default.css">
