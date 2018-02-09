@@ -1488,7 +1488,8 @@ class BPME {
 			where
 				(activity_instances.id_actor_assigned=$uid or activity_instances.id_actor_assigned is null) and
 				activity_instances.date_completed is null and
-				activities.activity_type in ('U')
+				activities.activity_type in ('U') and
+				activity_instances.visible=true
 		";
 		$rs=$this->db->query($sql);
 		try {
