@@ -723,6 +723,9 @@ class BPME {
 	}
 
 	private function executeActivityInstanceOpenCode($id_activity_instance) {
+		if (!getActivityInstanceVisibility($id_activity_instance)) {
+			return;
+		}
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 		$opening_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_OPEN.php";
 		if (stream_resolve_include_path($opening_script)) {
@@ -947,6 +950,10 @@ class BPME {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 
+		if(!$this->getActivityInstanceVisibility($id_activity_instance)) {
+			return;
+		}
+
 		$this->executeActivityInstanceOpenCode($id_activity_instance);
 
 		$this->assignActivity($id_activity_instance,$this->getCurrentUID($id_activity_instance));
@@ -976,6 +983,8 @@ class BPME {
 		global $id_activity_instance,$id_process_instance;
 
 		$id_activity_instance=$this_id_activity_instance;
+
+		$visible=$this->getActivityInstanceVisibility($id_activity_instance);
 
 		$this->doLog("Requested with activty instance $id_activity_instance");
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
@@ -1014,7 +1023,12 @@ class BPME {
 		$this->fw->AddMerge("field","piid",$id_process_instance);
 		$this->fw->AddMerge("field","note",$note);
 		$this->fw->AddMerge("field","aiid",$id_activity_instance);
-		$tmpl=$this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm";
+		if ($visible) {
+			$tmpl=$this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm";
+		}
+		else {
+			$tmpl=$this->app_name."/bpme/templates/STEP_NOVISIBLE.htm";
+		}
 		$this->fw->app["TBS"]->LoadTemplate($tmpl,"+");
 	}
 
@@ -1239,7 +1253,7 @@ class BPME {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 
-		$sql="update activity_instances set visible=$visible";
+		$sql="update activity_instances set visible=$visible where id=$id_activity_instance";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1249,6 +1263,27 @@ class BPME {
 			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
 		}		
+	}
+
+	private function getActivityInstanceVisibility($id_activity_instance) {
+		$this->doLog("Requested with activity instance $id_activity_instance");
+
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$sql="select visible from activity_instances where id=$id_activity_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}
+
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getAvailableActivities($uid=0,$id_process_instance=0) {
