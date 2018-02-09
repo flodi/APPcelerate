@@ -1201,8 +1201,52 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		$this->dispatchActivity($id_activity_instance_to,$ui);
+		if ($this->getActivityInstanceWaitingInActions($id_activity_instance_to)==0) {
+			$this->dispatchActivity($id_activity_instance_to,$ui);
+		}
+		else {
+			$this->setActivityInstanceVisibility($id_activity_instance_to,false);
+		}
 
+
+	}
+
+	private function getActivityInstanceWaitingInActions($id_activity_instance) {
+		$this->doLog("Requested with activity instance $id_activity_instance");
+
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$sql="select count(*) from action_instances where id_activity_instance_to=$id_activity_instance and date_executed is not null";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}		
+	}
+
+	private function setActivityInstanceVisibility($id_activity_instance,$visible=true) {
+		$this->doLog("Requested with activity instance $id_activity_instance");
+
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$sql="update activity_instances set visible=$visible";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )");
+			throw new Exception("Query Error", 0);
+		}		
 	}
 
 	private function getAvailableActivities($uid=0,$id_process_instance=0) {
