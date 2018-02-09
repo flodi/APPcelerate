@@ -1227,7 +1227,9 @@ class BPME {
 			$msg=$e->getMessage();
 			$this->doLog("$sql ( $msg )");
 			throw new Exception("Query Error", 0);
-		}		
+		}
+
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function setActivityInstanceVisibility($id_activity_instance,$visible=true) {
