@@ -558,16 +558,15 @@ class APPcelerate {
 					}
 					$c.='
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/3.3.3/js/tabulator.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/moment-with-locales.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/parsley.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/i18n/it.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.form.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.treetable.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/select2.full.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap-editable.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/typeaheadjs.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.filtertable.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/garlic.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.fittext.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/appcelerate.js"></script>
 					';
 					break;
