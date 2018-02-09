@@ -723,7 +723,7 @@ class BPME {
 	}
 
 	private function executeActivityInstanceOpenCode($id_activity_instance) {
-		if (!getActivityInstanceVisibility($id_activity_instance)) {
+		if (!$this->getActivityInstanceVisibility($id_activity_instance)) {
 			return;
 		}
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
