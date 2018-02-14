@@ -1219,7 +1219,12 @@ class BPME {
 			$this->dispatchActivity($id_activity_instance_to,$ui);
 		}
 		else {
-			$this->setActivityInstanceVisibility($id_activity_instance_to,false);
+			try {
+				$this->setActivityInstanceVisibility($id_activity_instance_to,false);
+			}
+			catch {
+				$this->doLog("Cannot set Activity Instance visibility for id '$id_activity_instance'",APPcelerate::L_ERROR);				 
+			}
 		}
 
 
