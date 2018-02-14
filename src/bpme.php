@@ -1222,7 +1222,7 @@ class BPME {
 			try {
 				$this->setActivityInstanceVisibility($id_activity_instance_to,false);
 			}
-			catch {
+			catch (Exception $e) {
 				$this->doLog("Cannot set Activity Instance visibility for id '$id_activity_instance'",APPcelerate::L_ERROR);				 
 			}
 		}
