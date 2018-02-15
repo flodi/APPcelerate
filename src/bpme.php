@@ -168,7 +168,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) startProcess | $sql | $msg",APPcelerate::L_ERROR;
+			$this->doLog("F: (P) startProcess | $sql | $msg",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$id_process_instance=$this->db->insert_id;
