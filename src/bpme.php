@@ -797,7 +797,7 @@ class BPME {
 			throw new Exception("Activity type $activity_type not allowed", 0);
 		}
 
-		$this->doLog("Activity type of $id_activity_instance is $activity_type",APPcelerate::L_DEBUG;
+		$this->doLog("Activity type of $id_activity_instance is $activity_type",APPcelerate::L_DEBUG);
 
 		switch ($activity_type) {
 			case 'S':
@@ -1662,7 +1662,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("Sql Error | $sql | $msg",APPcelerate::L_ERROR;
+			$this->doLog("Sql Error | $sql | $msg",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
