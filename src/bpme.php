@@ -65,7 +65,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("Error creating alert | $sql | $msg");
+			$this->doLog("Error creating alert | $sql | $msg",APPcelerate::L_ERROR);
 			throw new Exception("Query Error: $sql", 0);
 		}
 	}
@@ -78,7 +78,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("Error getting alerts | $sql | $msg");
+			$this->doLog("Error getting alerts | $sql | $msg",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$alerts=array();
@@ -121,7 +121,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("Error getting alerts | $sql | $msg");
+			$this->doLog("Error getting alerts | $sql | $msg",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$i=0;
@@ -139,7 +139,7 @@ class BPME {
 	// Ritorna l'id dell'istanza dell'ultima attività eseguita
 	private function startProcess($code,$start,$initial_data,$ui) {
 
-		$this->doLog("Requested with code $code and start $start and ui $ui",$initial_data);
+		$this->doLog("Requested with code $code and start $start and ui $ui",$initial_data,APPcelerate::L_DEBUG);
 
 		$uid=$this->getCurrentUID();
 
@@ -150,7 +150,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) startProcess | $sql | $msg");
+			$this->doLog("F: (P) startProcess | $sql | $msg",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		if ($rs->num_rows===0) {
@@ -168,7 +168,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("F: (P) startProcess | $sql | $msg");
+			$this->doLog("F: (P) startProcess | $sql | $msg",APPcelerate::L_ERROR;
 			throw new Exception("Query Error", 0);
 		}
 		$id_process_instance=$this->db->insert_id;
@@ -178,7 +178,7 @@ class BPME {
 		}
 		catch (Exception $e){
 			$msg=$e->getMessage();
-			$this->doLog("Cannot create process ( $msg )");
+			$this->doLog("Cannot create process ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Cannot create process ($msg)", 0);
 		}
 
@@ -187,13 +187,13 @@ class BPME {
 
 		$this->dispatchActivity($id_activity_instance,$ui);
 
-		$this->doLog("Returning process instance $id_process_instance and activity instance $id_activity_instance");
+		$this->doLog("Returning process instance $id_process_instance and activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 
 		return(array($id_process_instance,$id_activity_instance));
 	}
 
 	public function setProcessInstanceData($id_process_instance,$data) {
-		$this->doLog("Requested with process instance $id_process_instance and data ".print_r($data,true));
+		$this->doLog("Requested with process instance $id_process_instance and data ".print_r($data,true),APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
@@ -210,7 +210,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$d=$rs->fetch_array(MYSQLI_NUM)[0];
@@ -230,7 +230,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 
@@ -238,7 +238,7 @@ class BPME {
 	}
 
 	private function getProcessInstanceNote($id_process_instance) {
-		$this->doLog("Requested with process instance $id_process_instance");
+		$this->doLog("Requested with process instance $id_process_instance",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
@@ -250,14 +250,14 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getProcessInstanceData($id_process_instance,$all=true,$type) {
-		$this->doLog("Requested with process instance $id_process_instance and all $all and type $type");
+		$this->doLog("Requested with process instance $id_process_instance and all $all and type $type",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
@@ -269,7 +269,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$d=json_decode($rs->fetch_array(MYSQLI_NUM)[0],true);
@@ -338,7 +338,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$value=$this->fw->fetchAllAssoc($rs);
@@ -347,7 +347,7 @@ class BPME {
 	}
 
 	private function getActorType($id_actor) {
-		$this->doLog("Requested with actor id $id_actor");
+		$this->doLog("Requested with actor id $id_actor",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_actor) and !is_int($id_actor)) {
 			throw new Exception("Actor id $id_actor not valid", 0);
 		}
@@ -358,14 +358,14 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getProcessIDFromProcessInstance($id_process_instance) {
-		$this->doLog("Requested with process instance $id_process_instance");
+		$this->doLog("Requested with process instance $id_process_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
 		}
@@ -376,14 +376,14 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getProcessCodeFromProcessInstance($id_process_instance) {
-		$this->doLog("Requested with process instance $id_process_instance");
+		$this->doLog("Requested with process instance $id_process_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
 		}
@@ -394,14 +394,14 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_DEBUG);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getProcessCodeFromActivityID($id_activity) {
-		$this->doLog("Requested with actvity id $id_activity");
+		$this->doLog("Requested with actvity id $id_activity",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity) and !is_int($id_activity)) {
 			throw new Exception("Activity id $id_activity not valid", 0);
 		}
@@ -412,14 +412,14 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getProcessNameFromProcessInstance($id_process_instance) {
-		$this->doLog("Requested with process instance $id_process_instance");
+		$this->doLog("Requested with process instance $id_process_instance",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
@@ -431,14 +431,14 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getProcessInstanceOwner($id_process_instance) {
-		$this->doLog("Requested with process instance $id_process_instance");
+		$this->doLog("Requested with process instance $id_process_instance",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
@@ -451,14 +451,14 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getProcessInstanceFromActivityInstance($id_activity_instance) {
-		$this->doLog("Requested with activity instance $id_activity_instance");
+		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
@@ -469,14 +469,14 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getActivityCodeFromActivityInstance($id_activity_instance) {
-		$this->doLog("Requested with activity instance $id_activity_instance");
+		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
@@ -487,14 +487,14 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getProcessInstanceCounterpart($id_process_instance) {
-		$this->doLog("Requested with process instance $id_process_instance");
+		$this->doLog("Requested with process instance $id_process_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
 		}
@@ -506,14 +506,14 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function setProcessInstanceCounterpart($id_process_instance,$id_actor) {
-		$this->doLog("Requested with process instance $id_process_instance and actor $id_actor");
+		$this->doLog("Requested with process instance $id_process_instance and actor $id_actor",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
 		}
@@ -528,13 +528,13 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 	}
 
 	private function getActivityNameFromActivityInstance($id_activity_instance) {
-		$this->doLog("Requested with activity instance $id_activity_instance");
+		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
@@ -545,14 +545,14 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getActivityInstanceContext($id_activity_instance) {
-		$this->doLog("Requested with activity instance $id_activity_instance");
+		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
@@ -578,7 +578,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$context=$this->fw->fetchAllAssoc($rs);
@@ -587,7 +587,7 @@ class BPME {
 	}
 
 	private function getActionNameFromActionInstance($id_action_instance) {
-		$this->doLog("Requested with action instance $id_action_instance");
+		$this->doLog("Requested with action instance $id_action_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
 			throw new Exception("Activity instance id $id_action_instance not valid", 0);
 		}
@@ -598,14 +598,14 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getCounterpartCodeFromActivityInstance($id_activity_instance) {
-		$this->doLog("Requested with activity instance  $id_activity_instance");
+		$this->doLog("Requested with activity instance  $id_activity_instance",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_process_instance not valid", 0);
@@ -618,7 +618,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$idaa=$rs->fetch_array(MYSQLI_NUM)[0];
@@ -630,7 +630,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$code=$rs->fetch_array(MYSQLI_NUM)[0];
@@ -639,7 +639,7 @@ class BPME {
 	}
 
 	private function assignActivity($id_activity_instance,$id_actor) {
-		$this->doLog("Requested with activity instance  $id_activity_instance and actor id $id_actor");
+		$this->doLog("Requested with activity instance  $id_activity_instance and actor id $id_actor",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_process_instance not valid", 0);
@@ -655,7 +655,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 	}
@@ -663,7 +663,7 @@ class BPME {
 	private function createActivityInstance($id_activity_instance_prec,$id_process_instance,$id_activity,$ui=false) {
 		global $id_activity_instance_opening;
 
-		$this->doLog("Requested with activity instance prec id $id_activity_instance_prec and process instance id $id_process_instance and activity id $id_activity and ui $ui");
+		$this->doLog("Requested with activity instance prec id $id_activity_instance_prec and process instance id $id_process_instance and activity id $id_activity and ui $ui",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_activity_instance_prec) and !is_int($id_activity_instance_prec)) {
 			throw new Exception("Activity instance prec id $id_activity_instance_prec not valid", 0);
@@ -703,7 +703,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 
@@ -714,7 +714,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$id_activity_instance=$rs1->fetch_array(MYSQLI_NUM)[0];
@@ -735,7 +735,7 @@ class BPME {
 
 	private function createActionInstance($id_process_instance,$id_activity_instance_from,$id_action) {
 
-		$this->doLog("Requested with process instance $id_process_instance and activity instance $id_activity_instance_from and action $id_action");
+		$this->doLog("Requested with process instance $id_process_instance and activity instance $id_activity_instance_from and action $id_action",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
@@ -755,7 +755,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 
@@ -766,7 +766,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$id_action_instance=$rs1->fetch_array(MYSQLI_NUM)[0];
@@ -776,7 +776,7 @@ class BPME {
 	// Ritorna l'id dell'istanza dell'ultima attività eseguita
 	private function dispatchActivity($id_activity_instance,$ui=false) {
 
-		$this->doLog("Requested with activity instance  $id_activity_instance and ui $ui");
+		$this->doLog("Requested with activity instance  $id_activity_instance and ui $ui",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
@@ -797,7 +797,7 @@ class BPME {
 			throw new Exception("Activity type $activity_type not allowed", 0);
 		}
 
-		$this->doLog("Activity type of $id_activity_instance is $activity_type");
+		$this->doLog("Activity type of $id_activity_instance is $activity_type",APPcelerate::L_DEBUG;
 
 		switch ($activity_type) {
 			case 'S':
@@ -807,7 +807,7 @@ class BPME {
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
-					$this->doLog("Cannot follow actions from instance $id_activity_instance ( $msg )");
+					$this->doLog("Cannot follow actions from instance $id_activity_instance ( $msg )",APPcelerate::L_ERROR);
 				}
 				break;
 			case 'F':
@@ -821,7 +821,7 @@ class BPME {
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
-					$this->doLog("Cannot execute automatic activity instance $id_activity_instance ( $msg )");
+					$this->doLog("Cannot execute automatic activity instance $id_activity_instance ( $msg )",APPcelerate::L_ERROR);
 				}
 
 				try {
@@ -829,7 +829,7 @@ class BPME {
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
-					$this->doLog("Cannot follow actions from activity instance $id_activity_instance ( $msg )");
+					$this->doLog("Cannot follow actions from activity instance $id_activity_instance ( $msg )",APPcelerate::L_ERROR);
 				}
 				break;
 			case 'C':
@@ -842,9 +842,7 @@ class BPME {
 	}
 
 	private function executeCounterpartActivity($id_activity_instance) {
-		$this->doLog("Requested with activty instance  $id_activity_instance");
-
-		xdebug_break();
+		$this->doLog("Requested with activty instance  $id_activity_instance",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
@@ -869,7 +867,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$activity[0]=$rs->fetch_array(MYSQLI_ASSOC);
@@ -882,7 +880,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$counterpart=$this->fw->fetchAllAssoc($rs);
@@ -899,7 +897,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$r=$rs->fetch_array(MYSQLI_NUM);
@@ -921,7 +919,7 @@ class BPME {
 		}
 
 		if (empty($to)) {
-			$this->doLog("Counterpart with id ".$counterpart[0]["id"]." does not have any email, sent to myself");
+			$this->doLog("Counterpart with id ".$counterpart[0]["id"]." does not have any email, sent to myself",APPcelerate::L_WARNING);
 			$to[0]=$from;
 			$this->makeAlert("1",$id_process_instance,$id_activity_instance,"null",array("counterpart" => $counterpart[0]["nome"]." ".$counterpart[0]["cognome"]));
 		}
@@ -947,12 +945,14 @@ class BPME {
 
 	private function executeActivity($id_activity_instance) {
 		global $id_activity_instance_action;
-		$this->doLog("Requested with activty instance $id_activity_instance");
+
+		$this->doLog("Requested with activty instance $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 
 		if(!$this->getActivityInstanceVisibility($id_activity_instance)) {
+			$this->doLog("NO VISIBILITY for activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 			return;
 		}
 
@@ -968,7 +968,7 @@ class BPME {
 	}
 
 	private function testActivity($activity,$process_data=array(),$context="") {
-		$this->doLog("Requested with activty $activity");
+		$this->doLog("Requested with activty $activity",APPcelerate::L_DEBUG);
 
 		$id_activity=$this->getActivityIDFromActivityCode($activity);
 
@@ -988,7 +988,7 @@ class BPME {
 
 		$visible=$this->getActivityInstanceVisibility($id_activity_instance);
 
-		$this->doLog("Requested with activty instance $id_activity_instance");
+		$this->doLog("Requested with activty instance $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
@@ -1049,7 +1049,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1062,7 +1062,7 @@ class BPME {
 
 			if (!empty($r["entry_condition"])) {
 				list($evaluation,$ok)=$this->checkActionCondition($id_activity_instance_from,$id_action,$r["entry_condition"]);
-				$this->doLog("Condition evaluation returned with evaluation='$evaluation' and ok=".(($ok) ? 'true' : 'false'));
+				$this->doLog("Condition evaluation returned with evaluation='$evaluation' and ok=".(($ok) ? 'true' : 'false'),APPcelerate::L_DEBUG);
 				$sql="update action_instances set entry_condition_evaluation='$evaluation' where id=$id_action_instance";
 				$rs1=$this->db->query($sql);
 				try {
@@ -1070,7 +1070,7 @@ class BPME {
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
-					$this->doLog("$sql ( $msg )");
+					$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 					throw new Exception("Query Error", 0);
 				}
 				if (!$ok) {
@@ -1111,7 +1111,7 @@ class BPME {
 	}
 
 	private function checkActionCondition($id_activity_instance,$id_action,$condition) {
-		$this->doLog("Requested with $id_activity_instance $id_action $condition");
+		$this->doLog("Requested with $id_activity_instance $id_action $condition",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_action_instance not valid", 0);
@@ -1134,7 +1134,7 @@ class BPME {
 	private function executeAction($id_action_instance,$ui=false) {
 		global $id_activity_instance_closing;
 
-		$this->doLog("Requested with action instance $id_action_instance and ui $ui");
+		$this->doLog("Requested with action instance $id_action_instance and ui $ui",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
 			throw new Exception("Action instance id $id_action_instance not valid", 0);
@@ -1147,7 +1147,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$id_activity_instance_from=$rs->fetch_array(MYSQLI_NUM)[0];
@@ -1162,7 +1162,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1180,7 +1180,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1194,7 +1194,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1213,7 +1213,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1233,7 +1233,7 @@ class BPME {
 	}
 
 	private function getActivityInstanceWaitingInActions($id_activity_instance) {
-		$this->doLog("Requested with activity instance $id_activity_instance");
+		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
@@ -1246,7 +1246,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1254,7 +1254,7 @@ class BPME {
 	}
 
 	private function setActivityInstanceVisibility($id_activity_instance,$visible=true) {
-		$this->doLog("Requested with activity instance $id_activity_instance");
+		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
@@ -1267,13 +1267,13 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}		
 	}
 
 	private function getActivityInstanceVisibility($id_activity_instance) {
-		$this->doLog("Requested with activity instance $id_activity_instance");
+		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
@@ -1286,7 +1286,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1294,7 +1294,7 @@ class BPME {
 	}
 
 	private function getAvailableActivities($uid=0,$id_process_instance=0) {
-		$this->doLog("Requested with uid $uid and process instance $id_process_instance");
+		$this->doLog("Requested with uid $uid and process instance $id_process_instance",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($uid) and !is_int($uid)) {
 			throw new Exception("User id $uid not valid", 0);
@@ -1328,7 +1328,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1336,7 +1336,7 @@ class BPME {
 	}
 
 	private function getCurrentUID($id_activity_instance=0) {
-		$this->doLog("Requested with Activity instance id $id_activity_instance");
+		$this->doLog("Requested with Activity instance id $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
@@ -1363,7 +1363,7 @@ class BPME {
 	}
 
 	private function getActivityInstanceAssignedActor($id_activity_instance) {
-		$this->doLog("Requested with Activity instance id  $id_activity_instance");
+		$this->doLog("Requested with Activity instance id  $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
@@ -1374,7 +1374,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		$id=$rs->fetch_array(MYSQLI_NUM)[0];
@@ -1387,7 +1387,7 @@ class BPME {
 	}
 
 	private function getActivityInstanceCreatedUser($id_activity_instance) {
-		$this->doLog("Requested with Activity instance id $id_activity_instance");
+		$this->doLog("Requested with Activity instance id $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
@@ -1398,20 +1398,20 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getActivityID($process_code,$activity_code) {
-		$this->doLog("Requested with process_code $process_code and activity_code $activity_code");
+		$this->doLog("Requested with process_code $process_code and activity_code $activity_code",APPcelerate::L_DEBUG);
 
 		$sql="select id from processes where code='$process_code'";
 		$rs=$this->db->query($sql);
 		if ($rs->num_rows===0) {
 			throw new Exception("Process $code not found", 0);
-			$this->doLog("Process $code not found");
+			$this->doLog("Process $code not found",APPcelerate::L_ERROR);
 		}
 		$id_process=$rs->fetch_array(MYSQLI_NUM)[0];
 
@@ -1422,7 +1422,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
@@ -1585,7 +1585,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )");
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 
@@ -1605,7 +1605,7 @@ class BPME {
 	}
 
 	public function bpmeTBS($function,$params) {
-		$this->doLog("Requested with function $function and params ".print_r($params,true));
+		$this->doLog("Requested with function $function and params ".print_r($params,true),APPcelerate::L_DEBUG);
 		switch($function) {
 			case 'processNameFromProcessInstance':
 				return($this->getProcessNameFromProcessInstance($params["id"]));
@@ -1644,7 +1644,7 @@ class BPME {
 			}
 			catch (Exception $e) {
 				$msg=$e->getMessage();
-				$this->doLog("Sql Error | $sql | $msg");
+				$this->doLog("Sql Error | $sql | $msg",APPcelerate::L_ERROR);
 				throw new Exception("Query Error", 0);
 			}
 			$process_instance=$rs->fetch_array(MYSQLI_ASSOC);
@@ -1662,7 +1662,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("Sql Error | $sql | $msg");
+			$this->doLog("Sql Error | $sql | $msg",APPcelerate::L_ERROR;
 			throw new Exception("Query Error", 0);
 		}
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
@@ -1700,7 +1700,7 @@ class BPME {
 				}
 				catch (Exception $e) {
 					$msg=$e->getMessage();
-					$this->doLog("Sql Error | $sql | $msg");
+					$this->doLog("Sql Error | $sql | $msg",APPcelerate::L_ERROR);
 					throw new Exception("Query Error", 0);
 				}
 
@@ -1719,7 +1719,7 @@ class BPME {
 					}
 					catch (Exception $e) {
 						$msg=$e->getMessage();
-						$this->doLog("Sql Error | $sql | $msg");
+						$this->doLog("Sql Error | $sql | $msg",APPcelerate::L_ERROR);
 						throw new Exception("Query Error", 0);
 					}
 					if ($rs1->num_rows==0) {
@@ -1738,7 +1738,7 @@ class BPME {
 					}
 					catch (Exception $e) {
 						$msg=$e->getMessage();
-						$this->doLog("Sql Error | $sql | $msg");
+						$this->doLog("Sql Error | $sql | $msg",APPcelerate::L_ERROR);
 						throw new Exception("Query Error", 0);
 					}
 					$nome=$rs1->fetch_array(MYSQLI_NUM)[0];
@@ -1772,7 +1772,7 @@ class BPME {
 		}
 		catch (Exception $e) {
 			$msg=$e->getMessage();
-			$this->doLog("Sql Error | $sql | $msg");
+			$this->doLog("Sql Error | $sql | $msg",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
@@ -1796,7 +1796,7 @@ class BPME {
 	}
 
 	public function engine($function,$params) {
-		$this->doLog("Requested with function $function and params ".print_r($params,true));
+		$this->doLog("Requested with function $function and params ".print_r($params,true),APPcelerate::L_DEBUG);
 
 		switch($function) {
 			case 'getCases':
