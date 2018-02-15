@@ -844,6 +844,8 @@ class BPME {
 	private function executeCounterpartActivity($id_activity_instance) {
 		$this->doLog("Requested with activty instance  $id_activity_instance");
 
+		xdebug_break();
+
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
