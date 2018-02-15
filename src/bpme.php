@@ -723,13 +723,18 @@ class BPME {
 	}
 
 	private function executeActivityInstanceOpenCode($id_activity_instance) {
+		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!$this->getActivityInstanceVisibility($id_activity_instance)) {
+			$this->doLog("Activity instance $id_activity_instance not visible, returning",APPcelerate::L_DEBUG);
 			return;
 		}
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 		$opening_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_OPEN.php";
 		if (stream_resolve_include_path($opening_script)) {
 			include($opening_script);
+		}
+		else {
+			$this->doLog("Cannot open $opening_script",APPcelerate::L_ERROR);
 		}
 	}
 
@@ -1239,7 +1244,7 @@ class BPME {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 
-		$sql="select count(*) from action_instances where id_activity_instance_to=$id_activity_instance and date_executed is not null";
+		$sql="select count(*) from action_instances where id_activity_instance_to=$id_activity_instance and date_executed is null";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
