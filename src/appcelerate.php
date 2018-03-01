@@ -576,7 +576,7 @@ class APPcelerate {
 					$c='
 		<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 					';
-					if ($this->app["bootstrap"]==3 or !array_key_exists("bootstrap", $this->app) or empty($this->app["bootstrap"]==3)) {
+					if ($this->app["bootstrap"]==3 or !array_key_exists("bootstrap", $this->app) or empty($this->app["bootstrap"])) {
 						$c.='
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
