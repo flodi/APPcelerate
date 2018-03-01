@@ -696,7 +696,7 @@ class APPcelerate {
     <body>
         <h1>Error: you tried to to something that it is not allowed</h1>
         <h2>You'll be redirected to home page in 5 seconds...</h2>
-        <i>Info: ".$actual_link."</i>
+        <i>Info:<br>".$actual_link."<br>".$_SERVER["SERVER_NAME"]."<br>".$_SERVER["DOCUMENT_ROOT"]."</i>
     </body>
 </html>";
 			header("Location: ".$this->app["base_url"]."/");
