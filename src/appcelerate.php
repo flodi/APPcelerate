@@ -685,7 +685,8 @@ class APPcelerate {
 	}
 
 	public function errRoute($redir=true) {
-		$this->doLog("Route Error, restarting ".$_SERVER["REQUEST_URI"],APPcelerate::L_ERROR);
+		$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+		$this->doLog("Route Error, restarting $actual_link",APPcelerate::L_ERROR);
 		if ($redir) {
 			echo "
 <html>
@@ -695,6 +696,7 @@ class APPcelerate {
     <body>
         <h1>Error: you tried to to something that it is not allowed</h1>
         <h2>You'll be redirected to home page in 5 seconds...</h2>
+        <i>Info: ".$actual_link."</i>
     </body>
 </html>";
 			header("Location: ".$this->app["base_url"]."/");
