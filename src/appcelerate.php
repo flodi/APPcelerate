@@ -144,6 +144,12 @@ class APPcelerate {
 		$this->app["bootstrap"]=getenv('BOOTSTRAP_VERSION');
 		$this->app["fontawesome"]=getenv('FONTAWESOME_VERSION');
 
+		$this->app["envlevel"]=getenv('ENVLEVEL');
+		if (empty($this->app["envlevel"])) {
+			$this->app["envlevel"]="DEVELOPMENT";
+		}
+
+
 		#Default template folders
 		foreach ($this->app["apps"] as $app_name) {
 			$app_path=$base_path."/apps/$app_name";
