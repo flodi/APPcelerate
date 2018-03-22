@@ -930,19 +930,13 @@ class BPME {
 		}
 
 		$cc=array();
-		if (array_key_exists("email_aziendale",$counterpart[0]) and !empty($counterpart[0]["email_aziendale"])) {
+/*		if (array_key_exists("email_aziendale",$counterpart[0]) and !empty($counterpart[0]["email_aziendale"])) {
 			$cc[]=$counterpart[0]["email_aziendale"];
 		}
 		if (array_key_exists("email_personale",$counterpart[0]) and !empty($counterpart[0]["email_personale"])) {
 			$cc[]=$counterpart[0]["email_personale"];
 		}
-
-// TO REMOVE <====================================================
-//$to=array("flodi@e-scientia.eu");
-//$cc=array();
-//$bcc=array();
-// TO REMOVE <====================================================
-
+*/
 		$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$cc,$bcc);
 		$this->assignActivity($id_activity_instance,$id_counterpart);
 
