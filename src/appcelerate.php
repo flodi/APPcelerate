@@ -326,6 +326,111 @@ class APPcelerate {
 				// Inserisco i valori campo per campo
 				foreach ($excel as $i => $name) {
 					if (array_key_exists($i, $r)) {
+						$sql="update $tmptable set `$name`='".$this->app["db_".$this->app["name"]]->escape_string(trim($r[$i],"_"))."' where mytmpid=$id";
+						$rs=$this->app["db_".$this->app["name"]]->query($sql);
+						$err=$this->ISsqlError($rs,$sql);
+						if ($err) {
+							throw new Exception("SQL Error $err");
+						}
+					}
+				}
+			}
+		}
+
+		return ($tmptable);
+
+	}
+
+	public function excel2Table_2($file,$columns,$addcolumns,$temporary=true) {
+		$tmptable="import_ospiti_".str_replace(" ","",str_replace(".","",microtime()));
+
+		if ($temporary) {
+			$sql="CREATE TEMPORARY TABLE $tmptable (mytmpid INT NOT NULL AUTO_INCREMENT,";
+		}
+		else {
+			$sql="CREATE TABLE $tmptable (mytmpid INT NOT NULL AUTO_INCREMENT,";
+		}
+		foreach ($columns as $key => $value) {
+			$sql.="`$value` text,";
+		}
+		foreach ($addcolumns as $value) {
+			$sql.="`$value` text,";
+		}
+		$sql.="PRIMARY KEY (mytmpid));";
+		$rs=$this->app["db_".$this->app["name"]]->query($sql);
+		$this->sqlError($rs,$sql);
+
+
+		$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+		$reader->setReadDataOnly(true);
+		$reader->setLoadSheetsOnly(["OSPITI"]);
+			
+		try {
+			$x = $reader->load($file);
+		}
+		catch (Exception $e) {
+			throw new Exception($e->getMessage());
+		}
+
+		$first=true;
+		foreach ($x as $r) {
+			// Se è la prima riga, controllo che ci siano tutte le intestazioni corrette
+			if ($first) {
+
+				$first=false;
+				$excel=array();
+				$missings=array();
+
+				foreach ($columns as $excel_field => $table_field) {
+					$found=false;
+					foreach ($r as $excel_field_no => $excel_field_name) {
+						if ($excel_field===$excel_field_name) {
+							$excel[$excel_field_no]=$table_field;
+							$found=true;
+							break;
+						}
+					}
+
+					if (!$found) {
+						$missings[]=$excel_field;
+					}
+
+				}
+
+				if (count($missings)!=0) {
+					throw new Exception("Missing columns: ".implode(",",$missings));
+				}
+			}
+			// Se non è la prima riga, scrivo i dati
+			else {
+
+				// Skip empty rows
+				$empty=0;
+				foreach ($r as $key => $value) {
+					if (empty($value)) {
+						// Conto i campi vuoti per vedere se è una riga vuota
+						$empty++;
+					}
+				}
+				// Se è una riga vuota la salto
+				if ($empty==count(array_keys($r))) {
+					break;
+				}
+
+				// Inserisco una riga vuota
+				$sql="insert into $tmptable (mytmpid) values (NULL)";
+				$rs=$this->app["db_".$this->app["name"]]->query($sql);
+				$err=$this->ISsqlError($rs,$sql);
+				if ($err) {
+					throw new Exception("SQL Error $err");
+				}
+
+				// Recuper l'ID della riga
+				$id=$this->app["db_".$this->app["name"]]->insert_id;
+
+				// Inserisco i valori campo per campo
+				foreach ($excel as $i => $name) {
+					if (array_key_exists($i, $r)) {
 						$sql="update $tmptable set `$name`='".$this->app["db_".$this->app["name"]]->escape_string($r[$i])."' where mytmpid=$id";
 						$rs=$this->app["db_".$this->app["name"]]->query($sql);
 						$err=$this->ISsqlError($rs,$sql);
