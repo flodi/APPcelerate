@@ -19,10 +19,6 @@ jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
           );
         }
       });
-      if (selectSingleMatch === true && 
-          $(select).children().length === 1) {
-        $(select).children().get(0).selected = true;
-      }
     });
   });
 };
