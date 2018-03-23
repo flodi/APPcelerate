@@ -995,7 +995,7 @@ class BPME {
 		$this->executeActivityInstanceOpenCode($id_activity_instance);
 
 		if($this->getActivityTypeFromActivityInstance($id_activity_instance)==="U") {
-			$this->assignActivity($id_activity_instance,$this->getCurrentUID($id_activity_instance));
+			$this->assignActivity($id_activity_instance,$this->getCurrentUID());
 		}
 
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
@@ -1554,7 +1554,7 @@ class BPME {
 
 	private function getCases($uid) {
 		global $id_cliente;
-		
+
 		if (!is_numeric($uid) and !is_int($uid)) {
 			throw new Exception("Uid $uid not valid", 0);
 		}
