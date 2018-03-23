@@ -994,8 +994,8 @@ class BPME {
 
 		$this->executeActivityInstanceOpenCode($id_activity_instance);
 
-		if($this->getActivityTypeFromActivityInstance($id_activity_instance)==("U")) {
-			$this->assignActivity($id_activity_instance,$this->getCurrentUID());
+		if($this->getActivityTypeFromActivityInstance($id_activity_instance)==="U") {
+			$this->assignActivity($id_activity_instance,$this->getCurrentUID($id_activity_instance));
 		}
 
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
