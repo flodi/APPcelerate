@@ -1553,6 +1553,8 @@ class BPME {
 	}
 
 	private function getCases($uid) {
+		global $id_cliente;
+		
 		if (!is_numeric($uid) and !is_int($uid)) {
 			throw new Exception("Uid $uid not valid", 0);
 		}
@@ -1568,16 +1570,15 @@ class BPME {
 				process_instances.data as data,
 				process_instances.id as caseid
 			from
-			activity_instances
-				join activities on activity_instances.id_activity=activities.id
-				join processes on activity_instances.id_process=processes.id
-				join process_instances on activity_instances.id_process_instance=process_instances.id
+				process_instances
+					join processes on process_instances.id_process=processes.id
+					join partecipanti on process_instances.id_counterpart=partecipanti.id
+					join ospiti on partecipanti.id_ospite=ospiti.id
+					join activity_instances on process_instances.id=activity_instances.id_process_instance
+					join activities on activity_instances.id_activity=activities.id
 			where
-				(activity_instances.id_actor_assigned=$uid or activity_instances.id_actor_assigned is null) and
-				activity_instances.date_completed is null and
-				activities.activity_type in ('U') and
-				activity_instances.visible=true
-		";
+				ospiti.id_cliente=$id_cliente
+				and (activity_instances.id_actor_assigned=$uid or id_actor_assigned is null)		";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
