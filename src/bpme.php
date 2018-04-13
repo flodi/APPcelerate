@@ -905,9 +905,7 @@ class BPME {
 			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
-		$r=$rs->fetch_array(MYSQLI_NUM);
-
-		$mitt=$r[0]." (".$r[1]." - ".$data[0]["_mail_mitt"].")";
+		$mitt=$rs->fetch_array(MYSQLI_ASSOC);
 
 		$TBSC->MergeField("mitt","$mitt");
 
