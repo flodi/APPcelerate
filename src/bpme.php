@@ -907,7 +907,7 @@ class BPME {
 		}
 		$mitt=$rs->fetch_array(MYSQLI_ASSOC);
 
-		$TBSC->MergeField("mitt","$mitt");
+		$TBSC->MergeField("mitt",$mitt);
 
 		$TBSC->Show(TBS_NOTHING);
 		$mail=$TBSC->Source;
