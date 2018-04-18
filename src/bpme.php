@@ -722,6 +722,28 @@ class BPME {
 		return($id_activity_instance);
 	}
 
+	private funcion setProcessAlarm($id_process_instance, $id_activity_instance, $alarm_data, $severity=3) {
+		$this->doLog("Requested with process instance $id_process_instance and activity instance $id_activity_instance and data $alarm_data",APPcelerate::L_DEBUG);
+		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
+			throw new Exception("Process instance id $id_process_instance not valid", 0);
+		}
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$sql="insert into alarm (id_process_instance,id_activity_instance,specific_data,severity) values ($id_process_instance, $id_activity_instance, '$alarm_data', $severity)";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+
+	}
+
 	private function executeActivityInstanceOpenCode($id_activity_instance) {
 		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!$this->getActivityInstanceVisibility($id_activity_instance)) {
