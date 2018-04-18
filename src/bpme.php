@@ -56,20 +56,6 @@ class BPME {
 
 	}
 
-	private function makeAlert($severity,$id_process_instance,$id_activity_instance='null',$id_action_instance='null',$data=array()) {
-		$data=json_encode($data);
-		$sql=sprintf("insert into alerts (severity,id_process_instance,id_activity_instance,id_action_instance,specific_data) values ('%s',%d,%s,%s,'%s')",$severity,$id_process_instance,$id_activity_instance,$id_action_instance,$data);
-		$rs=$this->db->query($sql);
-		try {
-			$this->rsCheck($rs);
-		}
-		catch (Exception $e) {
-			$msg=$e->getMessage();
-			$this->doLog("Error creating alert | $sql | $msg",APPcelerate::L_ERROR);
-			throw new Exception("Query Error: $sql", 0);
-		}
-	}
-
 	private function getAlerts() {
 		$sql="select * from alerts where alert_done=false order by severity desc";
 		$rs=$this->db->query($sql);
@@ -88,7 +74,6 @@ class BPME {
 			$alerts[$i]["local_data"]=json_decode($r["specific_data"],true);
 			$alerts[$i]["id_process_instance"]=$r["id_process_instance"];
 			$alerts[$i]["id_activity_instance"]=$r["id_activity_instance"];
-			$alerts[$i]["id_action_instance"]=$r["id_action_instance"];
 			if (array_key_exists("id_process_instance", $r) and !empty($r["id_process_instance"])) {
 				$alerts[$i]["processo"]=$this->getProcessNameFromProcessInstance($r["id_process_instance"]);
 			}
@@ -100,12 +85,6 @@ class BPME {
 			}
 			else {
 				$alerts[$i]["activity"]="";
-			}
-			if (array_key_exists("id_action_instance", $r) and !empty($r["id_action_instance"])) {
-				$alerts[$i]["action"]=$this->getActionNameFromActionInstance($r["id_action_instance"]);
-			}
-			else {
-				$alerts[$i]["action"]="";
 			}
 			$i++;
 		}
@@ -722,7 +701,7 @@ class BPME {
 		return($id_activity_instance);
 	}
 
-	private function setProcessAlarm($id_process_instance, $id_activity_instance, $alarm_data, $severity=3) {
+	private function setProcessAlert($id_process_instance, $id_activity_instance, $alarm_data, $severity=3) {
 		$this->doLog("Requested with process instance $id_process_instance and activity instance $id_activity_instance and data $alarm_data",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
 			throw new Exception("Process instance id $id_process_instance not valid", 0);
@@ -946,7 +925,7 @@ class BPME {
 		if (empty($to)) {
 			$this->doLog("Counterpart with id ".$counterpart[0]["id"]." does not have any email, sent to myself",APPcelerate::L_WARNING);
 			$to[0]=$from;
-			$this->makeAlert("1",$id_process_instance,$id_activity_instance,"null",array("counterpart" => $counterpart[0]["nome"]." ".$counterpart[0]["cognome"]));
+			$this->setProcessAlert($id_process_instance,$id_activity_instance, $counterpart[0]["nome"]." ".$counterpart[0]["cognome"]." non ha un email");
 		}
 
 		$cc=array();
