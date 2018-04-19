@@ -710,7 +710,7 @@ class BPME {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 
-		$sql="insert into alarm (id_process_instance,id_activity_instance,specific_data,severity) values ($id_process_instance, $id_activity_instance, '$alarm_data', $severity)";
+		$sql="insert into alerts (id_process_instance,id_activity_instance,specific_data,severity) values ($id_process_instance, $id_activity_instance, '$alarm_data', $severity)";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
