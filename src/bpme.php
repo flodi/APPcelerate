@@ -70,6 +70,7 @@ class BPME {
 		$alerts=array();
 		$i=0;
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
+			$alerts[$i]["id"]=$r["id"];
 			$alerts[$i]["severity"]=json_decode($r["severity"],true);
 			$alerts[$i]["data"]=$r["specific_data"];
 			$alerts[$i]["id_process_instance"]=$r["id_process_instance"];
