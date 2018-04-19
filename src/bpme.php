@@ -701,6 +701,24 @@ class BPME {
 		return($id_activity_instance);
 	}
 
+	private function clearAlert($id_alert) {
+		$this->doLog("Requested with id alert $id_alert",APPcelerate::L_DEBUG);
+		if (!is_numeric($id_alert) and !is_int($id_alert)) {
+			throw new Exception("Alert id $id_alert not valid", 0);
+		}
+
+		$sql="update alerts set alert_done=1 where id=$id_alert";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}		
+	}
+
 	private function setProcessAlert($id_process_instance, $id_activity_instance, $alarm_data, $severity=3) {
 		$this->doLog("Requested with process instance $id_process_instance and activity instance $id_activity_instance and data $alarm_data",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
@@ -1890,6 +1908,9 @@ class BPME {
 			case 'getAlerts':
 				$alerts=$this->getAlerts();
 				return($alerts);
+				break;
+			case 'clearAlert':
+				$this->clearAlert($params["id"]);
 				break;
 			case 'getLastActivities':
 				$last=$this->getLastActivities();
