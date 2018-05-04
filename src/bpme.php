@@ -658,7 +658,7 @@ class BPME {
 		$uid=$this->getNextUID($id_activity_instance_prec,$id_activity);
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
-		if ($ui and $this->getActorType($uid)=='U') {
+		if ($ui and $this->getActorType($uid)==='U') {
 			$id_actor_assigned=$uid;
 		}
 		else {
@@ -1371,12 +1371,12 @@ class BPME {
 			throw new Exception("Activity instance prec id $id_activity_instance_prec not valid", 0);
 		}
 
-		$this->doLog("Requested with Activity instance prec id $id_activity_instance_prec",APPcelerate::L_DEBUG);
-		if (!is_numeric($id_activity_instance_prec) and !is_int($id_activity_instance_prec)) {
-			throw new Exception("Activity instance prec id $id_activity_instance_prec not valid", 0);
+		$this->doLog("Requested with Activity id $id_activity",APPcelerate::L_DEBUG);
+		if (!is_numeric($id_activity) and !is_int($id_activity)) {
+			throw new Exception("Activity id $id_activity not valid", 0);
 		}
 
-		$type=$this->getActivityInstanceType($id_activity_instance_prec);
+		$type=$this->getActivityType($id_activity);
 
 		if($type==='U') {
 			$pid=$this->getProcessInstanceFromActivityInstance($id_activity_instance_prec);
