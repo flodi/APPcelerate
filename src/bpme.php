@@ -1310,6 +1310,27 @@ class BPME {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
+	private function getActivityInstanceType($id_activity_instance) {
+		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
+
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$sql="select activity_type from activities where id=(select id_activity from activity_instances where id=$id_activity_instance)";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
 	private function getAvailableActivities($uid=0,$id_process_instance=0) {
 		$this->doLog("Requested with uid $uid and process instance $id_process_instance",APPcelerate::L_DEBUG);
 
@@ -1367,16 +1388,43 @@ class BPME {
 			}
 		}
 		else {
+
+			$type=getActivityInstanceType($id_activity_instance);
+
 			$uid=$this->getActivityInstanceAssignedActor($id_activity_instance);
 			if ($uid!=-1) {
 				return($uid);
 			}
 			else {
-				$uid=$this->getActivityInstanceCreatedUser($id_activity_instance);
+				if ($type=='C') {
+					$uid=$this->getActivityInstanceCreatedUser($id_activity_instance);
+				}
+				else {
+					$pid=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
+					$uid=$this->getProcessInstanceCreatedUser($id_activity_instance);
+				}
 				return($uid);
 			}
 		}
 
+	}
+
+	private function getProcessInstanceCreatedUser($id_process_instance) {
+		$this->doLog("Requested with Process instance id $id_process_instance",APPcelerate::L_DEBUG);
+		if (!is_numeric($id_process_instance) and !is_int($id_process_instance)) {
+			throw new Exception("Process instance id $id_process_instance not valid", 0);
+		}
+		$sql="select id_actor_created from process_instances where id=$id_process_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
 	private function getActivityInstanceAssignedActor($id_activity_instance) {
