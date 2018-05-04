@@ -1380,7 +1380,7 @@ class BPME {
 
 		if($type==='U') {
 			$pid=$this->getProcessInstanceFromActivityInstance($id_activity_instance_prec);
-			$uid=$this->getProcessInstanceCreatedUser($id_activity_instance_prec);
+			$uid=$this->getProcessInstanceCreatedUser($pid);
 		}
 		else {
 			if (array_key_exists("uid",$this->fw->app)) {
