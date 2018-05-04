@@ -655,15 +655,7 @@ class BPME {
 			throw new Exception("Activity id $id_activity not valid", 0);
 		}
 
-		if ($ui) {
-			$uid=$this->getCurrentUID();
-			if (!$uid or $uid==0) {
-				$uid=$this->getActivityInstanceAssignedActor($id_activity_instance_prec);
-			}
-		}
-		else {
-			$uid=$this->getCurrentUID($id_activity_instance_prec);
-		}
+		$uid=$this->getNextUID($id_activity_instance_prec,$id_activity);
 
 		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
 		if ($ui and $this->getActorType($uid)=='U') {
@@ -1373,6 +1365,36 @@ class BPME {
 		return($this->fw->fetchAllAssoc($rs));
 	}
 
+	private function getNextUID($id_activity_instance_prec,$id_activity) {
+		$this->doLog("Requested with Activity instance prec id $id_activity_instance_prec",APPcelerate::L_DEBUG);
+		if (!is_numeric($id_activity_instance_prec) and !is_int($id_activity_instance_prec)) {
+			throw new Exception("Activity instance prec id $id_activity_instance_prec not valid", 0);
+		}
+
+		$this->doLog("Requested with Activity instance prec id $id_activity_instance_prec",APPcelerate::L_DEBUG);
+		if (!is_numeric($id_activity_instance_prec) and !is_int($id_activity_instance_prec)) {
+			throw new Exception("Activity instance prec id $id_activity_instance_prec not valid", 0);
+		}
+
+		$type=getActivityInstanceType($id_activity_instance_prec);
+
+		if($type==='U') {
+			$pid=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
+			$uid=$this->getProcessInstanceCreatedUser($id_activity_instance);
+		}
+		else {
+			if (array_key_exists("uid",$this->fw->app)) {
+				$uid=$this->fw->app["uid"];
+			}
+			else {
+				$uid=$this->getCurrentUID($id_activity_instance_prec);
+			}
+		}
+
+		return($uid);
+
+	}
+
 	private function getCurrentUID($id_activity_instance=0) {
 		$this->doLog("Requested with Activity instance id $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
@@ -1389,20 +1411,12 @@ class BPME {
 		}
 		else {
 
-			$type=getActivityInstanceType($id_activity_instance);
-
 			$uid=$this->getActivityInstanceAssignedActor($id_activity_instance);
 			if ($uid!=-1) {
 				return($uid);
 			}
 			else {
-				if ($type=='C') {
-					$uid=$this->getActivityInstanceCreatedUser($id_activity_instance);
-				}
-				else {
-					$pid=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
-					$uid=$this->getProcessInstanceCreatedUser($id_activity_instance);
-				}
+				$uid=$this->getActivityInstanceCreatedUser($id_activity_instance);
 				return($uid);
 			}
 		}
