@@ -1379,7 +1379,7 @@ class BPME {
 		$type=$this->getActivityInstanceType($id_activity_instance_prec);
 
 		if($type==='U') {
-			$pid=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
+			$pid=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 			$uid=$this->getProcessInstanceCreatedUser($id_activity_instance);
 		}
 		else {
