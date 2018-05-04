@@ -1376,7 +1376,7 @@ class BPME {
 			throw new Exception("Activity instance prec id $id_activity_instance_prec not valid", 0);
 		}
 
-		$type=getActivityInstanceType($id_activity_instance_prec);
+		$type=$this->getActivityInstanceType($id_activity_instance_prec);
 
 		if($type==='U') {
 			$pid=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
