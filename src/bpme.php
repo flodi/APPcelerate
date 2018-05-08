@@ -162,7 +162,6 @@ class BPME {
 			throw new Exception("Cannot create process ($msg)", 0);
 		}
 
-
 		$id_activity_instance=$this->createActivityInstance(0,$id_process_instance,$id_activity,$ui);
 
 		$this->dispatchActivity($id_activity_instance,$ui);
@@ -1235,7 +1234,7 @@ class BPME {
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_from);
 
 		//Concludo l'activity precedente ed eseguo closing script, se non era già conclusa
-		$sql="select id from activity_instances where date_completed is not null and id_actor_completed is not null and id=$id_activity_instance_from";
+		$sql="select id from activity_instances where date_completed is not null and id_actor_completed is null and id=$id_activity_instance_from";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
