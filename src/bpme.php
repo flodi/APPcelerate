@@ -1083,6 +1083,7 @@ class BPME {
 					throw new Exception("Query Error", 0);
 				}
 				if (!$ok) {
+					$this->negateBranch($id_action_instance);
 					continue;
 				}
 			}
@@ -1140,6 +1141,76 @@ class BPME {
 		return(array($confirm,$r));
 	}
 
+	private function negateBranch($id_action_instance) {
+		$this->doLog("Requested with action instance $id_action_instance and ui $ui",APPcelerate::L_DEBUG);
+
+		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
+			throw new Exception("Action instance id $id_action_instance not valid", 0);
+		}
+
+		$sql="select id_activity_instance_from,id_action from action_instances where id=$id_action_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+		list($id_activity_instance_from,$id_action)=$rs->fetch_array(MYSQLI_NUM);
+
+		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance_from);
+
+		$sql="select id_activity_to from actions where id=$id_action";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+		$id_activity_to=$rs->fetch_array(MYSQLI_NUM)[0];
+
+		$id_activity_instance_to=$this->createActivityInstance($id_activity_instance_from,$id_process_instance,$id_activity_to);
+
+		$sql="update action_instances set followed=0, id_actor_executed=$id_actor, date_executed=now() where id=$id_action_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+
+		$sql="select id,id_activity_to from actions where id_activity_from=$id_activity_to and sync=0";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+		while ($r=$rs->fetch_aray(MYSQLI_NUM)) {
+			$id_action=$r[0];
+			$id_activity_from=$r[1];
+
+			$id_activity_instance_from=$this->createActivityInstance($id_activity_instance_to,$id_process_instance,$id_activity_from);
+
+			$id_action_instance=$this->createActionInstance($id_process_instance,$id_activity_instance_from,$id_action);
+
+			$this->negateBranch($id_action_instance);
+
+		}
+
+	}
+
 	private function executeAction($id_action_instance,$ui=false) {
 		global $id_activity_instance_closing;
 
@@ -1163,8 +1234,8 @@ class BPME {
 
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_from);
 
-		//Concludo l'activity precedente
-		$sql="update activity_instances set date_completed=now(), id_actor_completed=".$this->getCurrentUID($id_activity_instance_from)." where id=$id_activity_instance_from";
+		//Concludo l'activity precedente ed eseguo closing script, se non era già conclusa
+		$sql="select id from activity_instances where date_completed is not null and id_actor_completed is not null and id=$id_activity_instance_from";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1174,11 +1245,24 @@ class BPME {
 			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
+		if ($rs->num_rows>0) {
 
-		$id_activity_instance=$id_activity_instance_from;
-		$closing_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance_from)."_CLOSE.php";
-		if (stream_resolve_include_path($closing_script)) {
-			include($closing_script);
+			$sql="update activity_instances set date_completed=now(), id_actor_completed=".$this->getCurrentUID($id_activity_instance_from)." where id=$id_activity_instance_from";
+			$rs=$this->db->query($sql);
+			try {
+				$this->rsCheck($rs);
+			}
+			catch (Exception $e) {
+				$msg=$e->getMessage();
+				$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+				throw new Exception("Query Error", 0);
+			}
+
+			$closing_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance_from)."_CLOSE.php";
+			if (stream_resolve_include_path($closing_script)) {
+				include($closing_script);
+			}
+
 		}
 
 		//Definisco l'activity successiva
@@ -1192,24 +1276,7 @@ class BPME {
 			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
-
 		$id_activity_to=$rs->fetch_array(MYSQLI_NUM)[0];
-
-		//Cerco l'istanza di processo relativa
-		$sql="select id_activity_instance_from from action_instances where id=$id_action_instance";
-		$rs=$this->db->query($sql);
-		try {
-			$this->rsCheck($rs);
-		}
-		catch (Exception $e) {
-			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
-			throw new Exception("Query Error", 0);
-		}
-
-		$id_activity_instance=$rs->fetch_array(MYSQLI_NUM)[0];
-
-		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
 
 		//Creo l'istanza di activity di arrivo
 		$id_activity_instance_to=$this->createActivityInstance($id_activity_instance_from,$id_process_instance,$id_activity_to,$ui);
@@ -1226,7 +1293,8 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		if ($this->getActivityInstanceWaitingInActions($id_activity_instance_to)==0) {
+		// Se ci sono altre actions in attesa di essere eseguite, visibility = 0
+		if ($this->getActivityInstanceWaitingInActions($id_process_instance, $id_activity_instance_to)==0) {
 			$this->dispatchActivity($id_activity_instance_to,$ui);
 		}
 		else {
@@ -1241,14 +1309,16 @@ class BPME {
 
 	}
 
-	private function getActivityInstanceWaitingInActions($id_activity_instance) {
-		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
+	private function getActivityInstanceWaitingInActions($id_process_instance, $id_activity_instance_to) {
+		$this->doLog("Requested with activity instance to id $id_activity_instance_to",APPcelerate::L_DEBUG);
 
-		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
-			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		if (!is_numeric($id_activity_instance_to) and !is_int($id_activity_instance_to)) {
+			throw new Exception("Activity instance to id $id_activity_instance_to not valid", 0);
 		}
 
-		$sql="select count(*) from action_instances where id_activity_instance_to=$id_activity_instance and date_executed is null";
+		$id_activity=getActivityIDFromActivityCode(getActivityCodeFromActivityInstance($id_activity_instance_to));
+
+		$sql="select count(id) from actions where id_activity_to=$id_activity";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1258,8 +1328,21 @@ class BPME {
 			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
+		$n_expected=$rs->fetch_array(MYSQLI_NUM)[0];
 
-		return($rs->fetch_array(MYSQLI_NUM)[0]);
+		$sql="select count(action_instances.id) from actions join action_instances on actions.id=action_instances.id_action where actions.id_activity_to=$id_activity and action_instances.id_process_instance=$id_process_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+		$n_executed=$rs->fetch_array(MYSQLI_NUM)[0];
+
+		return($n_expected-$n_executed);
 	}
 
 	private function setActivityInstanceVisibility($id_activity_instance,$visible=true) {
