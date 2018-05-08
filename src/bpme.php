@@ -1741,8 +1741,9 @@ class BPME {
 					join activities on activity_instances.id_activity=activities.id
 			where
 				ospiti.id_cliente=$id_cliente
-				and (activity_instances.id_actor_assigned=$uid or id_actor_assigned is null)
+				and (activity_instances.id_actor_assigned=$uid or activity_instances.id_actor_assigned is null)
 				and activity_instances.date_completed is null
+				and activity_instances.visible=1
 		";
 		$rs=$this->db->query($sql);
 		try {
