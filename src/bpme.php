@@ -1316,7 +1316,7 @@ class BPME {
 			throw new Exception("Activity instance to id $id_activity_instance_to not valid", 0);
 		}
 
-		$id_activity=getActivityIDFromActivityCode(getActivityCodeFromActivityInstance($id_activity_instance_to));
+		$id_activity=$this->getActivityIDFromActivityCode(getActivityCodeFromActivityInstance($id_activity_instance_to));
 
 		$sql="select count(id) from actions where id_activity_to=$id_activity";
 		$rs=$this->db->query($sql);
