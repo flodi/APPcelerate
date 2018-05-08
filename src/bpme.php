@@ -1299,7 +1299,7 @@ class BPME {
 		}
 		else {
 			try {
-				$this->setActivityInstanceVisibility($id_activity_instance_to,false);
+				$this->setActivityInstanceVisibility($id_activity_instance_to,0);
 			}
 			catch (Exception $e) {
 				$this->doLog("Cannot set Activity Instance visibility for id '$id_activity_instance_to'",APPcelerate::L_ERROR);				 
@@ -1345,7 +1345,7 @@ class BPME {
 		return($n_expected-$n_executed);
 	}
 
-	private function setActivityInstanceVisibility($id_activity_instance,$visible=true) {
+	private function setActivityInstanceVisibility($id_activity_instance,$visible=1) {
 		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
