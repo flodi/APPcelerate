@@ -1216,6 +1216,8 @@ class BPME {
 
 		$id_activity_instance_to=$this->createActivityInstance($id_activity_instance_from,$id_process_instance,$id_activity_to);
 
+		$id_actor=$this->getCurrentUID($id_activity_instance_from);
+
 		$sql="update action_instances set followed=0, id_actor_executed=$id_actor, date_executed=now() where id=$id_action_instance";
 		$rs=$this->db->query($sql);
 		try {
