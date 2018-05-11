@@ -1258,6 +1258,9 @@ class BPME {
 				throw new Exception("Query Error", 0);
 			}
 
+			// Prepario variabile per _CLOSE script
+			$id_activity_instance=$id_activity_instance_from;
+
 			$closing_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance_from)."_CLOSE.php";
 			if (stream_resolve_include_path($closing_script)) {
 				include($closing_script);
@@ -1294,7 +1297,7 @@ class BPME {
 		}
 
 		// Se ci sono altre actions in attesa di essere eseguite, visibility = 0
-		if ($this->getActivityInstanceWaitingInActions($id_process_instance, $id_activity_instance_to)==0) {
+		if ($this->activityIsSync($id_activity_instance_to) and $this->getActivityInstanceWaitingInActions($id_process_instance, $id_activity_instance_to)==0) {
 			$this->dispatchActivity($id_activity_instance_to,$ui);
 		}
 		else {
@@ -1372,6 +1375,27 @@ class BPME {
 		}
 
 		$sql="select visible from activity_instances where id=$id_activity_instance";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
+	private function activityIsSync($id_activity_instance) {
+		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
+
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$sql="select sync from activities where id=(select id_activity from activity_instances where id=$id_activity_instance)";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
