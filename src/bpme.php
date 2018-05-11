@@ -1182,6 +1182,9 @@ class BPME {
 	}
 
 	private function negateBranch($id_action_instance,$ui=false) {
+
+		return;
+
 		$this->doLog("Requested with action instance $id_action_instance and ui $ui",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
@@ -1235,7 +1238,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		$sql="select id,id_activity_to from actions where id_activity_from=$id_activity_to";
+		$sql="select id,id_activity_to from actions where id_activity_from=$id_activity_to and id_activity_to not in (select id_activity from activity_instances where id_process_instance=$id_process_instance)";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -1251,7 +1254,7 @@ class BPME {
 
 			$id_activity_instance_from=$this->createActivityInstance($id_activity_instance_to,$id_process_instance,$id_activity_from);
 
-			$id_action_instance=$this->createActionInstance($id_process_instance,$id_activity_instance_from,$id_action);
+			$id_action_instance=$this->createActionInstance($id_process_instance,$id_activity_instance_from,$id_action,1);
 
 			$this->negateBranch($id_action_instance);
 
