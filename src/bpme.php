@@ -1245,7 +1245,7 @@ class BPME {
 			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
-		while ($r=$rs->fetch_aray(MYSQLI_NUM)) {
+		while ($r=$rs->fetch_array(MYSQLI_NUM)) {
 			$id_action=$r[0];
 			$id_activity_from=$r[1];
 
