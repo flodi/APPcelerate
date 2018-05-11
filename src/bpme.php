@@ -1082,8 +1082,11 @@ class BPME {
 					throw new Exception("Query Error", 0);
 				}
 				if (!$ok) {
-					$this->doLog("Condition failed, skipping branch",APPcelerate::L_DEBUG);
-					$this->negateBranch($id_action_instance);
+					$this->doLog("Condition failed, skipping",APPcelerate::L_DEBUG);
+					if ($this->isActionInstanceInBranch($id_action_instance)==1) {
+						$this->doLog("In branch, negating",APPcelerate::L_DEBUG);
+						$this->negateBranch($id_action_instance);
+					}
 					continue;
 				}
 			}
@@ -1141,7 +1144,7 @@ class BPME {
 		return(array($confirm,$r));
 	}
 
-	private function negateBranch($id_action_instance) {
+	private function negateBranch($id_action_instance,$ui=false) {
 		$this->doLog("Requested with action instance $id_action_instance and ui $ui",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
@@ -1297,7 +1300,7 @@ class BPME {
 		}
 
 		// Se ci sono altre actions in attesa di essere eseguite, visibility = 0
-		if ($this->activityIsSync($id_activity_instance_to)==0 or $this->getActivityInstanceWaitingInActions($id_process_instance, $id_activity_instance_to)==0) {
+		if ($this->isActivityInstanceSync($id_activity_instance_to)==0 or $this->getActivityInstanceWaitingInActions($id_process_instance, $id_activity_instance_to)==0) {
 			$this->dispatchActivity($id_activity_instance_to,$ui);
 		}
 		else {
@@ -1388,7 +1391,28 @@ class BPME {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
-	private function activityIsSync($id_activity_instance) {
+	private function isActionInstanceInBranch($id_action_instance) {
+		$this->doLog("Requested with action instance $id_action_instance",APPcelerate::L_DEBUG);
+
+		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
+			throw new Exception("Action instance id $id_action_instance not valid", 0);
+		}
+
+		$sql="select inbranch from action_instances where id=$id_action_instance)";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
+	private function isActivityInstanceSync($id_activity_instance) {
 		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
