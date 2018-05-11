@@ -1297,7 +1297,7 @@ class BPME {
 		}
 
 		// Se ci sono altre actions in attesa di essere eseguite, visibility = 0
-		if ($this->activityIsSync($id_activity_instance_to) and $this->getActivityInstanceWaitingInActions($id_process_instance, $id_activity_instance_to)==0) {
+		if ($this->activityIsSync($id_activity_instance_to)==0 or $this->getActivityInstanceWaitingInActions($id_process_instance, $id_activity_instance_to)==0) {
 			$this->dispatchActivity($id_activity_instance_to,$ui);
 		}
 		else {
