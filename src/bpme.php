@@ -1086,9 +1086,10 @@ class BPME {
 
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			$id_action=$r["id"];
-			$sync=$r["sync"];
 
 			$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_from);
+
+			$sync=$this->isActivitySync($this->getActivityIDFromActivityInstance($id_activity_instance_from));
 
 			$branch=$this->isActivityBranch($this->getActivityIDFromActivityInstance($id_activity_instance_from));
 
@@ -1430,6 +1431,27 @@ class BPME {
 		}
 
 		$sql="select branch from activities where id=$id_activity";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
+	private function isActivitySync($id_activity) {
+		$this->doLog("Requested with activity id $id_activity",APPcelerate::L_DEBUG);
+
+		if (!is_numeric($id_activity) and !is_int($id_activity)) {
+			throw new Exception("Activity instance id $id_activity not valid", 0);
+		}
+
+		$sql="select sync from activities where id=$id_activity";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
