@@ -1216,6 +1216,12 @@ class BPME {
 
 		$id_activity_instance_to=$this->createActivityInstance($id_activity_instance_from,$id_process_instance,$id_activity_to);
 
+		$sync=isActivitySync($id_activity_to);
+
+		if ($sync==1) {
+			return;
+		}
+
 		$id_actor=$this->getCurrentUID($id_activity_instance_from);
 
 		$sql="update action_instances set followed=0, id_actor_executed=$id_actor, date_executed=now() where id=$id_action_instance";
@@ -1229,7 +1235,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		$sql="select id,id_activity_to from actions where id_activity_from=$id_activity_to and sync=0";
+		$sql="select id,id_activity_to from actions where id_activity_from=$id_activity_to";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
