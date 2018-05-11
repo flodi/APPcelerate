@@ -585,7 +585,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 		if ($rs->num_rows==0) {
-			$sql="select id from actions where action_type='S'";
+			return(-1);
 		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 
@@ -1098,7 +1098,9 @@ class BPME {
 
 			if ($branch==0 and $sync==0) {
 				$id_action_instance_prec=$this->getActionInstanceIDFromActivityInstanceTo($id_activity_instance_from);
-				$branch=$this->isActionInstanceInBranch($id_action_instance_prec);
+				if ($id_activity_instance_prec<>-1) {
+					$branch=$this->isActionInstanceInBranch($id_action_instance_prec);
+				}
 			}
 
 			$id_action_instance=$this->createActionInstance($id_process_instance,$id_activity_instance_from,$id_action,$branch);
