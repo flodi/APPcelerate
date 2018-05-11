@@ -1086,10 +1086,11 @@ class BPME {
 
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			$id_action=$r["id"];
-			$branch=$r["branch"];
 			$sync=$r["sync"];
 
 			$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_from);
+
+			$branch=$this->isActivityBranch($this->getActivityIDFromActivityInstance($id_activity_instance_from));
 
 			if ($branch==0 and $sync==0) {
 				$id_action_instance_prec=$this->getActionInstanceIDFromActivityInstanceTo($id_activity_instance_from);
@@ -1421,6 +1422,27 @@ class BPME {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
+	private isActivityBranch($id_activity) {
+		$this->doLog("Requested with activity id $id_activity",APPcelerate::L_DEBUG);
+
+		if (!is_numeric($id_activity) and !is_int($id_activity)) {
+			throw new Exception("Activity instance id $id_activity not valid", 0);
+		}
+
+		$sql="select branch from activities where id=$id_activity";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
 	private function isActionInstanceInBranch($id_action_instance) {
 		$this->doLog("Requested with action instance $id_action_instance",APPcelerate::L_DEBUG);
 
@@ -1698,6 +1720,16 @@ class BPME {
 
 	public function getActivityIDFromActivityCode($activity) {
 		$sql="select id from activities where code='$activity'";
+		$rs=$this->db->query($sql);
+		if ($rs->num_rows===0) {
+			throw new Exception("Activity id $id_activity not found", 0);
+		}
+
+		return ($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
+	public function getActivityIDFromActivityInstance($id_activity_instance_from) {
+		$sql="select id_activity from activity_instances where id='$activity'";
 		$rs=$this->db->query($sql);
 		if ($rs->num_rows===0) {
 			throw new Exception("Activity id $id_activity not found", 0);
