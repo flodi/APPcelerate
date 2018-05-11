@@ -1216,7 +1216,7 @@ class BPME {
 
 		$id_activity_instance_to=$this->createActivityInstance($id_activity_instance_from,$id_process_instance,$id_activity_to);
 
-		$sync=isActivitySync($id_activity_to);
+		$sync=$this->isActivitySync($id_activity_to);
 
 		if ($sync==1) {
 			return;
