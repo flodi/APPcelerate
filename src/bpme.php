@@ -571,7 +571,7 @@ class BPME {
 			throw new Exception("Activity instance id $id_activity_instance_to not valid", 0);
 		}
 
-		$id_process_instance=getProcessInstanceIDFromActivityInstanceID($id_activity_instance_to);
+		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance_to);
 
 		$sql="select id from action_instances where id_process_instance=$id_process_instance and id_activity_instance_to=$id_activity_instance_to order by id asc limit 1";
 
