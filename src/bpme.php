@@ -584,6 +584,9 @@ class BPME {
 			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
+		if ($rs->num_rows==0) {
+			$sql="select id from actions where action_type='S'";
+		}
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 
 	}
