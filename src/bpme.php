@@ -1398,7 +1398,7 @@ class BPME {
 			throw new Exception("Action instance id $id_action_instance not valid", 0);
 		}
 
-		$sql="select inbranch from action_instances where id=$id_action_instance)";
+		$sql="select inbranch from action_instances where id=$id_action_instance";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
