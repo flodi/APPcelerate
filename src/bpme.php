@@ -1422,7 +1422,7 @@ class BPME {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
-	private isActivityBranch($id_activity) {
+	private function isActivityBranch($id_activity) {
 		$this->doLog("Requested with activity id $id_activity",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_activity) and !is_int($id_activity)) {
