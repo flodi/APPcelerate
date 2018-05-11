@@ -1082,6 +1082,7 @@ class BPME {
 					throw new Exception("Query Error", 0);
 				}
 				if (!$ok) {
+					$this->doLog("Condition failed, skipping branch"),APPcelerate::L_DEBUG);
 					$this->negateBranch($id_action_instance);
 					continue;
 				}
@@ -1234,7 +1235,7 @@ class BPME {
 		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_from);
 
 		//Concludo l'activity precedente ed eseguo closing script, se non era già conclusa
-		$sql="select id from activity_instances where date_completed is not null and id_actor_completed is null and id=$id_activity_instance_from";
+		$sql="select id from activity_instances where date_completed is not null and id_actor_completed is not null and id=$id_activity_instance_from";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
