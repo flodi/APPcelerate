@@ -565,10 +565,33 @@ class BPME {
 		return($context);
 	}
 
+	private function getActionInstanceIDFromActivityInstanceTo($id_activity_instance_to) {
+		$this->doLog("Requested with activity instance $id_activity_instance_to",APPcelerate::L_DEBUG);
+		if (!is_numeric($id_activity_instance_to) and !is_int($id_activity_instance_to)) {
+			throw new Exception("Activity instance id $id_activity_instance_to not valid", 0);
+		}
+
+		$id_process_instance=getProcessInstanceIDFromActivityInstanceID($id_activity_instance_to);
+
+		$sql="select id from action_instances where id_process_instance=$id_process_instance and id_activity_instance_to=$id_activity_instance_to order by id asc limit 1";
+
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+
+	}
+
 	private function getActionNameFromActionInstance($id_action_instance) {
 		$this->doLog("Requested with action instance $id_action_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_action_instance) and !is_int($id_action_instance)) {
-			throw new Exception("Activity instance id $id_action_instance not valid", 0);
+			throw new Exception("Action instance id $id_action_instance not valid", 0);
 		}
 		$sql="select actions.name from actions join action_instances on actions.id=activity_instances.id_activity where action_instances.id=$id_action_instance";
 		$rs=$this->db->query($sql);
@@ -749,7 +772,7 @@ class BPME {
 		}
 	}
 
-	private function createActionInstance($id_process_instance,$id_activity_instance_from,$id_action) {
+	private function createActionInstance($id_process_instance,$id_activity_instance_from,$id_action,$inbranch=0) {
 
 		$this->doLog("Requested with process instance $id_process_instance and activity instance $id_activity_instance_from and action $id_action",APPcelerate::L_DEBUG);
 
@@ -764,7 +787,7 @@ class BPME {
 
 		$fingerprint=uniqid();
 
-		$sql=sprintf("insert into action_instances (fingerprint,id_process,id_action,id_process_instance,id_activity_instance_from,id_actor_executed) values ('%s',%d,%d,%d,%d,%d)",$fingerprint,$id_process,$id_action,$id_process_instance,$id_activity_instance_from,$this->getCurrentUID($id_activity_instance_from));
+		$sql=sprintf("insert into action_instances (fingerprint,id_process,id_action,id_process_instance,id_activity_instance_from,id_actor_executed,inbranch) values ('%s',%d,%d,%d,%d,%d,%d)",$fingerprint,$id_process,$id_action,$id_process_instance,$id_activity_instance_from,$this->getCurrentUID($id_activity_instance_from),$inbranch);
 		$rs1=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs1);
@@ -1063,10 +1086,17 @@ class BPME {
 
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			$id_action=$r["id"];
+			$branch=$r["branch"];
+			$sync=$r["sync"];
 
 			$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_from);
 
-			$id_action_instance=$this->createActionInstance($id_process_instance,$id_activity_instance_from,$id_action);
+			if ($branch==0) {
+				$id_action_instance_prec=$this->getActionInstanceIDFromActivityInstanceTo($id_activity_instance_from);
+				$branch=$this->isActionInstanceInBranch($id_action_instance_prec);
+			}
+
+			$id_action_instance=$this->createActionInstance($id_process_instance,$id_activity_instance_from,$id_action,$branch);
 
 			if (!empty($r["entry_condition"])) {
 				list($evaluation,$ok)=$this->checkActionCondition($id_activity_instance_from,$id_action,$r["entry_condition"]);
