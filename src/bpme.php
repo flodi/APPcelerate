@@ -1082,7 +1082,7 @@ class BPME {
 					throw new Exception("Query Error", 0);
 				}
 				if (!$ok) {
-					$this->doLog("Condition failed, skipping branch"),APPcelerate::L_DEBUG);
+					$this->doLog("Condition failed, skipping branch",APPcelerate::L_DEBUG);
 					$this->negateBranch($id_action_instance);
 					continue;
 				}
