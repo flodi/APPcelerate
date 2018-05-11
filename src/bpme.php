@@ -436,7 +436,7 @@ class BPME {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
-	private function getProcessInstanceFromActivityInstance($id_activity_instance) {
+	private function getProcessInstanceIDFromActivityInstanceID($id_activity_instance) {
 		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
@@ -762,7 +762,7 @@ class BPME {
 			$this->doLog("Activity instance $id_activity_instance not visible, returning",APPcelerate::L_DEBUG);
 			return;
 		}
-		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
+		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
 		$opening_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_OPEN.php";
 		if (stream_resolve_include_path($opening_script)) {
 			include($opening_script);
@@ -887,7 +887,7 @@ class BPME {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
 
-		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
+		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
 
 		$id_counterpart=$this->getProcessInstanceCounterpart($id_process_instance);
 
@@ -991,7 +991,7 @@ class BPME {
 
 		$this->assignActivity($id_activity_instance,$this->getCurrentUID($id_activity_instance));
 
-		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
+		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
 		$auto_script=$this->app_name."/bpme/views/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance)."_AUTO.php";
 		if (stream_resolve_include_path($auto_script)) {
 			include($auto_script);
@@ -1030,7 +1030,7 @@ class BPME {
 			$this->assignActivity($id_activity_instance,$this->getCurrentUID());
 		}
 
-		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
+		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
 
 		$type=$this->getActivityTypeFromActivityInstance($id_activity_instance);
 
@@ -1087,7 +1087,7 @@ class BPME {
 		while ($r=$rs->fetch_array(MYSQLI_ASSOC)) {
 			$id_action=$r["id"];
 
-			$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_from);
+			$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance_from);
 
 			$sync=$this->isActivitySync($this->getActivityIDFromActivityInstance($id_activity_instance_from));
 
@@ -1164,7 +1164,7 @@ class BPME {
 
 		$condition=strtoupper($condition);
 
-		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance);
+		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
 		$data=$this->getProcessInstanceData($id_process_instance,true,"array");
 		$confirm=strtoupper($data["lastconfirm"]);
 		if ($confirm===$condition) {
@@ -1267,7 +1267,7 @@ class BPME {
 		}
 		$id_activity_instance_from=$rs->fetch_array(MYSQLI_NUM)[0];
 
-		$id_process_instance=$this->getProcessInstanceFromActivityInstance($id_activity_instance_from);
+		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance_from);
 
 		//Concludo l'activity precedente ed eseguo closing script, se non era già conclusa
 		$sql="select id from activity_instances where date_completed is null and id_actor_completed is null and id=$id_activity_instance_from";
@@ -1584,7 +1584,7 @@ class BPME {
 		$type=$this->getActivityType($id_activity);
 
 		if($type==='U') {
-			$pid=$this->getProcessInstanceFromActivityInstance($id_activity_instance_prec);
+			$pid=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance_prec);
 			$uid=$this->getProcessInstanceCreatedUser($pid);
 		}
 		else {
@@ -2173,7 +2173,7 @@ class BPME {
 				if (!array_key_exists("id",$params)) {
 					throw new Exception("Missing 'id' params", 0);
 				}
-				return($this->getProcessInstanceFromActivityInstance($params["id"]));
+				return($this->getProcessInstanceIDFromActivityInstanceID($params["id"]));
 				break;
 			case 'setProcessInstanceCounterpart':
 				if (!array_key_exists("id_process_instance",$params)) {
