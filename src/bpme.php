@@ -1098,7 +1098,7 @@ class BPME {
 
 			if ($branch==0 and $sync==0) {
 				$id_action_instance_prec=$this->getActionInstanceIDFromActivityInstanceTo($id_activity_instance_from);
-				if ($id_activity_instance_prec<>-1) {
+				if ($id_action_instance_prec<>-1) {
 					$branch=$this->isActionInstanceInBranch($id_action_instance_prec);
 				}
 			}
