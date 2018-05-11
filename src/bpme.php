@@ -1750,8 +1750,8 @@ class BPME {
 		return ($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
-	public function getActivityIDFromActivityInstance($id_activity_instance_from) {
-		$sql="select id_activity from activity_instances where id='$activity'";
+	public function getActivityIDFromActivityInstance($id_activity_instance) {
+		$sql="select id_activity from activity_instances where id='$id_activity_instance'";
 		$rs=$this->db->query($sql);
 		if ($rs->num_rows===0) {
 			throw new Exception("Activity id $id_activity not found", 0);
