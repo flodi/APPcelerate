@@ -2047,7 +2047,7 @@ class BPME {
 					$v=$d["day"]."/".$d["month"]."/".$d["year"];
 					$label.="\nStarted ".$v;
 
-					$type=getActorType($activity_instance["id_actor_created"]);
+					$type=$this->getActorType($activity_instance["id_actor_created"]);
 
 					if ($type==("U")) {
 						$sql="select login from users where id=".$activity_instance["id_actor_created"];
