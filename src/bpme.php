@@ -2049,7 +2049,7 @@ class BPME {
 
 					$type=getActorType($activity_instance["id_actor_created"]);
 
-					if ($type==("U") {
+					if ($type==("U")) {
 						$sql="select login from users where id=".$activity_instance["id_actor_created"];
 					}
 					else {
