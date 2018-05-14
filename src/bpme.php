@@ -330,7 +330,7 @@ class BPME {
 		if (!is_numeric($id_actor) and !is_int($id_actor)) {
 			throw new Exception("Actor id $id_actor not valid", 0);
 		}
-		$sql="select type from actors where id=$id_actor";
+		$sql="select id from users where id=$id_actor";
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -340,7 +340,28 @@ class BPME {
 			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
-		return($rs->fetch_array(MYSQLI_NUM)[0]);
+		if($rs->num_rows==0) {
+			$sql="select id from partecipanti where id=$id_actor";
+			$rs=$this->db->query($sql);
+			try {
+				$this->rsCheck($rs);
+			}
+			catch (Exception $e) {
+				$msg=$e->getMessage();
+				$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+				throw new Exception("Query Error", 0);
+			}
+			if ($rs->num_rows==0) {
+				$type="N";
+			}
+			else {
+				$type="P";
+			}
+		}
+		else {
+			$type="U";
+		}
+		return($type);
 	}
 
 	private function getProcessIDFromProcessInstance($id_process_instance) {
@@ -2026,25 +2047,13 @@ class BPME {
 					$v=$d["day"]."/".$d["month"]."/".$d["year"];
 					$label.="\nStarted ".$v;
 
-					$sql="select * from actors where id=".$activity_instance["id_actor_created"];
-					$rs1=$this->fw->app["db_programmi"]->query($sql);
-					try {
-						$this->fw->DBsqlError($rs1,$sql);
-					}
-					catch (Exception $e) {
-						$msg=$e->getMessage();
-						$this->doLog("Sql Error | $sql | $msg",APPcelerate::L_ERROR);
-						throw new Exception("Query Error", 0);
-					}
-					if ($rs1->num_rows==0) {
-						die("Error: $sql");
-					}
-					$actor=$rs1->fetch_array(MYSQLI_ASSOC);
-					if($actor["type"]==="U") {
-						$sql="select login from users where id=".$actor["id"];
+					$type=getActorType($activity_instance["id_actor_created"]);
+
+					if ($type==("U") {
+						$sql="select login from users where id=".$activity_instance["id_actor_created"];
 					}
 					else {
-						$sql="select concat(nome,' ',cognome) from ospiti where id=(select id_ospite from partecipanti where id=".$actor["id"].")";
+						$sql="select concat(nome,' ',cognome) from ospiti where id=(select id_ospite from partecipanti where id=".$activity_instance["id_actor_created"].")";
 					}
 					$rs1=$this->fw->app["db_programmi"]->query($sql);
 					try {
