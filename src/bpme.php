@@ -200,6 +200,15 @@ class BPME {
 			$d=json_decode($d,true);
 		}
 
+		foreach ($data as $key => $val) {
+			if (is_null($data[$key])) {
+				unset($data[$key]);
+				if (array_key_exists($key, $d)) {
+					unset($d[$key]);
+				}
+			}
+		}
+
 		$new_d=array_merge($d,$data);
 
 		$sql="update process_instances set data='".addslashes(json_encode($new_d))."' where id=$id_process_instance";
