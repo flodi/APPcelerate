@@ -904,6 +904,9 @@ class BPME {
 					$this->doLog("Cannot follow actions from activity instance $id_activity_instance ( $msg )",APPcelerate::L_ERROR);
 				}
 				break;
+			case 'T':
+				$this->executeThirdPartyActivity($id_activity_instance);
+				break;
 			case 'C':
 				$this->executeCounterpartActivity($id_activity_instance);
 				break;
@@ -1002,6 +1005,94 @@ class BPME {
 			$cc[]=$counterpart[0]["email_personale"];
 		}
 */
+		$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$cc,$bcc);
+		$this->assignActivity($id_activity_instance,$id_counterpart);
+
+	}
+
+	private function executeThirdPartyActivity($id_activity_instance) {
+		$this->doLog("Requested with activty instance  $id_activity_instance",APPcelerate::L_DEBUG);
+
+		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
+			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
+		}
+
+		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
+
+		$id_third_party=$this->getActivityThirdParty($this->getActivityIDFromActivityInstance($id_activity_instance));
+
+		$this->assignActivity($id_activity_instance,$id_third_party);
+
+		$TBSC = new clsTinyButStrong;
+		$TBSC->LoadTemplate($this->app_name."/bpme/templates/STEP_TP_EMAIL.htm");
+
+		$data=$this->getProcessInstanceData($id_process_instance,true,"block");
+		$TBSC->MergeBlock("bPdata",$data);
+
+		$sql="select * from activities where code='".$this->getActivityCodeFromActivityInstance($id_activity_instance)."' and id_process=".$this->getProcessIDFromProcessInstance($id_process_instance);
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+		$activity[0]=$rs->fetch_array(MYSQLI_ASSOC);
+		$TBSC->MergeBlock("bActivity",$activity);
+
+		$sql="select * from fornitori where id=(select id_fornitore from process_third_parties where id=$id_third_party)";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+		$third_party=$this->fw->fetchAllAssoc($rs);
+		$TBSC->MergeBlock("bTP",$third_party);
+
+		$url=$this->fw->app["base_url"]."/bpme/case/$id_activity_instance/";
+		$TBSC->MergeField("url","$url");
+
+		$id_owner=$this->getProcessInstanceOwner($id_process_instance);
+		$sql="select fullname,mobile from users where id=$id_owner";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+		$mitt=$rs->fetch_array(MYSQLI_ASSOC);
+
+		$TBSC->MergeField("mitt",$mitt);
+
+		$TBSC->Show(TBS_NOTHING);
+		$mail=$TBSC->Source;
+
+		$subject=sprintf("#%d %s > %s > Richiesta riscontro - Messaggio Automatico",$id_activity_instance,$data[0]["_mail_object"],$third_party[0]["ragsoc"]." ".$third_party[0]["nome_struttura"]);
+
+		$from=$data[0]["_mail_from"];
+		$bcc[0]=$data[0]["_mail_from"];
+
+		if (array_key_exists("riferimento_email",$third_party[0]) and !empty($third_party[0]["riferimento_email"])) {
+			$to[0]=$third_party[0]["riferimento_email"];
+		}
+
+		if (empty($to)) {
+			$this->doLog("Third party with id ".$third_party[0]["id"]." does not have any email, sent to myself",APPcelerate::L_WARNING);
+			$to[0]=$from;
+			$this->setProcessAlert($id_process_instance,$id_activity_instance, $third_party[0]["ragsoc"]." ".$third_party[0]["nome_struttura"]." non ha un email");
+		}
+
+		$cc=array();
+
 		$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$cc,$bcc);
 		$this->assignActivity($id_activity_instance,$id_counterpart);
 
