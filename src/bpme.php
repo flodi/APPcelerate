@@ -2111,20 +2111,25 @@ class BPME {
 			$node[$activity["id"]]->setAttribute("graphviz.style","filled");
 			$node[$activity["id"]]->setAttribute("graphviz.splines","curved");
 
-			if($activity["activity_type"]==="S") {
-				$node[$activity["id"]]->setAttribute("graphviz.shape","proteinstab");
-			}
-			else if($activity["activity_type"]==="F") {
-				$node[$activity["id"]]->setAttribute("graphviz.shape","proteasesite");
-			}
-			else if($activity["activity_type"]==="A") {
-				$node[$activity["id"]]->setAttribute("graphviz.shape","component");
-			}
-			else if($activity["activity_type"]==="C") {
-				$node[$activity["id"]]->setAttribute("graphviz.shape","cds");
-			}
-			else {
-				$node[$activity["id"]]->setAttribute("graphviz.shape","box");
+			switch($activity["activity_type"]) {
+				case "S":
+					$node[$activity["id"]]->setAttribute("graphviz.shape","proteinstab");
+					break;
+				case "F":
+					$node[$activity["id"]]->setAttribute("graphviz.shape","proteasesite");
+					break;
+				case "A":
+					$node[$activity["id"]]->setAttribute("graphviz.shape","component");
+					break;
+				case "C":
+					$node[$activity["id"]]->setAttribute("graphviz.shape","signature");
+					break;
+				case "T":
+					$node[$activity["id"]]->setAttribute("graphviz.shape","cds");
+					break;
+				case "U":
+					$node[$activity["id"]]->setAttribute("graphviz.shape","box");
+					break;
 			}
 
 			if($id_process_instance!=0) {
