@@ -1025,7 +1025,6 @@ class BPME {
 		}
 */
 		$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$cc,$bcc);
-		$this->assignActivity($id_activity_instance,$id_counterpart);
 
 	}
 
@@ -1113,7 +1112,6 @@ class BPME {
 		$cc=array();
 
 		$this->fw->sendEmail($mail, $subject, $data[0]["_mail_from"], $to,$cc,$bcc);
-		$this->assignActivity($id_activity_instance,$id_counterpart);
 
 	}
 
