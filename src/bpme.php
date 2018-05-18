@@ -18,7 +18,8 @@ class BPME {
 		"F" => "Finish",
 		"U" => "Manual",
 		"A" => "Automatic",
-		"C" => "Counterpart"
+		"C" => "Counterpart",
+		"T" => "Third Party"
 	);
 
 	//
