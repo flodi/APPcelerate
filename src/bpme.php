@@ -484,6 +484,24 @@ class BPME {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
+	private function getActivityThirdParty($id_activity) {
+		$this->doLog("Requested with activity $id_activity",APPcelerate::L_DEBUG);
+		if (!is_numeric($id_activity) and !is_int($id_activity)) {
+			throw new Exception("Activity id $id_activity not valid", 0);
+		}
+		$sql="select id_tp from activities where id=$id_activity";
+		$rs=$this->db->query($sql);
+		try {
+			$this->rsCheck($rs);
+		}
+		catch (Exception $e) {
+			$msg=$e->getMessage();
+			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+			throw new Exception("Query Error", 0);
+		}
+		return($rs->fetch_array(MYSQLI_NUM)[0]);
+	}
+
 	private function getActivityCodeFromActivityInstance($id_activity_instance) {
 		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
@@ -1292,6 +1310,7 @@ class BPME {
 
 		$id_process_instance=$this->getProcessInstanceIDFromActivityInstanceID($id_activity_instance);
 		$data=$this->getProcessInstanceData($id_process_instance,true,"array");
+
 		$confirm=strtoupper($data["lastconfirm"]);
 		if ($confirm===$condition) {
 			$r=true;
