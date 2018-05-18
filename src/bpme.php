@@ -1600,6 +1600,8 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
+		return(0);
+
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
