@@ -1176,6 +1176,7 @@ class BPME {
 		$type=$this->getActivityTypeFromActivityInstance($id_activity_instance);
 
 		switch($type) {
+			case "T":
 			case "C":
 				$data=$this->getProcessInstanceData($id_process_instance,false,"block");
 				$code=$this->getCounterpartCodeFromActivityInstance($id_activity_instance);
