@@ -741,8 +741,29 @@ class BPME {
 
 		$fingerprint=uniqid();
 
-		$sql=sprintf("insert into activity_instances (fingerprint,id_activity,id_process,id_process_instance,id_actor_created,id_actor_assigned) values ('%s',%d,%d,%d,%d,%s)",$fingerprint,$id_activity,$id_process,$id_process_instance,$uid,$id_actor_assigned);
+		$sync=$this->isActivitySync($id_activity);
 
+		if ($sync==1) {
+			$sql="select id from activity_instances where id_activity=$id_activity and id_process_instance=$id_process_instance";
+			$rs=$this->db->query($sql);
+			try {
+				$this->rsCheck($rs);
+			}
+			catch (Exception $e) {
+				$msg=$e->getMessage();
+				$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+				throw new Exception("Query Error", 0);
+			}
+
+			if ($rs->num_rows>0) {
+				$id_activity_instance=$rs->fetch_array(MYSQLI_NUM)[0];
+
+				return($id_activity_instance);
+			}
+
+		}
+
+		$sql=sprintf("insert into activity_instances (fingerprint,id_activity,id_process,id_process_instance,id_actor_created,id_actor_assigned) values ('%s',%d,%d,%d,%d,%s)",$fingerprint,$id_activity,$id_process,$id_process_instance,$uid,$id_actor_assigned);
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
