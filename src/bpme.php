@@ -1286,6 +1286,9 @@ class BPME {
 				case "U":
 					$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT.htm","+");
 					break;
+				case "T":
+					$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT_TP.htm","+");
+					break;
 				case "C":
 					$this->fw->app["TBS"]->LoadTemplate($this->app_name."/bpme/templates/STEP_RESULT_COUNTERPART.htm","+");
 					break;
