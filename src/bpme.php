@@ -2050,8 +2050,8 @@ class BPME {
 			from
 				process_instances
 					join processes on process_instances.id_process=processes.id
-					join partecipanti on process_instances.id_counterpart=partecipanti.id
-					join ospiti on partecipanti.id_ospite=ospiti.id
+					left join partecipanti on process_instances.id_counterpart=partecipanti.id
+					left join ospiti on partecipanti.id_ospite=ospiti.id
 					join activity_instances on process_instances.id=activity_instances.id_process_instance
 					join activities on activity_instances.id_activity=activities.id
 			where
