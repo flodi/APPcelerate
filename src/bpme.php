@@ -1218,6 +1218,13 @@ class BPME {
 		$this->fw->AddMerge("field","note",$note);
 		$this->fw->AddMerge("field","aiid",$id_activity_instance);
 
+		if (array_key_exists("lastconfirmnote", $data) and !empty($data["lastconfirmnote"])) {
+			$this->fw->AddMerge("field","cnote",$data["lastconfirmnote"]);
+		}
+		else {
+			$this->fw->AddMerge("field","cnote",null);
+		}
+
 		$visible=$this->getActivityInstanceVisibility($id_activity_instance);
 
 		if ($visible==1) {
