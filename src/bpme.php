@@ -1601,7 +1601,7 @@ class BPME {
 			throw new Exception("Query Error", 0);
 		}
 
-		return(0);
+		return(1);
 
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
@@ -2069,8 +2069,6 @@ class BPME {
 			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
-
-print_r($rs);
 
 		return($this->fw->fetchAllAssoc($rs));
 	}
