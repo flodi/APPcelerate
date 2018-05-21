@@ -2060,7 +2060,6 @@ class BPME {
 				and activity_instances.date_completed is null
 				and activity_instances.visible=1
 		";
-echo $sql;
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
@@ -2070,6 +2069,8 @@ echo $sql;
 			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
 		}
+
+print_r($rs);
 
 		return($this->fw->fetchAllAssoc($rs));
 	}
