@@ -2055,7 +2055,7 @@ class BPME {
 					join activity_instances on process_instances.id=activity_instances.id_process_instance
 					join activities on activity_instances.id_activity=activities.id
 			where
-				(ospiti.id_cliente=$id_cliente or or ospiti.id_cliente is null)
+				(ospiti.id_cliente=$id_cliente or ospiti.id_cliente is null)
 				and (activity_instances.id_actor_assigned=$uid or activity_instances.id_actor_assigned is null)
 				and activity_instances.date_completed is null
 				and activity_instances.visible=1
