@@ -1179,8 +1179,6 @@ class BPME {
 
 		$id_activity_instance=$this_id_activity_instance;
 
-		$visible=$this->getActivityInstanceVisibility($id_activity_instance);
-
 		$this->doLog("Requested with activty instance $id_activity_instance",APPcelerate::L_DEBUG);
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
@@ -1219,7 +1217,10 @@ class BPME {
 		$this->fw->AddMerge("field","piid",$id_process_instance);
 		$this->fw->AddMerge("field","note",$note);
 		$this->fw->AddMerge("field","aiid",$id_activity_instance);
-		if ($visible) {
+
+		$visible=$this->getActivityInstanceVisibility($id_activity_instance);
+
+		if ($visible==1) {
 			$tmpl=$this->app_name."/bpme/templates/".$this->getProcessCodeFromProcessInstance($id_process_instance)."_".$this->getActivityCodeFromActivityInstance($id_activity_instance).".htm";
 		}
 		else {
