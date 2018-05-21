@@ -2060,6 +2060,7 @@ class BPME {
 				and activity_instances.date_completed is null
 				and activity_instances.visible=1
 		";
+echo $sql;
 		$rs=$this->db->query($sql);
 		try {
 			$this->rsCheck($rs);
