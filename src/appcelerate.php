@@ -138,8 +138,9 @@ class APPcelerate {
 		$this->app["from_email"]=getenv('FROM_EMAIL');
 
 		$this->app["session_mins"]=getenv('SESSION_MINS');
-		ini_set("session.gc_maxlifetime",60*$this->app["session_mins"]);
-		session_set_cookie_params(60*$this->app["session_mins"],"/");
+		$duration=60*$this->app["session_mins"]:
+		ini_set("session.gc_maxlifetime",$duration);
+		session_set_cookie_params($duration);
 
 		$this->app["bootstrap"]=getenv('BOOTSTRAP_VERSION');
 		$this->app["fontawesome"]=getenv('FONTAWESOME_VERSION');
