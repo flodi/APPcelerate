@@ -23,7 +23,7 @@ class BPME {
 	);
 
 	//
-	// $this->fw - Istanza di framework attiva
+	// $fw - Istanza di framework attiva
 	// $name - Nome dell'applicazione sotto la quale gestire i processi
 	//
     public function __construct($fw,$name) {
