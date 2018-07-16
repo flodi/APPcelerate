@@ -138,7 +138,7 @@ class APPcelerate {
 		$this->app["from_email"]=getenv('FROM_EMAIL');
 
 		$this->app["session_mins"]=getenv('SESSION_MINS');
-		$duration=60*$this->app["session_mins"]:
+		$duration=60*$this->app["session_mins"];
 		ini_set("session.gc_maxlifetime",$duration);
 		session_set_cookie_params($duration);
 
