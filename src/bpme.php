@@ -2059,6 +2059,7 @@ class BPME {
 				and (activity_instances.id_actor_assigned=$uid or activity_instances.id_actor_assigned is null)
 				and activity_instances.date_completed is null
 				and activity_instances.visible=1
+				and process_instances.status='R'
 		";
 		$rs=$this->db->query($sql);
 		try {
