@@ -1568,6 +1568,8 @@ class BPME {
 	private function setActivityInstanceVisibility($id_activity_instance,$visible=1) {
 		$this->doLog("Requested with activity instance $id_activity_instance",APPcelerate::L_DEBUG);
 
+$visible=1;
+
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
 			throw new Exception("Activity instance id $id_activity_instance not valid", 0);
 		}
