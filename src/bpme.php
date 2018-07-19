@@ -1,4 +1,5 @@
-<?
+<? /** @noinspection ALL */
+
 /*
  * (c) Fabrizio Lodi <flodi@e-scientia.eu>
  *
