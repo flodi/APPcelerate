@@ -267,6 +267,9 @@ class BPME {
 		$i=0;
 		$data=array();
 		foreach($d as $key => $value) {
+			if (!is_string($key)) {
+				die("ERRORE DI SISTEMA, CONTATTARE IL SUPPORTO<br>bpme,key,270,notstring<br>".var_dump($d));
+			}
 			if (substr($key, 0, 1) !== "_" or $all) {
 				if (substr($value, 0, 1) === "@") {
 					$value=json_encode($this->getProcessDataFieldFromDB($value));
@@ -1027,6 +1030,10 @@ class BPME {
 
 		$from=$data[0]["_mail_from"];
 		$bcc[0]=$data[0]["_mail_from"];
+
+		if(!is_array($counterpart[0])) {
+			die("ERRORE DI SISTEMA, CONTATTARE IL SUPPORTO<br>bpme,notarray,1035<br>".var_dump($counterpart));
+		}
 
 		if (array_key_exists("email",$counterpart[0]) and !empty($counterpart[0]["email"])) {
 			$to[0]=$counterpart[0]["email"];

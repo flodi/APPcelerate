@@ -686,6 +686,7 @@ class APPcelerate {
 		<script src="/vendor/flodi/appcelerate/src/include/js/typeaheadjs.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/garlic.min.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.fixedheadertable.min.js"></script>
+		<script src="/vendor/flodi/appcelerate/src/include/js/xepOnline.jqPlugin.js"></script>
 		<script src="/vendor/flodi/appcelerate/src/include/js/appcelerate.js"></script>
 					';
 					break;
