@@ -54,7 +54,7 @@ class APPcelerate {
 				$uname="NOLOGGEDUSER";
 			}
 
-			$debug=debug_backtrace()[2];
+			$debug=debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT,3)[2];
 			if (array_key_exists("file",$debug)) {
 				$caller_file=str_replace($_SERVER["DOCUMENT_ROOT"],"",$debug["file"]);
 			}
@@ -365,7 +365,7 @@ class APPcelerate {
 		$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
 		$reader->setReadDataOnly(true);
 		$reader->setLoadSheetsOnly(["OSPITI"]);
-			
+
 		try {
 			$x = $reader->load($file);
 		}
