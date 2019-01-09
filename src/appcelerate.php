@@ -83,161 +83,6 @@ class APPcelerate {
 	}
 
 	//
-	// INIT
-	//
-    public function __construct() {
-		ini_set('display_errors', 1);
-		ini_set('display_startup_errors', 1);
-		error_reporting(E_ALL);
-
-		register_shutdown_function(function() {
-			$e=error_get_last();
-
-			if ($e['type']) {
-				$msg=sprintf("Type %u File %s Line %u Message %s",$e["type"],$e["file"],$e["line"],$e["message"]);
-				$this->doLog($msg);
-			}
-		});
-
-		$base_path=$_SERVER["DOCUMENT_ROOT"];
-
-		$fwpath=__DIR__;
-
-		$vendor_path=$base_path."/vendor";
-		$include_path=$base_path."/include";
-		$apps_path=$base_path."/apps";
-
-		if (set_include_path(get_include_path().PATH_SEPARATOR.$vendor_path.PATH_SEPARATOR.$include_path.PATH_SEPARATOR.$fwpath.PATH_SEPARATOR.$apps_path)==false) {
-			die("Cannot set include path.");
-		}
-
-		include_once("tinybutstrong/tinybutstrong/plugins/tbs_plugin_html.php");
-
-		$this->app["skipui"]=false;
-		$this->app["skipsec"]=false;
-
-		$this->app["apps_path"]=$base_path."/apps";
-
-		$this->app["base_path"]=$base_path;
-		$dotenv = new Dotenv\Dotenv($this->app["base_path"], 'app.config');
-		$dotenv->load();
-
-		$this->app["base_url"]=getenv('BASE_URL');
-
-		$this->app["apps"]=explode("|",getenv('APPS'));
-
-		$this->app["default_app"]=getenv('DEFAULT_APP');
-
-		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
-
-		$this->app["loglevel"]=constant("APPcelerate::L_".strtoupper(getenv('LOGLEVEL')));
-
-		$this->app["aws_key"]=getenv('AWS_KEY');
-		$this->app["aws_code"]=getenv('AWS_CODE');
-
-		$this->app["from_email"]=getenv('FROM_EMAIL');
-
-		$this->app["session_mins"]=getenv('SESSION_MINS');
-		$duration=60*$this->app["session_mins"];
-		ini_set("session.gc_maxlifetime",$duration);
-		session_set_cookie_params($duration);
-
-		$this->app["bootstrap"]=getenv('BOOTSTRAP_VERSION');
-		$this->app["fontawesome"]=getenv('FONTAWESOME_VERSION');
-
-		$this->app["envlevel"]=getenv('ENVLEVEL');
-		if (empty($this->app["envlevel"])) {
-			$this->app["envlevel"]="DEVELOPMENT";
-		}
-
-
-		#Default template folders
-		foreach ($this->app["apps"] as $app_name) {
-			$app_path=$base_path."/apps/$app_name";
-			$views_path=$base_path."/apps/$app_name/templates";
-			if (set_include_path(get_include_path().PATH_SEPARATOR.$app_path.PATH_SEPARATOR.$views_path)==false) {
-				die("Cannot set include path.");
-			}
-		}
-
-		# Define Additional templates
-		foreach ($this->app["apps"] as $app_name) {
-			$add_tpl=getenv('ADD_TPL_'.$app_name);
-			if ($add_tpl==="Y") {
-				$this->app["addtemplates"][$app_name]=$app_name."_additional_template.htm";
-			}
-		}
-
-		# Define Accounts exception
-		foreach ($this->app["apps"] as $app_name) {
-			$add_tpl=getenv('ACCOUNT_'.$app_name);
-			if ($add_tpl==="N") {
-				$this->app["accounts"][$app_name]=false;
-				$this->app["secredir"][$app_name]=true;
-			}
-			else if ($add_tpl==="Y") {
-				$this->app["accounts"][$app_name]=true;
-				$this->app["secredir"][$app_name]=true;
-			}
-			else if ($add_tpl==="C") {
-				$this->app["accounts"][$app_name]=true;
-				$this->app["secredir"][$app_name]=false;
-			}
-		}
-
-		//
-		// Init Log
-		//
-		$this->app["main_logger"]=new Monolog\Logger('appcelerate');
-
-		$dateFormat = "d-m-Y G:i";
-		$output = "%datetime% ; %level_name% ; %message% ; %context%\n";
-		$formatter = new Monolog\Formatter\LineFormatter($output, $dateFormat);
-
-		switch($this->app["loglevel"]) {
-			case "info":
-				$ll=Monolog\Logger::INFO;
-				break;
-			default:
-				$ll=Monolog\Logger::DEBUG;
-		}
-
-		$mainstream=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/appcelerate.log", $ll);
-		$mainstream->setFormatter($formatter);
-
-		$this->app["main_logger"]->pushHandler($mainstream);
-
-		# Apps Log
-		foreach ($this->app["apps"] as $app_name) {
-			$this->app[$app_name."_logger"]=new Monolog\Logger($app_name);
-			$this->app[$app_name."_log_stream"]=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/".$app_name.".log", $ll);
-			$this->app[$app_name."_log_stream"]->setFormatter($formatter);
-			$this->app[$app_name."_logger"]->pushHandler($this->app[$app_name."_log_stream"]);
-		}
-
-		//
-		// DB Connection Init
-		//
-		$db_address=getenv('DB_ADDRESS');
-		$db_user=getenv('DB_USER');
-		$db_password=getenv('DB_PASSWORD');
-
-		foreach ($this->app["apps"] as $app_name) {
-			$db_name=getenv('DB_NAME_'.$app_name);
-			$this->app["db_".$app_name] = new mysqli($db_address, $db_user, $db_password, $db_name);
-			if ($this->app["db_".$app_name]->connect_error) {
-			    die("Failed to connect to MySQL: doing new mysqli($db_address, $db_user, $db_password, $db_name) (".$this->app["db_".$app_name]->connect_errno.") ".$this->app["db_".$app_name]->connect_error);
-			}
-			$this->app["db_".$app_name]->set_charset("utf8");
-		}
-
-		$this->bpme=false;
-
-		$this->doLog("APPCelerate created for http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
-
-	}
-
-	//
 	// Excel Functions
 	//
 
@@ -1230,6 +1075,170 @@ class APPcelerate {
 		}
 
 		$this->doLog("<===== Routed for  ".json_encode($match),$this::L_INFO);
+
+	}
+
+	//
+	// INIT
+	//
+	public function __construct() {
+
+		// Default, no BPME engine
+		$this->bpme=false;
+
+		// Errors on
+		ini_set('display_errors', 1);
+		ini_set('display_startup_errors', 1);
+		error_reporting(E_ALL);
+
+		// Intercept crashes
+		register_shutdown_function(function() {
+			$e=error_get_last();
+
+			if ($e['type']) {
+				$msg=sprintf("Type %u File %s Line %u Message %s",$e["type"],$e["file"],$e["line"],$e["message"]);
+				$this->doLog($msg);
+			}
+		});
+
+		// Init vars
+		$base_path=$_SERVER["DOCUMENT_ROOT"];
+		$fwpath=__DIR__;
+		$vendor_path=$base_path."/vendor";
+		$include_path=$base_path."/include";
+		$apps_path=$base_path."/apps";
+
+		$this->app["skipui"]=false;
+		$this->app["skipsec"]=false;
+		$this->app["apps_path"]=$base_path."/apps";
+		$this->app["base_path"]=$base_path;
+
+		// Define include path
+		if (set_include_path(get_include_path().PATH_SEPARATOR.$vendor_path.PATH_SEPARATOR.$include_path.PATH_SEPARATOR.$fwpath.PATH_SEPARATOR.$apps_path)==false) {
+			die("Cannot set include path.");
+		}
+		include_once("tinybutstrong/tinybutstrong/plugins/tbs_plugin_html.php");
+
+		// Read app.config
+		$dotenv = new Dotenv\Dotenv($this->app["base_path"], 'app.config');
+		$dotenv->load();
+
+		$this->app["base_url"]=getenv('BASE_URL');
+		$this->app["base_app"]=getenv('BASE_APP');
+		if (strlen($this->app["base_app"])>0) {
+			$this->app["complete_url"]=$this->app["base_url"]."/".$this->app["base_app"];
+		}
+		else {
+			$this->app["complete_url"]=$this->app["base_url"];
+		}
+
+		$this->app["apps"]=explode("|",getenv('APPS'));
+		$this->app["default_app"]=getenv('DEFAULT_APP');
+
+		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
+
+		$this->app["loglevel"]=constant("APPcelerate::L_".strtoupper(getenv('LOGLEVEL')));
+
+		$this->app["aws_key"]=getenv('AWS_KEY');
+		$this->app["aws_code"]=getenv('AWS_CODE');
+
+		$this->app["from_email"]=getenv('FROM_EMAIL');
+
+		$this->app["session_mins"]=getenv('SESSION_MINS');
+		$duration=60*$this->app["session_mins"];
+		ini_set("session.gc_maxlifetime",$duration);
+		session_set_cookie_params($duration);
+
+		$this->app["bootstrap"]=getenv('BOOTSTRAP_VERSION');
+		$this->app["fontawesome"]=getenv('FONTAWESOME_VERSION');
+
+		$this->app["envlevel"]=getenv('ENVLEVEL');
+		if (empty($this->app["envlevel"])) {
+			$this->app["envlevel"]="DEVELOPMENT";
+		}
+
+
+		#Default template folders
+		foreach ($this->app["apps"] as $app_name) {
+			$app_path=$base_path."/apps/$app_name";
+			$views_path=$base_path."/apps/$app_name/templates";
+			if (set_include_path(get_include_path().PATH_SEPARATOR.$app_path.PATH_SEPARATOR.$views_path)==false) {
+				die("Cannot set include path.");
+			}
+		}
+
+		# Define Additional templates
+		foreach ($this->app["apps"] as $app_name) {
+			$add_tpl=getenv('ADD_TPL_'.$app_name);
+			if ($add_tpl==="Y") {
+				$this->app["addtemplates"][$app_name]=$app_name."_additional_template.htm";
+			}
+		}
+
+		# Define Accounts exception
+		foreach ($this->app["apps"] as $app_name) {
+			$add_tpl=getenv('ACCOUNT_'.$app_name);
+			if ($add_tpl==="N") {
+				$this->app["accounts"][$app_name]=false;
+				$this->app["secredir"][$app_name]=true;
+			}
+			else if ($add_tpl==="Y") {
+				$this->app["accounts"][$app_name]=true;
+				$this->app["secredir"][$app_name]=true;
+			}
+			else if ($add_tpl==="C") {
+				$this->app["accounts"][$app_name]=true;
+				$this->app["secredir"][$app_name]=false;
+			}
+		}
+
+		//
+		// Init Log
+		//
+		$this->app["main_logger"]=new Monolog\Logger('appcelerate');
+
+		$dateFormat = "d-m-Y G:i";
+		$output = "%datetime% ; %level_name% ; %message% ; %context%\n";
+		$formatter = new Monolog\Formatter\LineFormatter($output, $dateFormat);
+
+		switch($this->app["loglevel"]) {
+			case "info":
+				$ll=Monolog\Logger::INFO;
+				break;
+			default:
+				$ll=Monolog\Logger::DEBUG;
+		}
+
+		$mainstream=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/appcelerate.log", $ll);
+		$mainstream->setFormatter($formatter);
+
+		$this->app["main_logger"]->pushHandler($mainstream);
+
+		# Apps Log
+		foreach ($this->app["apps"] as $app_name) {
+			$this->app[$app_name."_logger"]=new Monolog\Logger($app_name);
+			$this->app[$app_name."_log_stream"]=new Monolog\Handler\StreamHandler($this->app["base_path"]."/logs/".$app_name.".log", $ll);
+			$this->app[$app_name."_log_stream"]->setFormatter($formatter);
+			$this->app[$app_name."_logger"]->pushHandler($this->app[$app_name."_log_stream"]);
+		}
+
+		//
+		// DB Connection Init
+		//
+		$db_address=getenv('DB_ADDRESS');
+		$db_user=getenv('DB_USER');
+		$db_password=getenv('DB_PASSWORD');
+
+		foreach ($this->app["apps"] as $app_name) {
+			$db_name=getenv('DB_NAME_'.$app_name);
+			$this->app["db_".$app_name] = new mysqli($db_address, $db_user, $db_password, $db_name);
+			if ($this->app["db_".$app_name]->connect_error) {
+				die("Failed to connect to MySQL: doing new mysqli($db_address, $db_user, $db_password, $db_name) (".$this->app["db_".$app_name]->connect_errno.") ".$this->app["db_".$app_name]->connect_error);
+			}
+			$this->app["db_".$app_name]->set_charset("utf8");
+		}
+
+		$this->doLog("APPCelerate created for http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 
 	}
 
