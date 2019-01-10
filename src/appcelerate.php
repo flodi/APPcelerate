@@ -1309,7 +1309,7 @@ class APPcelerate {
 			              "gc_maxlifetime" =>3600,
 			              "cookie_lifetime" => 3600,
 			              "gc_divisor" => 1000000,
-			              "save_path" => $_SERVER["DOCUMENT_ROOT"]."/session";
+			              "save_path" => $_SERVER["DOCUMENT_ROOT"]."/session",
 		              ]);
 
 		// Default, no BPME engine
