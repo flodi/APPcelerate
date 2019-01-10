@@ -1,15 +1,24 @@
 <?
-/*
+/**
  * (c) Fabrizio Lodi <flodi@e-scientia.eu>
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
 
+/**
+ * Class APPcelerate
+ */
 class APPcelerate {
 
+	/**
+	 * @var array $app
+	 */
 	public $app;
 
+	/**
+	 * @var array $bpmr
+	 */
 	private $bpme;
 
 	const L_DEBUG="100";
@@ -21,10 +30,16 @@ class APPcelerate {
 	const L_ALERT="550";
 	const L_EMERCENCY="600";
 
-	//
-	// Logger Function
-	//
-	public function doLog($msg,$level=APPcelerate::L_DEBUG) {
+	/**
+	 * Function doLog
+	 *
+	 * Log to context logfile the message passed
+	 *
+	 * @param string $msg
+	 * @param integer $level
+	 * @return void
+	 */
+	public function doLog($msg, $level=APPcelerate::L_DEBUG) {
 
 		if (isset($this->app) and  array_key_exists("name", $this->app) and $this->app["name"]!=="init") {
 			$app_name=$this->app["name"];
@@ -44,7 +59,15 @@ class APPcelerate {
 
 	}
 
-	public function writeLog($logger,$level,$msg,$context) {
+	/**
+	 * Function writeLog
+	 *
+	 * @param Logger $logger
+	 * @param integer $level
+	 * @param string $msg
+	 * @param array $context
+	 */
+	private function writeLog($logger, $level, $msg, $context) {
 
 		if ($level>=$this->app["loglevel"]) {
 			if (array_key_exists("uname",$this->app)) {
@@ -78,15 +101,26 @@ class APPcelerate {
 		}
 	}
 
+	/**
+	 * Function setBPME
+	 *
+	 * @param boolean $v
+	 */
 	public function setBPME($v) {
 		$this->bpme=$v;
 	}
 
-	//
-	// Excel Functions
-	//
-
-	public function excel2Table($file,$columns,$addcolumns,$temporary=true) {
+	/**
+	 * Function excel2Table
+	 *
+	 * @param string $file
+	 * @param array $columns
+	 * @param array $addcolumns
+	 * @param bool $temporary
+	 * @return string
+	 * @throws Exception
+	 */
+	public function excel2Table($file, $columns, $addcolumns, $temporary=true) {
 		$tmptable="import_ospiti_".str_replace(" ","",str_replace(".","",microtime()));
 
 		if ($temporary) {
@@ -187,7 +221,17 @@ class APPcelerate {
 
 	}
 
-	public function excel2Table_2($file,$columns,$addcolumns,$temporary=true) {
+	/**
+	 * Function excel2Table_2
+	 *
+	 * @param $file
+	 * @param $columns
+	 * @param $addcolumns
+	 * @param bool $temporary
+	 * @return string
+	 * @throws Exception
+	 */
+	public function excel2Table_2($file, $columns, $addcolumns, $temporary=true) {
 		$tmptable="import_ospiti_".str_replace(" ","",str_replace(".","",microtime()));
 
 		if ($temporary) {
@@ -292,11 +336,15 @@ class APPcelerate {
 
 	}
 
-	//
-	// MySQL function
-	//
-
-	public function DBexistRel($rel,$idfromname,$idto) {
+	/**
+	 * Function DBexistRel
+	 *
+	 * @param string $rel
+	 * @param string $idfromname
+	 * @param string $idto
+	 * @return bool
+	 */
+	public function DBexistRel($rel, $idfromname, $idto) {
 
 		if (!is_numeric($idto)) {
 			$idto="'".$idto."'";
@@ -317,7 +365,14 @@ class APPcelerate {
 
 	}
 
-	public function DBfindDup($table,$field) {
+	/**
+	 * Function DBfindDup
+	 *
+	 * @param string $table
+	 * @param string $field
+	 * @return array
+	 */
+	public function DBfindDup($table, $field) {
 		$sql="select $field from $table group by $field having count($field)>1";
 		$rs=$this->app["db_".$this->app["name"]]->query($sql);
 		$this->sqlError($rs,$sql);
@@ -329,7 +384,16 @@ class APPcelerate {
 		}
 	}
 
-	public function DBexistRelAll($rel,$idtoname,$tblto,$idfromname="id") {
+	/**
+	 * Function DBExistRelAll
+	 *
+	 * @param string $rel
+	 * @param string $idtoname
+	 * @param string $tblto
+	 * @param string $idfromname
+	 * @return boolean
+	 */
+	public function DBexistRelAll($rel, $idtoname, $tblto, $idfromname="id") {
 		global $DBerrMsg;
 
 		$sql1="select count(*) from $rel where $idfromname in (select $idtoname from $tblto)";
@@ -350,13 +414,23 @@ class APPcelerate {
 		$sql="select $idfromname from $rel where $idfromname not in (select $idfromname from $tblto)";
 		$rs=$this->app["db_".$this->app["name"]]->query($sql);
 		$this->sqlError($rs,$sql);
-		$DBerrMsg=explode(",",array_values($rs->fetch_array(MYSQLI_NUM)));
+		$DBerrMsg=array_values($rs->fetch_array(MYSQLI_NUM));
 
 		return false;
 
 	}
 
-	public function DBisRelOK($rel,$idfromname,$idfrom,$idtoname,$idto) {
+	/**
+	 * Function DBisRelOK
+	 *
+	 * @param string $rel
+	 * @param string $idfromname
+	 * @param string $idfrom
+	 * @param string $idtoname
+	 * @param string $idto
+	 * @return bool
+	 */
+	public function DBisRelOK($rel, $idfromname, $idfrom, $idtoname, $idto) {
 
 		if (!is_numeric($idfrom)) {
 			$idfrom="'".$idfrom."'";
@@ -380,7 +454,14 @@ class APPcelerate {
 
 	}
 
-	public function DBnumRows($table,$cond="") {
+	/**
+	 * Function DBnumRows
+	 *
+	 * @param string $table
+	 * @param string $cond
+	 * @return integer
+	 */
+	public function DBnumRows($table, $cond="") {
 		$sql="select count(*) from $table";
 		if (!empty($cond)) {
 			$sql.=" where ".$cond;
@@ -390,17 +471,31 @@ class APPcelerate {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
-	public function DBnumValues($table,$column) {
+	/**
+	 * Function DBnumValues
+	 *
+	 * @param string $table
+	 * @param string $column
+	 * @return integer
+	 */
+	public function DBnumValues($table, $column) {
 		$sql="select $column from $table";
 		$rs=$this->app["db_".$this->app["name"]]->query($sql);
 		$this->sqlError($rs,$sql);
-		while($r=$rs->fetch_array(MYSQLI_NUM)) {
+		while(($r=$rs->fetch_array(MYSQLI_NUM))==true) {
 			$v[]=$r[0];
 		}
 		return(count(array_unique($v)));
 	}
 
-	public function ISsqlError($recordset,$query) {
+	/**
+	 * Function ISsqlError
+	 *
+	 * @param mysqli_result $recordset
+	 * @param string $query
+	 * @return bool
+	 */
+	public function ISsqlError($recordset, $query) {
 		if (!$recordset) {
 			$error=$this->app["db_".$this->app["name"]]->error;
 			$this->doLog("Failed SQL query - Query => $query, Error => ".$error,APPcelerate::L_ERROR);
@@ -411,21 +506,39 @@ class APPcelerate {
 		}
 	}
 
-	public function DBsqlError($recordset,$query) {
+	/**
+	 * Function DBsqlError
+	 *
+	 * @param mysqli_result $recordset
+	 * @param string $query
+	 * @return void
+	 * @throws Exception
+	 */
+	public function DBsqlError($recordset, $query) {
 		if (!$recordset) {
 			$this->doLog("Failed SQL query - Query => $query, Error => ".$this->app["db_".$this->app["name"]]->error,APPcelerate::L_ERROR);
 			throw new Exception("Database error, please contact support", 1);
 		}
 	}
 
-	// DEPRECATED
-	public function sqlError($recordset,$query) {
+	/**
+	 * Function sqlError
+	 *
+	 * @param mysqli_result $recordset
+	 * @param string $query
+	 * @return void
+	 */
+	public function sqlError($recordset, $query) {
 		if (!$recordset) {
 			$this->doLog("Failed SQL query - Query => $query, Error => ".$this->app["db_".$this->app["name"]]->error,APPcelerate::L_ERROR);
 			die("Database error, please contact support\n");
 		}
 	}
 
+	/**
+	 * Function destroySession
+	 * @return void
+	 */
 	public function destroySession() {
 		$_SESSION = array();
 
@@ -442,22 +555,40 @@ class APPcelerate {
 		return;
 	}
 
+	/**
+	 * function fetchAll
+	 *
+	 * @param mysqli_result $recordset
+	 * @return array
+	 */
 	public function fetchAll ($recordset) {
 		$data = [];
-		while ($row = $recordset->fetch_array(MYSQLI_NUM)) {
+		while (($row = $recordset->fetch_array(MYSQLI_NUM))==true) {
 	    	$data[] = $row;
 		}
 		return $data;
 	}
 
+	/**
+	 * Function fetchAllAssoc
+	 *
+	 * @param mysqli_result $recordset
+	 * @return array
+	 */
 	public function fetchAllAssoc ($recordset) {
 		$data = [];
-		while ($row = $recordset->fetch_array(MYSQLI_ASSOC)) {
+		while (($row = $recordset->fetch_array(MYSQLI_ASSOC))==true) {
 	    	$data[] = $row;
 		}
 		return $data;
 	}
 
+	/**
+	 * Function getString
+	 *
+	 * @param string $token
+	 * @return string
+	 */
 	public function getString($token) {
 		foreach ($this->app["apps"] as $app_name) {
 			$sql="select string from strings where token='$token' and id_language=(select id from languages where locale='".$this->app["locale"]."')";
@@ -472,6 +603,12 @@ class APPcelerate {
 		return($token);
 	}
 
+	/**
+	 * Function getUserFullName
+	 *
+	 * @param integer $uid
+	 * @return string
+	 */
 	public function getUserFullName($uid) {
 		$sql="select fullname from users where id=$uid";
 		$rs=$this->app["db_".$this->app["name"]]->query($sql);
@@ -479,6 +616,12 @@ class APPcelerate {
 		return($rs->fetch_array(MYSQLI_NUM)[0]);
 	}
 
+	/**
+	 * Function genSSO
+	 *
+	 * @param string $token
+	 * @return string string
+	 */
 	public function genSSO($token) {
 		if (array_key_exists($token."_ap_uid",$_SESSION)) {
 			$uid=$_SESSION[$token."_ap_uid"];
@@ -494,7 +637,14 @@ class APPcelerate {
 		}
 	}
 
-	public function getInclude($type,$params) {
+	/**
+	 * Function getInclude
+	 *
+	 * @param string $type
+	 * @param array $params
+	 * @return string|null
+	 */
+	public function getInclude($type, $params) {
 		$mode=$params["mode"];
 
 		if ($mode==="std") {
@@ -609,10 +759,10 @@ class APPcelerate {
 
 				switch($type) {
 					case "js":
-						$tag="script";
+						//$tag="script";
 						break;
 					case "css":
-						$tag="style";
+						//$tag="style";
 						break;
 				}
 				return($this->app["base_path"].$file);
@@ -623,7 +773,19 @@ class APPcelerate {
 
 	}
 
-	public function  sendEmail($body, $subject, $from, $to, $cc=array(),$bcc=array(), $files=array()) {
+	/**
+	 * Function sendEmail
+	 *
+	 * @param string $body
+	 * @param string $subject
+	 * @param string $from
+	 * @param string $to
+	 * @param array $cc
+	 * @param array $bcc
+	 * @param array $files
+	 * @return void
+	 */
+	public function  sendEmail($body, $subject, $from, $to, $cc=array(), $bcc=array(), $files=array()) {
 
 		if (!is_array($to)) {
 			$to=array($to);
@@ -657,6 +819,12 @@ class APPcelerate {
 		$this->sqlError($rs, $sql);
 	}
 
+	/**
+	 * Function errRoute
+	 *
+	 * @param bool $redir
+	 * @return void
+	 */
 	public function errRoute($redir=true) {
 		$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 		$this->doLog("Route Error, restarting $actual_link",APPcelerate::L_ERROR);
@@ -680,15 +848,36 @@ class APPcelerate {
 		}
 	}
 
+	/**
+	 * Function urlEncode
+	 *
+	 * @param string $url
+	 * @return string
+	 */
 	public function urlEncode($url) {
 		return urlencode($url);
 	}
 
-	public function stringForHTML($field,&$value) {
+	/**
+	 * function stringForHTML
+	 *
+	 * @param string $field
+	 * @param &string $value
+	 * @return void
+	 */
+	public function stringForHTML($field, &$value) {
 		$value=utf8_encode($value);
 	}
 
-	public function addMerge($type,$field,$var) {
+	/**
+	 * function addMerge
+	 *
+	 * @param string $type
+	 * @param string $field
+	 * @param mixed $var
+	 * @return void
+	 */
+	public function addMerge($type, $field, $var) {
 		switch ($type) {
 			case "block":
 				$this->app["tail_blocks"][$field]=$var;
@@ -701,6 +890,12 @@ class APPcelerate {
 		}
 	}
 
+	/**
+	 * Function logged
+	 *
+	 * @param string $app
+	 * @return bool
+	 */
 	public function logged($app="") {
 		foreach ($this->app["apps"] as $app_name) {
 			if (!empty($app) and $app_name!==$app) {
@@ -713,7 +908,15 @@ class APPcelerate {
 		return (false);
 	}
 
-	public function userAppAble($uid,$app) {
+	/**
+	 * Function userAppAble
+	 *
+	 * @param integer $uid
+	 * @param string sapp
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function userAppAble($uid, $app) {
 		$sql="select * from users where id=$uid and app like '%|$app|%'";
 		$rs=$this->app["db_".$this->app["name"]]->query($sql);
 		$this->DBsqlError($rs,$sql);
@@ -725,6 +928,10 @@ class APPcelerate {
 		}
 	}
 
+	/**
+	 * Function doSecurity
+	 * @return void
+	 */
 	public function doSecurity() {
 
 		$secredir=$this->app["secredir"][$this->app["name"]];
@@ -778,13 +985,12 @@ class APPcelerate {
 						break;
 					case 0:
 						$this->doLog("[SECURITY KO] redirecting to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
-						if ($secredir) {
+						if ($secredir==true) {
 							header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
 							die();
 						}
-						else {
-							$break;
-						}
+						break;
+
 					default:
 						$this->doLog("[SECURITY MULTI] redirecting to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
 						if ($secredir) {
@@ -810,7 +1016,14 @@ class APPcelerate {
 
 	}
 
-	public function checkRequest($reqs,$vars) {
+	/**
+	 * Function checkRequest
+	 *
+	 * @param array $reqs
+	 * @param array $vars
+	 * @return array|bool
+	 */
+	public function checkRequest($reqs, $vars) {
 		$vals=array();
 		foreach ($reqs as $req) {
 			if (!array_key_exists($req,$_REQUEST)) {
@@ -829,13 +1042,22 @@ class APPcelerate {
 		return $vals;
 	}
 
-	public function map($method,$route,$name) {
+	/**
+	 * function map
+	 *
+	 * @param string $method
+	 * @param string $route
+	 * @param string $name
+	 */
+	public function map($method, $route, $name) {
 		$this->app["router"]->map($method,$route,$name);
 	}
 
+	/**
+	 * Function doApp
+	 * return void
+	 */
 	public function doApp() {
-		session_start(array("gc_maxlifetime" =>1800, "cookie_lifetime" => 1800, ));
-
 		$this->doLog("Instance Started",$this::L_INFO);
 
 		$this->app["TBS"] = new clsTinyButStrong;
@@ -892,7 +1114,7 @@ class APPcelerate {
 			$app_base_path=$this->app["apps_path"]."/".$this->app["name"]."/";
 			$sec_base_path=$app_base_path.$this->app["section"]."/";
 
-			$base_url=$this->app["base_url"];
+			//$base_url=$this->app["base_url"];
 
 			$app_tpl_path=$app_base_path."templates/";
 			$sec_tpl_path=$sec_base_path."templates/";
@@ -900,9 +1122,9 @@ class APPcelerate {
 			$app_vws_path=$app_base_path."views/";
 			$sec_vws_path=$sec_base_path."views/";
 
-			$app_name=$this->app["name"];
+			//$app_name=$this->app["name"];
 
-			$section_name=$this->app["section"];
+			//$section_name=$this->app["section"];
 
 			//
 			// Init app (if exists)
@@ -1078,10 +1300,17 @@ class APPcelerate {
 
 	}
 
-	//
-	// INIT
-	//
+	/**
+	 * APPcelerate constructor.
+	 */
 	public function __construct() {
+
+		session_start([
+			              "gc_maxlifetime" =>3600,
+			              "cookie_lifetime" => 3600,
+			              "gc_divisor" => 1000000,
+			              "save_path" => $_SERVER["DOCUMENT_ROOT"]."/session";
+		              ]);
 
 		// Default, no BPME engine
 		$this->bpme=false;
