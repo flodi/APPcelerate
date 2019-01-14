@@ -1460,12 +1460,12 @@ class APPcelerate {
 		// DB Connection Init
 		//
 		$db_address=getenv('DB_ADDRESS');
-		$db_user=getenv('DB_USER');
-		$db_password=getenv('DB_PASSWORD');
+		$db_address=getenv('DB_USER');
+		$db_address=getenv('DB_PASSWORD');
 
 		foreach ($this->app["apps"] as $app_name) {
 			$db_name=getenv('DB_NAME_'.$app_name);
-			$app[$app_name."_hash_base"]=hash("crc32",$db_name);
+			$this->$app[$app_name."_hash_base"]=hash("crc32",$db_address.$db_address.$db_address.$db_name);
 			$this->app["db_".$app_name] = new mysqli($db_address, $db_user, $db_password, $db_name);
 			if ($this->app["db_".$app_name]->connect_error) {
 				die("Failed to connect to MySQL: doing new mysqli($db_address, $db_user, $db_password, $db_name) (".$this->app["db_".$app_name]->connect_errno.") ".$this->app["db_".$app_name]->connect_error);
