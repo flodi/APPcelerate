@@ -738,6 +738,9 @@ class APPcelerate {
 			}
 
 			switch($mode) {
+				case "site":
+					$file.="site";
+					break;
 				case "app":
 					$file.=$this->app["name"];
 					break;
@@ -1346,7 +1349,7 @@ class APPcelerate {
 		if (set_include_path(get_include_path().PATH_SEPARATOR.$vendor_path.PATH_SEPARATOR.$include_path.PATH_SEPARATOR.$fwpath.PATH_SEPARATOR.$apps_path)==false) {
 			die("Cannot set include path.");
 		}
-		include_once("tinybutstrong/tinybutstrong/plugins/tbs_plugin_html.php");
+		include_once("tbs_plugin_html.php");
 
 		// Read app.config
 		$dotenv = new Dotenv\Dotenv($this->app["base_path"], 'app.config');
