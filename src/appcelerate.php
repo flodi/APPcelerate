@@ -1354,7 +1354,7 @@ class APPcelerate {
 		include_once("tbs_plugin_html.php");
 
 		// Read app.config
-		$dotenv = new Dotenv\Dotenv($this->app["base_path"], 'app.config');
+		$dotenv = Dotenv\Dotenv::create($this->app["base_path"], 'app.config');
 		$dotenv->load();
 
 		$this->app["base_url"]=getenv('BASE_URL');
