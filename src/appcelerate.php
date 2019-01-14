@@ -1339,15 +1339,16 @@ class APPcelerate {
 		$vendor_path=$base_path."/vendor";
 		$include_path=$base_path."/include";
 		$apps_path=$base_path."/apps";
+		$lib_inc_path=$base_path."/vendor/flodi/appcelerate/src/include/";
 
 		$this->app["skipui"]=false;
 		$this->app["skipsec"]=false;
 		$this->app["apps_path"]=$base_path."/apps";
 		$this->app["base_path"]=$base_path;
-		$this->app["lib_inc_path"]=$base_path."/vendor/flodi/appcelerate/src/include/";
+		$this->app["lib_inc_path"]=$lib_inc_path;
 
 		// Define include path
-		if (set_include_path(get_include_path().PATH_SEPARATOR.$vendor_path.PATH_SEPARATOR.$include_path.PATH_SEPARATOR.$fwpath.PATH_SEPARATOR.$apps_path)==false) {
+		if (set_include_path(get_include_path().PATH_SEPARATOR.$vendor_path.PATH_SEPARATOR.$include_path.PATH_SEPARATOR.$fwpath.PATH_SEPARATOR.$apps_path.PATH_SEPARATOR.$lib_inc_path)==false) {
 			die("Cannot set include path.");
 		}
 		include_once("tbs_plugin_html.php");
