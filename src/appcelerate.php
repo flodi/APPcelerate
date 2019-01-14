@@ -939,10 +939,10 @@ class APPcelerate {
 
 		$secredir=$this->app["secredir"][$this->app["name"]];
 
-		if (!empty($_SESSION[$this->app["name"]."_ap_uid"])) {
+		if (!empty($_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
-			$this->app['uid']=$_SESSION[$this->app["name"]."_ap_uid"];
-			$this->app['uname']=$_SESSION[$this->app["name"]."_ap_uname"];
+			$this->app['uid']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"];
+			$this->app['uname']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"];
 
 			$sql="select pwd from users where id=".$this->app['uid'];
 			$rs=$this->app["db_".$this->app["name"]]->query($sql);
@@ -975,8 +975,8 @@ class APPcelerate {
 						$this->app['uid']=$row[0];
 						$this->app['uname']=$_REQUEST["login"];
 						$this->app['upwd']=$_REQUEST["password"];
-						$_SESSION[$this->app["name"]."_ap_uid"]=$this->app['uid'];
-						$_SESSION[$this->app["name"]."_ap_uname"]=$this->app['uname'];
+						$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"]=$this->app['uid'];
+						$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"]=$this->app['uname'];
 						$sql="select locale from languages where id=(select id_language from users where id=".$this->app["uid"].")";
 						$rs1=$this->app["db_".$this->app["name"]]->query($sql);
 						$this->sqlError($rs1,$sql);
@@ -1465,6 +1465,7 @@ class APPcelerate {
 
 		foreach ($this->app["apps"] as $app_name) {
 			$db_name=getenv('DB_NAME_'.$app_name);
+			$app[$app_name."_hash_base"]=hash("crc32",$db_name);
 			$this->app["db_".$app_name] = new mysqli($db_address, $db_user, $db_password, $db_name);
 			if ($this->app["db_".$app_name]->connect_error) {
 				die("Failed to connect to MySQL: doing new mysqli($db_address, $db_user, $db_password, $db_name) (".$this->app["db_".$app_name]->connect_errno.") ".$this->app["db_".$app_name]->connect_error);
