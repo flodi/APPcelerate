@@ -1367,6 +1367,7 @@ class APPcelerate {
 		}
 
 		$this->app["apps"]=explode("|",getenv('APPS'));
+print_r($this->app["apps"]);
 		$this->app["default_app"]=getenv('DEFAULT_APP');
 
 		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
