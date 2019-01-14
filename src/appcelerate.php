@@ -1344,6 +1344,7 @@ class APPcelerate {
 		$this->app["skipsec"]=false;
 		$this->app["apps_path"]=$base_path."/apps";
 		$this->app["base_path"]=$base_path;
+		$this->app["lib_inc_path"]=$base_path."/vendor/flodi/appcelerate/src/include/";
 
 		// Define include path
 		if (set_include_path(get_include_path().PATH_SEPARATOR.$vendor_path.PATH_SEPARATOR.$include_path.PATH_SEPARATOR.$fwpath.PATH_SEPARATOR.$apps_path)==false) {
