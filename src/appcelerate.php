@@ -653,7 +653,9 @@ class APPcelerate {
 					$c='
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-migrate-3.0.0.min.js"></script>';
+		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-migrate-3.0.0.min.js"></script>
+		<script type="text/javascript" src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+		<script type="text/javascript" src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>';
 					if ($this->app["bootstrap"]==3) {
 						$c.='
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -665,8 +667,6 @@ class APPcelerate {
 						';
 					}
 					$c.='
-		<script type="text/javascript" src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-		<script type="text/javascript" src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/3.3.3/js/tabulator.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.8/xlsx.core.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
