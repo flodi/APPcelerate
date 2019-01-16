@@ -716,9 +716,14 @@ class APPcelerate {
 		<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 						';
 					}
-					else {
+					if($this->app["fontawesome"]==4) {
 						$c.='
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+						';
+					}
+					if($this->app["fontawesome"]==3) {
+						$c.='
+		<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 						';
 					}
 					break;
