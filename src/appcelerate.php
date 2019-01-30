@@ -67,7 +67,7 @@ class APPcelerate {
 	 * @param string $msg
 	 * @param array $context
 	 */
-	private function writeLog($logger, $level, $msg, $context) {
+	public function writeLog($logger, $level, $msg, $context) {
 
 		if ($level>=$this->app["loglevel"]) {
 			if (array_key_exists("uname",$this->app)) {
