@@ -668,6 +668,7 @@ class APPcelerate {
 					}
 					$c.='
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/4.1.5/js/tabulator.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/4.1.5/js/jquery_wrapper.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.8/xlsx.core.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.0.0/js/tableexport.min.js"></script>
