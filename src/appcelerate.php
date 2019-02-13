@@ -949,7 +949,7 @@ class APPcelerate {
 		if (!empty($_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
 			$this->app['uid']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"];
-			$this->app['uname']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"];
+			$this->app['uname']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"]$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"];
 
 			$sql="select pwd from users where id=".$this->app['uid'];
 			$rs=$this->app["db_".$this->app["name"]]->query($sql);
@@ -1126,15 +1126,25 @@ class APPcelerate {
 
 			//$base_url=$this->app["base_url"];
 
+			$site_tpl_path=$this->app["apps_path"]."/templates/";
 			$app_tpl_path=$app_base_path."templates/";
 			$sec_tpl_path=$sec_base_path."templates/";
 
+			$site_vws_path=$this->app["apps_path"]."/views/";
 			$app_vws_path=$app_base_path."views/";
 			$sec_vws_path=$sec_base_path."views/";
 
 			//$app_name=$this->app["name"];
 
 			//$section_name=$this->app["section"];
+
+			//
+			// Init site (if exists)
+			//
+			if (stream_resolve_include_path($site_vws_path."init.php")) {
+				$this->doLog("Initializing site",$this::L_INFO);
+				include_once($site_vws_path."init.php");
+			}
 
 			//
 			// Init app (if exists)
@@ -1165,6 +1175,14 @@ class APPcelerate {
 			}
 
 			//
+			// Init site after security (if exists)
+			//
+			if (stream_resolve_include_path($site_vws_path."init_ws.php")) {
+				$this->doLog("Initializing site after security ",$this::L_INFO);
+				include_once($site_vws_path."init_ws.php");
+			}
+
+			//
 			// Init app after security (if exists)
 			//
 			if (stream_resolve_include_path($app_vws_path."init_ws.php")) {
@@ -1184,6 +1202,17 @@ class APPcelerate {
 			if ($this->app["skipui"]==false) {
 
 				header('Content-type: text/html; charset=UTF-8');
+
+				//
+				// Include site header template (if exists)
+				//
+				$this->doLog("Loading HEAD template for site",$this::L_INFO);
+				if (stream_resolve_include_path($site_tpl_path."head.htm")) {
+					$this->app["TBS"]->LoadTemplate($site_tpl_path."head.htm");
+				}
+				else {
+					$this->doLog("HEAD template not found for site",$this::L_INFO);
+				}
 
 				//
 				// Include app header template (if exists)
@@ -1250,6 +1279,14 @@ class APPcelerate {
 				if (stream_resolve_include_path($app_tpl_path."tail.htm")) {
 					$this->doLog("Loading TAIL template for ".$this->app["name"],$this::L_INFO);
 					$this->app["TBS"]->LoadTemplate($app_tpl_path."tail.htm","+");
+				}
+
+				//
+				// Include site tail template (if exists)
+				//
+				if (stream_resolve_include_path($site_tpl_path."tail.htm")) {
+					$this->doLog("Loading TAIL template for site",$this::L_INFO);
+					$this->app["TBS"]->LoadTemplate($site_tpl_path."tail.htm","+");
 				}
 
 				//
