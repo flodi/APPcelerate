@@ -1219,7 +1219,7 @@ class APPcelerate {
 				//
 				$this->doLog("Loading HEAD template for ".$this->app["name"],$this::L_INFO);
 				if (stream_resolve_include_path($app_tpl_path."head.htm")) {
-					$this->app["TBS"]->LoadTemplate($app_tpl_path."head.htm");
+					$this->app["TBS"]->LoadTemplate($app_tpl_path."head.htm","+");
 				}
 				else {
 					$this->doLog("HEAD template not found for ".$this->app["name"],$this::L_INFO);
