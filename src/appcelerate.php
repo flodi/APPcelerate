@@ -949,7 +949,7 @@ class APPcelerate {
 		if (!empty($_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
 			$this->app['uid']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"];
-			$this->app['uname']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"]$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"];
+			$this->app['uname']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"];
 
 			$sql="select pwd from users where id=".$this->app['uid'];
 			$rs=$this->app["db_".$this->app["name"]]->query($sql);
