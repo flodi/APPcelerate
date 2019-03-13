@@ -1083,7 +1083,6 @@ class APPcelerate {
 		include_once("routes.php");
 
 		$match = $this->app["router"]->match();
-print_r($match);
 
 		$this->doLog("App Start - ".json_encode($match),$this::L_INFO);
 
@@ -1094,10 +1093,21 @@ print_r($match);
 			if (!array_key_exists(1, explode("#",$match["target"])) or empty(explode("#",$match["target"]))) {
 				die("Error in routes definition: missing section");
 			}
-			$this->app["name"]=explode("#",$match["target"])[0];
-			$this->app["section"]=explode("#",$match["target"])[1];
+			$targets=explode("#",$match["target"]);
+			$this->app["name"]=$targets[0];
+			if (array_key_exists(1,$targets)) {
+				$this->app["section"]=$targets[1];
+			}
+			else {
+				$this->app["section"]="main";
+			}
+			if (array_key_exists(2,$targets)) {
+				$this->app["action"]=$targets[2];
+			}
+			else {
+				$this->app["action"]="main";
+			}
 			$this->app["params"]=$match["params"];
-			$this->app["route"]=$match["name"];
 
 			$this->doLog("=====> Routing for  ".json_encode($match),$this::L_INFO);
 			$this->doLog("=====> Starting ".$this->app["name"]."/".$this->app["section"]." (".json_encode($this->app["params"]).")",$this::L_INFO);
