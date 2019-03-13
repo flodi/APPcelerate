@@ -1083,6 +1083,7 @@ class APPcelerate {
 		include_once("routes.php");
 
 		$match = $this->app["router"]->match();
+print_r($match);
 
 		$this->doLog("App Start - ".json_encode($match),$this::L_INFO);
 
@@ -1097,8 +1098,6 @@ class APPcelerate {
 			$this->app["section"]=explode("#",$match["target"])[1];
 			$this->app["params"]=$match["params"];
 			$this->app["route"]=$match["name"];
-
-print_r($match);
 
 			$this->doLog("=====> Routing for  ".json_encode($match),$this::L_INFO);
 			$this->doLog("=====> Starting ".$this->app["name"]."/".$this->app["section"]." (".json_encode($this->app["params"]).")",$this::L_INFO);
