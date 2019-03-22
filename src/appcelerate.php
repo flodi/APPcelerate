@@ -1110,6 +1110,7 @@ class APPcelerate {
 			}
 			$this->app["params"]=$match["params"];
 			$this->app["target"]=$match["target"];
+			$this->app["route"]=$match["name"];
 
 			$this->doLog("=====> Routing for  ".json_encode($match),$this::L_INFO);
 			$this->doLog("=====> Starting ".$this->app["name"]."/".$this->app["section"]." (".json_encode($this->app["params"]).")",$this::L_INFO);
