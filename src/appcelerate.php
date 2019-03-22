@@ -1531,7 +1531,7 @@ class APPcelerate {
 			$this->app["db_".$app_name]->set_charset("utf8");
 		}
 
-		$this->doLog("APPCelerate created for http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+		$this->doLog("APPCelerate created for $_SERVER[SERVER_PROTOCOL]  $_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 
 	}
 
