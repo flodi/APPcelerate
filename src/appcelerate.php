@@ -1410,6 +1410,15 @@ class APPcelerate {
 		$dotenv = Dotenv\Dotenv::create($this->app["base_path"], 'app.config');
 		$dotenv->load();
 
+		$this->app["session_mins"]=getenv('SESSION_MINS');
+		$duration=60*$this->app["session_mins"];
+		session_start([
+			              "gc_maxlifetime" =>$duration,
+			              "cookie_lifetime" => $duration,
+			              "gc_divisor" => 1000000,
+			              "save_path" => $_SERVER["DOCUMENT_ROOT"]."/session",
+		              ]);
+
 		$this->app["base_url"]=getenv('BASE_URL');
 		$this->app["base_app"]=getenv('BASE_APP');
 		if (strlen($this->app["base_app"])>0) {
@@ -1430,16 +1439,6 @@ class APPcelerate {
 		$this->app["aws_code"]=getenv('AWS_CODE');
 
 		$this->app["from_email"]=getenv('FROM_EMAIL');
-
-		$this->app["session_mins"]=getenv('SESSION_MINS');
-		$duration=60*$this->app["session_mins"];
-
-		session_start([
-			              "gc_maxlifetime" =>$duration,
-			              "cookie_lifetime" => $duration,
-			              "gc_divisor" => 1000000,
-			              "save_path" => $_SERVER["DOCUMENT_ROOT"]."/session",
-		              ]);
 
 		$this->app["bootstrap"]=getenv('BOOTSTRAP_VERSION');
 		$this->app["fontawesome"]=getenv('FONTAWESOME_VERSION');
