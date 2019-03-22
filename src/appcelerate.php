@@ -1368,13 +1368,6 @@ class APPcelerate {
 	 */
 	public function __construct() {
 
-		session_start([
-			              "gc_maxlifetime" =>3600,
-			              "cookie_lifetime" => 3600,
-			              "gc_divisor" => 1000000,
-			              "save_path" => $_SERVER["DOCUMENT_ROOT"]."/session",
-		              ]);
-
 		// Default, no BPME engine
 		$this->bpme=false;
 
@@ -1440,8 +1433,13 @@ class APPcelerate {
 
 		$this->app["session_mins"]=getenv('SESSION_MINS');
 		$duration=60*$this->app["session_mins"];
-		ini_set("session.gc_maxlifetime",$duration);
-		session_set_cookie_params($duration);
+
+		session_start([
+			              "gc_maxlifetime" =>$duration,
+			              "cookie_lifetime" => $duration,
+			              "gc_divisor" => 1000000,
+			              "save_path" => $_SERVER["DOCUMENT_ROOT"]."/session",
+		              ]);
 
 		$this->app["bootstrap"]=getenv('BOOTSTRAP_VERSION');
 		$this->app["fontawesome"]=getenv('FONTAWESOME_VERSION');
