@@ -670,7 +670,7 @@ class APPcelerate {
 					}
 					$c.='
 		<script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.2.0/dist/js/tabulator.min.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/4.1.5/js/jquery_wrapper.min.js"></script>
+		<script type="text/javascript" src="'.$b.'/vendor/flodi/appcelerate/src/include/js/jquery_wrapper.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.1/xlsx.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.8/xlsx.core.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
@@ -694,22 +694,21 @@ class APPcelerate {
 				case "css":
 					$c='
 		<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-					';
+		<link href="https://unpkg.com/tabulator-tables@4.2.3/dist/css/tabulator.min.css" rel="stylesheet">					';
 					if ($this->app["bootstrap"]==3 or !array_key_exists("bootstrap", $this->app) or empty($this->app["bootstrap"])) {
 						$c.='
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-		<link href="'.$b.'/dist/css/bootstrap/tabulator_bootstrap.min.css" rel="stylesheet">
+		<link href="'.$b.'/vendor/flodi/appcelerate/src/include/css/tabulator_bootstrap.min.css" rel="stylesheet">
 						';
 					}
 					if ($this->app["bootstrap"]==4) {
 						$c.='
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-		<link href="'.$b.'/dist/css/bootstrap/tabulator_bootstrap4.min.css" rel="stylesheet">
+		<link href="'.$b.'/vendor/flodi/appcelerate/src/include/css/tabulator_bootstrap4.min.css" rel="stylesheet">
 						';
 					}
 					$c.='
-		<link href="https://unpkg.com/tabulator-tables@4.2.0/dist/css/tabulator.min.css" rel="stylesheet">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.0.0/css/tableexport.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="'.$b.'/vendor/flodi/appcelerate/src/include/css/parsley.css">
 		<link rel="stylesheet" href="'.$b.'/vendor/flodi/appcelerate/src/include/css/jquery.treetable.css">
