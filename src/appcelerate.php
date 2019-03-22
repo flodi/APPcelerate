@@ -647,13 +647,15 @@ class APPcelerate {
 	public function getInclude($type, $params) {
 		$mode=$params["mode"];
 
+		$b=$this->app["base_url"];
+
 		if ($mode==="std") {
 			switch($type) {
 				case "js":
 					$c='
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/jquery-migrate-3.0.0.min.js"></script>
+		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/jquery-migrate-3.0.0.min.js"></script>
 		<script type="text/javascript" src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
 		<script type="text/javascript" src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>';
 					if ($this->app["bootstrap"]==3) {
@@ -676,17 +678,17 @@ class APPcelerate {
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
 		<script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.0/xlsx.full.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/moment-with-locales.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/parsley.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/i18n/it.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.form.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/select2.full.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/bootstrap-editable.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/typeaheadjs.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/garlic.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/jquery.fixedheadertable.min.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/xepOnline.jqPlugin.js"></script>
-		<script src="/vendor/flodi/appcelerate/src/include/js/appcelerate.js"></script>
+		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/moment-with-locales.js"></script>
+		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/parsley.min.js"></script>
+		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/i18n/it.js"></script>
+		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/jquery.form.js"></script>
+		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/select2.full.min.js"></script>
+		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/bootstrap-editable.min.js"></script>
+		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/typeaheadjs.js"></script>
+		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/garlic.min.js"></script>
+		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/jquery.fixedheadertable.min.js"></script>
+		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/xepOnline.jqPlugin.js"></script>
+		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/appcelerate.js"></script>
 					';
 					break;
 				case "css":
@@ -697,24 +699,24 @@ class APPcelerate {
 						$c.='
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-		<link href="/dist/css/bootstrap/tabulator_bootstrap.min.css" rel="stylesheet">
+		<link href="'.$b.'/dist/css/bootstrap/tabulator_bootstrap.min.css" rel="stylesheet">
 						';
 					}
 					if ($this->app["bootstrap"]==4) {
 						$c.='
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-		<link href="/dist/css/bootstrap/tabulator_bootstrap4.min.css" rel="stylesheet">
+		<link href="'.$b.'/dist/css/bootstrap/tabulator_bootstrap4.min.css" rel="stylesheet">
 						';
 					}
 					$c.='
 		<link href="https://unpkg.com/tabulator-tables@4.2.0/dist/css/tabulator.min.css" rel="stylesheet">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.0.0/css/tableexport.min.css" rel="stylesheet">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/parsley.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.treetable.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/jquery.treetable.theme.default.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/select2-bootstrap.min.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/typeahead.js-bootstrap.css">
-		<link rel="stylesheet" href="/vendor/flodi/appcelerate/src/include/css/bootstrap-editable.css">';
+		<link rel="stylesheet" href="'.$b.'/vendor/flodi/appcelerate/src/include/css/parsley.css">
+		<link rel="stylesheet" href="'.$b.'/vendor/flodi/appcelerate/src/include/css/jquery.treetable.css">
+		<link rel="stylesheet" href="'.$b.'/vendor/flodi/appcelerate/src/include/css/jquery.treetable.theme.default.css">
+		<link rel="stylesheet" href="'.$b.'/vendor/flodi/appcelerate/src/include/css/select2-bootstrap.min.css">
+		<link rel="stylesheet" href="'.$b.'/vendor/flodi/appcelerate/src/include/css/typeahead.js-bootstrap.css">
+		<link rel="stylesheet" href="'.$b.'/vendor/flodi/appcelerate/src/include/css/bootstrap-editable.css">';
 					if($this->app["fontawesome"]==5) {
 						$c.='
 		<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
@@ -727,7 +729,7 @@ class APPcelerate {
 					}
 					if($this->app["fontawesome"]==3) {
 						$c.='
-		<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+		<link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 						';
 					}
 					break;
