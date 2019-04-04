@@ -1534,7 +1534,7 @@ class APPcelerate {
 		}
 
 		$protocol="http://";
-		if (array_key_exists("HTTPS",$_SERVER) {
+		if (array_key_exists("HTTPS",$_SERVER)) {
 			$protocol="https://";
 		}
 
