@@ -808,7 +808,7 @@ class BPME {
 			$msg=$e->getMessage();
 			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
-		}		
+		}
 	}
 
 	private function setProcessAlert($id_process_instance, $id_activity_instance, $alarm_data, $severity=3) {
@@ -1529,7 +1529,7 @@ class BPME {
 				$this->setActivityInstanceVisibility($id_activity_instance_to,0);
 			}
 			catch (Exception $e) {
-				$this->doLog("Cannot set Activity Instance visibility for id '$id_activity_instance_to'",APPcelerate::L_ERROR);				 
+				$this->doLog("Cannot set Activity Instance visibility for id '$id_activity_instance_to'",APPcelerate::L_ERROR);
 			}
 		}
 
@@ -1590,7 +1590,7 @@ $visible=1;
 			$msg=$e->getMessage();
 			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
 			throw new Exception("Query Error", 0);
-		}		
+		}
 	}
 
 	private function getActivityInstanceVisibility($id_activity_instance) {
@@ -2349,6 +2349,15 @@ $visible=1;
 					throw new Exception("Missing 'id' params", 0);
 				}
 				return($this->getProcessInstanceData($params["id"],true,"array"));
+				break;
+			case 'setProcessInstanceData':
+				if (!array_key_exists("id",$params)) {
+					throw new Exception("Missing 'id' params", 0);
+				}
+				if (!array_key_exists("data",$params)) {
+					throw new Exception("Missing 'data' params", 0);
+				}
+				return($this->setProcessInstanceData($params["id"],$params["data"]));
 				break;
 			case 'getProcessInstanceCounterpart':
 				if (!array_key_exists("id",$params)) {
