@@ -960,7 +960,7 @@ class BPME {
 
 	}
 
-private function getCTypeFromProcessID($id_process) $id_process
+private function getCTypeFromProcessID($id_process) {
 	$this->doLog("Requested with process $id_process_instance",APPcelerate::L_DEBUG);
 
 	if (!is_numeric($id_process) and !is_int($id_process)) {
