@@ -960,7 +960,28 @@ class BPME {
 
 	}
 
-	private function executeCounterpartActivity($id_activity_instance) {
+private function getCTypeFromProcessID($id_process) $id_process
+	$this->doLog("Requested with process $id_process_instance",APPcelerate::L_DEBUG);
+
+	if (!is_numeric($id_process) and !is_int($id_process)) {
+		throw new Exception("Process id $id_process not valid", 0);
+	}
+
+	$sql="select counterpart_type from processes where id=$id_process";
+	$rs=$this->db->query($sql);
+	try {
+		$this->rsCheck($rs);
+	}
+	catch (Exception $e) {
+		$msg=$e->getMessage();
+		$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
+		throw new Exception("Query Error", 0);
+	}
+	return($rs->fetch_array(MYSQLI_NUM)[0]);
+}
+
+
+private function executeCounterpartActivity($id_activity_instance) {
 		$this->doLog("Requested with activty instance  $id_activity_instance",APPcelerate::L_DEBUG);
 
 		if (!is_numeric($id_activity_instance) and !is_int($id_activity_instance)) {
@@ -992,17 +1013,37 @@ class BPME {
 		$activity[0]=$rs->fetch_array(MYSQLI_ASSOC);
 		$TBSC->MergeBlock("bActivity",$activity);
 
-		$sql="select * from ospiti where id=(select id_ospite from partecipanti where id=$id_counterpart)";
-		$rs=$this->db->query($sql);
-		try {
-			$this->rsCheck($rs);
+		$id_process=$this->getProcessIDFromProcessInstance($id_process_instance);
+		$counterpart_type=$this->getCTypeFromProcessID($id_process);
+
+		switch($counterpart_type) {
+			case "U":
+				$sql="select * from ospiti where id=(select id_ospite from partecipanti where id=$id_counterpart)";
+				$rs=$this->db->query($sql);
+				try {
+					$this->rsCheck($rs);
+				}
+				catch (Exception $e) {
+					$msg=$e->getMessage();
+					$this->doLog("$sql ( $msg )", APPcelerate::L_ERROR);
+					throw new Exception("Query Error", 0);
+				}
+				$counterpart=$this->fw->fetchAllAssoc($rs);
+				break;
+			case "C":
+				$sql="select * from clienti where id=$id_counterpart";
+				$rs=$this->db->query($sql);
+				try {
+					$this->rsCheck($rs);
+				}
+				catch (Exception $e) {
+					$msg=$e->getMessage();
+					$this->doLog("$sql ( $msg )", APPcelerate::L_ERROR);
+					throw new Exception("Query Error", 0);
+				}
+				$counterpart=$this->fw->fetchAllAssoc($rs);
+				break;
 		}
-		catch (Exception $e) {
-			$msg=$e->getMessage();
-			$this->doLog("$sql ( $msg )",APPcelerate::L_ERROR);
-			throw new Exception("Query Error", 0);
-		}
-		$counterpart=$this->fw->fetchAllAssoc($rs);
 		$TBSC->MergeBlock("bCount",$counterpart);
 
 		$url=$this->fw->app["base_url"]."/bpme/case/$id_activity_instance/";
