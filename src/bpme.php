@@ -1031,7 +1031,7 @@ private function executeCounterpartActivity($id_activity_instance) {
 				$counterpart=$this->fw->fetchAllAssoc($rs);
 				break;
 			case "C":
-				$sql="select * from clienti where id=$id_counterpart";
+				$sql="select contact_name as nome, \"\" as cognome,contact_email as mail,* from clienti where id=$id_counterpart";
 				$rs=$this->db->query($sql);
 				try {
 					$this->rsCheck($rs);
