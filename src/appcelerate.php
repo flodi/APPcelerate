@@ -1018,8 +1018,8 @@ class APPcelerate {
 				$this->doLog("No Request login data found");
 				unset($this->app['uid']);
 				unset($this->app['uname']);
-				if (!(strpos($_SERVER['REQUEST_URI'],"/login/")) and !(strpos($_SERVER['REQUEST_URI'],"/logout/")) and !(strpos($_SERVER['REQUEST_URI'],"/register/"))) {
-					$this->doLog($_SERVER['REQUEST_URI']." is not login or logout or register page => Security Error",APPcelerate::L_ERROR);
+				if (!(strpos($_SERVER['REQUEST_URI'],"/login/")) and !(strpos($_SERVER['REQUEST_URI'],"/logout/")) and !(strpos($_SERVER['REQUEST_URI'],"/register/")) and !(strpos($_SERVER['REQUEST_URI'],"/confirm/"))) {
+					$this->doLog($_SERVER['REQUEST_URI']." is not login or logout or register or confirm page => Security Error",APPcelerate::L_ERROR);
 					if ($secredir) {
 						$from=base64_encode($_SERVER["REQUEST_URI"]);
 						$this->doLog("[SECURITY] redirecting to ". $this->app["base_url"] . "/".$this->app["name"] . "/login/?nolo");
