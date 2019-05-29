@@ -847,7 +847,7 @@ class APPcelerate {
 			echo "
 <html>
 	<head>
-		<meta http-equiv=\"refresh\" content=\"5;url=".$this->app["base_url"]."\" />
+		<meta http-equiv=\"refresh\" content=\"5;url=".$this->app["base_url"]."/\" />
     </head>
     <body>
         <h1>Error: you tried to to something that it is not allowed</h1>
