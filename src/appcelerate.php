@@ -854,13 +854,10 @@ class APPcelerate {
         <h2>You'll be redirected to home page in 5 seconds...</h2>
         <i>Info:<br>".$actual_link."<br>".$_SERVER["SERVER_NAME"]."<br>".$_SERVER["DOCUMENT_ROOT"]."</i>
         <hr>
-        <pre>
-        ".print_r($this->app["router"],true)."
-        </pre>
     </body>
 </html>";
 			//header("Location: ".$this->app["base_url"]."/");
-			die();
+			//die();
 		}
 		else {
 			die("Routing error, you've done something not permitted");
@@ -1082,7 +1079,6 @@ class APPcelerate {
 
 		$this->app["TBS"] = new clsTinyButStrong;
 
-
 		$this->app["router"] = new AltoRouter();
 		$this->app["router"]->addMatchTypes(array('l' => '(\d+?,?)+'));
 
@@ -1092,7 +1088,7 @@ class APPcelerate {
 
 		$this->doLog("App Start - ".json_encode($match),$this::L_INFO);
 
-		if ($match) {
+		if (is_array($match)) {
 			//
 			// If no Section specified, error
 			//
