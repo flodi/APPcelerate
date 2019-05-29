@@ -855,7 +855,7 @@ class APPcelerate {
         <i>Info:<br>".$actual_link."<br>".$_SERVER["SERVER_NAME"]."<br>".$_SERVER["DOCUMENT_ROOT"]."</i>
         <hr>
         <pre>
-        ".print_r($this->router,true)."
+        ".print_r($this->app["router"],true)."
         </pre>
     </body>
 </html>";
