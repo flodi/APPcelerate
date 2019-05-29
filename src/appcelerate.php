@@ -860,7 +860,7 @@ class APPcelerate {
     </body>
 </html>";
 			//header("Location: ".$this->app["base_url"]."/");
-			//die();
+			die();
 		}
 		else {
 			die("Routing error, you've done something not permitted");
