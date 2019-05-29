@@ -1066,8 +1066,11 @@ class APPcelerate {
 	 * @param string $route
 	 * @param string $name
 	 */
-	public function map($method, $route, $name) {
-		$this->app["router"]->map($method,$route,$name);
+	public function map($method, $route, $target, $name=null) {
+		if (is_null($name)) {
+			$name=$route.$target;
+		}
+		$this->app["router"]->map($method,$route,$target,$name);
 	}
 
 	/**
