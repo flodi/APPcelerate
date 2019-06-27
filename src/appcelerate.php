@@ -1322,7 +1322,7 @@ class APPcelerate {
 					$this->addMerge("field",'uname',"");
 				}
 				if (isset($this->app['uid'])) {
-					$this-addMerge("field",'uid',$this->app['uid']);
+					$this->addMerge("field",'uid',$this->app['uid']);
 				}
 				else {
 					$this->addMerge("field",'uid',"");
