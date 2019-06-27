@@ -1348,12 +1348,12 @@ class APPcelerate {
 				}
 
 				$this->app["TBS"]->ObjectRef['fw_obj'] = $this;
-				$this->addMerge("field",'tokens', '~fw_obj.getString', true);
-				$this->addMerge("field",'urlencode', '~fw_obj.urlEncode', true);
-				$this->addMerge("field",'include', '~fw_obj.getInclude', true);
-				$this->addMerge("field",'sso', '~fw_obj.genSSO', true);
+				$this->app["TBS"]->MergeField('tokens', '~fw_obj.getString', true);
+				$this->app["TBS"]->MergeField('urlencode', '~fw_obj.urlEncode', true);
+				$this->app["TBS"]->MergeField('include', '~fw_obj.getInclude', true);
+				$this->app["TBS"]->MergeField('sso', '~fw_obj.genSSO', true);
 				if ($this->bpme) {
-					$this->addMerge("field",'bpme', '~bpme_obj.bpmeTBS', true);
+					$this->app["TBS"]->MergeField('bpme', '~bpme_obj.bpmeTBS', true);
 				}
 
 				$this->app["TBS"]->SetOption('render',TBS_OUTPUT);
