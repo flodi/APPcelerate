@@ -1327,11 +1327,14 @@ class APPcelerate {
 				else {
 					$this->app["TBS"]->MergeField('uid',"");
 				}
-				$this->addMerge("field",'base_url', $this->app["base_url"]);
+				$this->app["TBS"]->MergeField('base_url',$this->app["base_url"]);
+				$this->addMerge("field",'base_url',$this->app["base_url"]);
 				$this->app["TBS"]->MergeField('app_tpl_path',$app_tpl_path);
 				$this->app["TBS"]->MergeField('sec_tpl_path',$sec_tpl_path);
 				$this->app["TBS"]->MergeField('app',$this->app["name"]);
+				$this->addMerge("field",'app',$this->app["name"]);
 				$this->app["TBS"]->MergeField('section',$this->app["section"]);
+				$this->addMerge("field",'section',$this->app["section"]);
 
 				if(array_key_exists("tail_blocks", $this->app)) {
 					foreach($this->app["tail_blocks"] as $block_name => $block_data) {
