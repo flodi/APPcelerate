@@ -1327,7 +1327,7 @@ class APPcelerate {
 				else {
 					$this->app["TBS"]->MergeField('uid',"");
 				}
-				$this->app["TBS"]->MergeField('base_url',$this->app["base_url"]);
+				$this->addMerge("field",'base_url', $this->app["base_url"]);
 				$this->app["TBS"]->MergeField('app_tpl_path',$app_tpl_path);
 				$this->app["TBS"]->MergeField('sec_tpl_path',$sec_tpl_path);
 				$this->app["TBS"]->MergeField('app',$this->app["name"]);
