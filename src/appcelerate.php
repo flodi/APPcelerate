@@ -1316,44 +1316,44 @@ class APPcelerate {
 				// Merge default variables
 				//
 				if (isset($this->app['uname'])) {
-					$this->app["TBS"]->MergeField('uname',$this->app['uname']);
+					$this->addMerge("field",'uname',$this->app['uname']);
 				}
 				else {
-					$this->app["TBS"]->MergeField('uname',"");
+					$this->addMerge("field",'uname',"");
 				}
 				if (isset($this->app['uid'])) {
-					$this->app["TBS"]->MergeField('uid',$this->app['uid']);
+					$this-addMerge("field",'uid',$this->app['uid']);
 				}
 				else {
-					$this->app["TBS"]->MergeField('uid',"");
+					$this->addMerge("field",'uid',"");
 				}
-				$this->app["TBS"]->MergeField('base_url',$this->app["base_url"]);
-				$this->app["TBS"]->MergeField('app_tpl_path',$app_tpl_path);
-				$this->app["TBS"]->MergeField('sec_tpl_path',$sec_tpl_path);
-				$this->app["TBS"]->MergeField('app',$this->app["name"]);
-				$this->app["TBS"]->MergeField('section',$this->app["section"]);
+				$this->addMerge("field",'base_url',$this->app["base_url"]);
+				$this->addMerge("field",'app_tpl_path',$app_tpl_path);
+				$this->addMerge("field",'sec_tpl_path',$sec_tpl_path);
+				$this->addMerge("field",'app',$this->app["name"]);
+				$this->addMerge("field",'section',$this->app["section"]);
 
 				if(array_key_exists("tail_blocks", $this->app)) {
 					foreach($this->app["tail_blocks"] as $block_name => $block_data) {
 						$this->doLog("Merging Tail Block $block_name");
-						$this->app["TBS"]->MergeBlock("$block_name",$block_data);
+						$this->addMerge("block","$block_name",$block_data);
 					}
 				}
 
 				if(array_key_exists("tail_fields", $this->app)) {
 					foreach($this->app["tail_fields"] as $field_name => $field_data) {
 						$this->doLog("Merging Tail Field $field_name");
-						$this->app["TBS"]->MergeField("$field_name",$field_data);
+						$this->addMerge("field","$field_name",$field_data);
 					}
 				}
 
 				$this->app["TBS"]->ObjectRef['fw_obj'] = $this;
-				$this->app["TBS"]->MergeField('tokens', '~fw_obj.getString', true);
-				$this->app["TBS"]->MergeField('urlencode', '~fw_obj.urlEncode', true);
-				$this->app["TBS"]->MergeField('include', '~fw_obj.getInclude', true);
-				$this->app["TBS"]->MergeField('sso', '~fw_obj.genSSO', true);
+				$this->app["TBS"]->addMerge("field",'tokens', '~fw_obj.getString', true);
+				$this->app["TBS"]->addMerge("field",'urlencode', '~fw_obj.urlEncode', true);
+				$this->app["TBS"]->addMerge("field",'include', '~fw_obj.getInclude', true);
+				$this->app["TBS"]->addMerge("field",'sso', '~fw_obj.genSSO', true);
 				if ($this->bpme) {
-					$this->app["TBS"]->MergeField('bpme', '~bpme_obj.bpmeTBS', true);
+					$this->app["TBS"]->addMerge("field",'bpme', '~bpme_obj.bpmeTBS', true);
 				}
 
 				$this->app["TBS"]->SetOption('render',TBS_OUTPUT);
