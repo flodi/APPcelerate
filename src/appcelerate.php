@@ -718,7 +718,7 @@ class APPcelerate {
 		<link rel="stylesheet" href="'.$b.'/vendor/flodi/appcelerate/src/include/css/bootstrap-editable.css">';
 					if($this->app["fontawesome"]==5) {
 						$c.='
-		<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+		<script src="https://kit.fontawesome.com/9572d44df9.js"></script>
 						';
 					}
 					if($this->app["fontawesome"]==4) {
