@@ -1180,7 +1180,6 @@ class APPcelerate {
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
 						include_once($site_vws_path."exception.php");
 					}
-
 				}
 			}
 
@@ -1189,7 +1188,21 @@ class APPcelerate {
 			//
 			if (stream_resolve_include_path($app_vws_path."init.php")) {
 				$this->doLog("Initializing app ".$this->app["name"],$this::L_INFO);
-				include_once($app_vws_path."init.php");
+				try {
+					include_once($app_vws_path."init.php");
+				} catch (Exception $e) {
+					$d=getdate();
+					global $e,$d;
+					if (stream_resolve_include_path($site_tpl_path."exception.htm")) {
+						$this->app["TBS"] = new clsTinyButStrong;
+						$this->app["TBS"]->LoadTemplate($site_tpl_path."exception.htm");
+						$this->addMerge("field",'e',$e);
+						$this->addMerge("field",'d',$d);
+					}
+					if (stream_resolve_include_path($site_vws_path."exception.php")) {
+						include_once($site_vws_path."exception.php");
+					}
+				}
 			}
 
 			//
@@ -1197,7 +1210,21 @@ class APPcelerate {
 			//
 			if (stream_resolve_include_path($sec_vws_path."init.php")) {
 				$this->doLog("Initializing section after security ".$this->app["section"],$this::L_INFO);
-				include_once($sec_vws_path."init.php");
+				try {
+					include_once($sec_vws_path."init.php");
+				} catch (Exception $e) {
+					$d=getdate();
+					global $e,$d;
+					if (stream_resolve_include_path($site_tpl_path."exception.htm")) {
+						$this->app["TBS"] = new clsTinyButStrong;
+						$this->app["TBS"]->LoadTemplate($site_tpl_path."exception.htm");
+						$this->addMerge("field",'e',$e);
+						$this->addMerge("field",'d',$d);
+					}
+					if (stream_resolve_include_path($site_vws_path."exception.php")) {
+						include_once($site_vws_path."exception.php");
+					}
+				}
 			}
 
 			//
@@ -1217,7 +1244,21 @@ class APPcelerate {
 			//
 			if (stream_resolve_include_path($site_vws_path."init_ws.php")) {
 				$this->doLog("Initializing site after security ",$this::L_INFO);
-				include_once($site_vws_path."init_ws.php");
+				try {
+					include_once($site_vws_path."init_ws.php");
+				} catch (Exception $e) {
+					$d=getdate();
+					global $e,$d;
+					if (stream_resolve_include_path($site_tpl_path."exception.htm")) {
+						$this->app["TBS"] = new clsTinyButStrong;
+						$this->app["TBS"]->LoadTemplate($site_tpl_path."exception.htm");
+						$this->addMerge("field",'e',$e);
+						$this->addMerge("field",'d',$d);
+					}
+					if (stream_resolve_include_path($site_vws_path."exception.php")) {
+						include_once($site_vws_path."exception.php");
+					}
+				}
 			}
 
 			//
@@ -1225,7 +1266,21 @@ class APPcelerate {
 			//
 			if (stream_resolve_include_path($app_vws_path."init_ws.php")) {
 				$this->doLog("Initializing app after security ".$this->app["name"],$this::L_INFO);
-				include_once($app_vws_path."init_ws.php");
+				try {
+					include_once($app_vws_path."init_ws.php");
+				} catch (Exception $e) {
+					$d=getdate();
+					global $e,$d;
+					if (stream_resolve_include_path($site_tpl_path."exception.htm")) {
+						$this->app["TBS"] = new clsTinyButStrong;
+						$this->app["TBS"]->LoadTemplate($site_tpl_path."exception.htm");
+						$this->addMerge("field",'e',$e);
+						$this->addMerge("field",'d',$d);
+					}
+					if (stream_resolve_include_path($site_vws_path."exception.php")) {
+						include_once($site_vws_path."exception.php");
+					}
+				}
 			}
 
 			//
@@ -1233,7 +1288,21 @@ class APPcelerate {
 			//
 			if (stream_resolve_include_path($sec_vws_path."init_ws.php")) {
 				$this->doLog("Initializing section ".$this->app["section"],$this::L_INFO);
-				include_once($sec_vws_path."init_ws.php");
+				try {
+					include_once($sec_vws_path."init_ws.php");
+				} catch (Exception $e) {
+					$d=getdate();
+					global $e,$d;
+					if (stream_resolve_include_path($site_tpl_path."exception.htm")) {
+						$this->app["TBS"] = new clsTinyButStrong;
+						$this->app["TBS"]->LoadTemplate($site_tpl_path."exception.htm");
+						$this->addMerge("field",'e',$e);
+						$this->addMerge("field",'d',$d);
+					}
+					if (stream_resolve_include_path($site_vws_path."exception.php")) {
+						include_once($site_vws_path."exception.php");
+					}
+				}
 			}
 
 
