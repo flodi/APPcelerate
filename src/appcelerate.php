@@ -1161,6 +1161,8 @@ class APPcelerate {
 
 			//$section_name=$this->app["section"];
 
+			$exception=false;
+
 			//
 			// Init site (if exists)
 			//
@@ -1180,6 +1182,7 @@ class APPcelerate {
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
 						include_once($site_vws_path."exception.php");
 					}
+					$exception=true;
 				}
 			}
 
@@ -1202,6 +1205,7 @@ class APPcelerate {
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
 						include_once($site_vws_path."exception.php");
 					}
+					$exception=true;
 				}
 			}
 
@@ -1224,6 +1228,7 @@ class APPcelerate {
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
 						include_once($site_vws_path."exception.php");
 					}
+					$exception=true;
 				}
 			}
 
@@ -1258,6 +1263,7 @@ class APPcelerate {
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
 						include_once($site_vws_path."exception.php");
 					}
+					$exception=true;
 				}
 			}
 
@@ -1280,6 +1286,7 @@ class APPcelerate {
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
 						include_once($site_vws_path."exception.php");
 					}
+					$exception=true;
 				}
 			}
 
@@ -1302,11 +1309,12 @@ class APPcelerate {
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
 						include_once($site_vws_path."exception.php");
 					}
+					$exception=true;
 				}
 			}
 
 
-			if ($this->app["skipui"]==false) {
+			if ($this->app["skipui"]==false and $exception==false) {
 
 				header('Content-type: text/html; charset=UTF-8');
 
