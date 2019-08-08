@@ -1314,7 +1314,7 @@ class APPcelerate {
 			}
 
 
-			if ($this->app["skipui"]==false and $exception==false) {
+			if ($this->app["skipui"]==false) {
 
 				header('Content-type: text/html; charset=UTF-8');
 
@@ -1351,17 +1351,19 @@ class APPcelerate {
 					$this->doLog("HEAD template not found for ".$this->app["name"]."/".$this->app["section"],$this::L_INFO);
 				}
 
-				//
-				// Include section template (if exists)
-				//
-				$this->doLog("Loading MAIN template for ".$this->app["name"]."/".$this->app["section"],$this::L_INFO);
-				if (stream_resolve_include_path($sec_tpl_path."main.htm")) {
-					$this->app["TBS"]->LoadTemplate($sec_tpl_path."main.htm","+");
-				}
-				else {
-					$this->doLog("MAIN template not found for ".$this->app["name"]."/".$this->app["section"],$this::L_INFO);
-				}
+				if ($exception==false) {
 
+					//
+					// Include section template (if exists)
+					//
+					$this->doLog("Loading MAIN template for ".$this->app["name"]."/".$this->app["section"], $this::L_INFO);
+					if (stream_resolve_include_path($sec_tpl_path."main.htm")) {
+						$this->app["TBS"]->LoadTemplate($sec_tpl_path."main.htm", "+");
+					} else {
+						$this->doLog("MAIN template not found for ".$this->app["name"]."/".$this->app["section"], $this::L_INFO);
+					}
+
+				}
 			}
 
 			//
@@ -1369,7 +1371,22 @@ class APPcelerate {
 			//
 			if (stream_resolve_include_path($sec_vws_path."main.php")) {
 				$this->doLog("Executing section ".$this->app["name"]."/".$this->app["section"],$this::L_INFO);
-				include_once($sec_vws_path."main.php");
+				try {
+					include_once($sec_vws_path."main.php");
+				} catch (Exception $e) {
+					$d=getdate();
+					global $e,$d;
+					if (stream_resolve_include_path($site_tpl_path."exception.htm")) {
+						$this->app["TBS"] = new clsTinyButStrong;
+						$this->app["TBS"]->LoadTemplate($site_tpl_path."exception.htm");
+						$this->addMerge("field",'e',$e);
+						$this->addMerge("field",'d',$d);
+					}
+					if (stream_resolve_include_path($site_vws_path."exception.php")) {
+						include_once($site_vws_path."exception.php");
+					}
+					$exception=true;
+				}
 			}
 			else {
 				$this->doLog("Section main.php for ".$this->app["name"]."/".$this->app["section"]." not found",$this::L_INFO);
