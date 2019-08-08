@@ -1173,12 +1173,8 @@ class APPcelerate {
 				} catch (Exception $e) {
 					$d=getdate();
 					global $e,$d;
-					if (stream_resolve_include_path($site_tpl_path."exception.htm")) {
-						$this->app["TBS"] = new clsTinyButStrong;
-						$this->app["TBS"]->LoadTemplate($site_tpl_path."exception.htm");
-						$this->addMerge("field",'e',$e);
-						$this->addMerge("field",'d',$d);
-					}
+					$this->addMerge("field",'e',$e);
+					$this->addMerge("field",'d',$d);
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
 						include_once($site_vws_path."exception.php");
 					}
@@ -1363,6 +1359,11 @@ class APPcelerate {
 						$this->doLog("MAIN template not found for ".$this->app["name"]."/".$this->app["section"], $this::L_INFO);
 					}
 
+				}
+				else {
+					if (stream_resolve_include_path($site_tpl_path."exception.htm")) {
+						$this->app["TBS"]->LoadTemplate($site_tpl_path."exception.htm");
+					}
 				}
 			}
 
