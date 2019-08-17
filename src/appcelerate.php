@@ -1172,7 +1172,7 @@ class APPcelerate {
 					include_once($site_vws_path."init.php");
 				} catch (Exception $e) {
 					$d=getdate();
-					global $e,$d;
+
 					$this->addMerge("field",'e',$e);
 					$this->addMerge("field",'d',$d);
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
@@ -1191,7 +1191,7 @@ class APPcelerate {
 					include_once($app_vws_path."init.php");
 				} catch (Exception $e) {
 					$d=getdate();
-					global $e,$d;
+
 					$this->addMerge("field",'e',$e);
 					$this->addMerge("field",'d',$d);
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
@@ -1210,7 +1210,7 @@ class APPcelerate {
 					include_once($sec_vws_path."init.php");
 				} catch (Exception $e) {
 					$d=getdate();
-					global $e,$d;
+
 					$this->addMerge("field",'e',$e);
 					$this->addMerge("field",'d',$d);
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
@@ -1241,7 +1241,7 @@ class APPcelerate {
 					include_once($site_vws_path."init_ws.php");
 				} catch (Exception $e) {
 					$d=getdate();
-					global $e,$d;
+
 					$this->addMerge("field",'e',$e);
 					$this->addMerge("field",'d',$d);
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
@@ -1260,7 +1260,7 @@ class APPcelerate {
 					include_once($app_vws_path."init_ws.php");
 				} catch (Exception $e) {
 					$d=getdate();
-					global $e,$d;
+
 					$this->addMerge("field",'e',$e);
 					$this->addMerge("field",'d',$d);
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
@@ -1279,7 +1279,7 @@ class APPcelerate {
 					include_once($sec_vws_path."init_ws.php");
 				} catch (Exception $e) {
 					$d=getdate();
-					global $e,$d;
+
 					$this->addMerge("field",'e',$e);
 					$this->addMerge("field",'d',$d);
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
@@ -1356,7 +1356,7 @@ class APPcelerate {
 					include_once($sec_vws_path."main.php");
 				} catch (Exception $e) {
 					$d=getdate();
-					global $e,$d;
+
 					$this->addMerge("field",'e',$e);
 					$this->addMerge("field",'d',$d);
 					if (stream_resolve_include_path($site_vws_path."exception.php")) {
