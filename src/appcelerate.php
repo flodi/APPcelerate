@@ -1508,9 +1508,11 @@ class APPcelerate {
 
 		$this->app["session_mins"]=getenv('SESSION_MINS');
 		$duration=60*$this->app["session_mins"];
+		ini_set("session.gc_maxlifetime", $duration);
+		ini_set("session.cache_expire", $duration);
 		session_start([
 			              "gc_maxlifetime" =>$duration,
-			              "cookie_lifetime" => $duration,
+			              "cookie_lifetime" => time() + (10 * 365 * 24 * 60 * 60),
 			              "gc_divisor" => 1000000,
 			              "save_path" => $_SERVER["DOCUMENT_ROOT"]."/session",
 		              ]);
