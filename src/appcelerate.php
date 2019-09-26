@@ -1413,26 +1413,26 @@ class APPcelerate {
 				else {
 					$this->app["TBS"]->MergeField('uid',"");
 				}
-				$this->app["TBS"]->MergeField('base_url',$this->app["base_url"]);
-				$this->addMerge("field",'the_base_url',$this->app["base_url"]);
-				$this->app["TBS"]->MergeField('app_tpl_path',$app_tpl_path);
-				$this->app["TBS"]->MergeField('sec_tpl_path',$sec_tpl_path);
-				$this->app["TBS"]->MergeField('app',$this->app["name"]);
-				$this->addMerge("field",'the_app',$this->app["name"]);
-				$this->app["TBS"]->MergeField('section',$this->app["section"]);
-				$this->addMerge("field",'the_section',$this->app["section"]);
+				$this->addMerge("field",'base_url', $this->app["base_url"]);
+				$this->addMerge("field",'the_base_url', $this->app["base_url"]);
+				$this->addMerge("field",'app_tpl_path', $app_tpl_path);
+				$this->addMerge("field",'sec_tpl_path' ,$sec_tpl_path);
+				$this->addMerge("field",'app', $this->app["name"]);
+				$this->addMerge("field",'the_app', $this->app["name"]);
+				$this->addMerge("field",'section', $this->app["section"]);
+				$this->addMerge("field",'the_section', $this->app["section"]);
 
 				if(array_key_exists("tail_blocks", $this->app)) {
 					foreach($this->app["tail_blocks"] as $block_name => $block_data) {
 						$this->doLog("Merging Tail Block $block_name");
-						$this->app["TBS"]->MergeBlock("$block_name",$block_data);
+						$this->addMerge("block","$block_name",$block_data);
 					}
 				}
 
 				if(array_key_exists("tail_fields", $this->app)) {
 					foreach($this->app["tail_fields"] as $field_name => $field_data) {
 						$this->doLog("Merging Tail Field $field_name");
-						$this->app["TBS"]->MergeField("$field_name",$field_data);
+						$this->addMerge("field","$field_name",$field_data);
 					}
 				}
 
