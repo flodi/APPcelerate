@@ -6,7 +6,7 @@
     "require": {
         "vlucas/phpdotenv": "*",
         "monolog/monolog": "*",
-        "tinybutstrong/tinybutstrong": "*",
+        "tinybutstrong/tinybutstrong": "3.10.12",
         "altorouter/altorouter": "*",
         "nuovo/spreadsheet-reader" : "*",
         "daniel-zahariev/php-aws-ses" : "*",
