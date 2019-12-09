@@ -694,11 +694,8 @@ class APPcelerate {
 		<script>
 			$(document).ready(function(){
 				$(\'[data-toggle="tooltip"]\').tooltip();
+				$(\'[data-toggle="popover"]\').popover();
 			});
-
-			$(function () {
-				$(\'[data-toggle="popover"]\').popover()
-			})
 		</script>
 
 					';
