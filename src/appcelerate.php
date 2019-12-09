@@ -7,6 +7,10 @@
  */
 
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use Dotenv\Dotenv;
+use Dotenv\Repository\Adapter\EnvConstAdapter;
+use Dotenv\Repository\Adapter\ServerConstAdapter;
+use Dotenv\Repository\RepositoryBuilder;
 
 /**
  * Class APPcelerate
@@ -1505,7 +1509,21 @@ class APPcelerate {
 		include_once("tbs_plugin_html.php");
 
 		// Read app.config
-		$dotenv = Dotenv\Dotenv::create($this->app["base_path"], 'app.config');
+
+		$adapters = [
+			new EnvConstAdapter(),
+			new ServerConstAdapter(),
+		];
+
+		$repository = RepositoryBuilder::create()
+		                               ->withReaders($adapters)
+		                               ->withWriters($adapters)
+		                               ->immutable()
+		                               ->make();
+
+		Dotenv::create($repository, $path, null)->load();
+
+		$dotenv = Dotenv\Dotenv::createImmutable($this->app["base_path"], 'app.config');
 		$dotenv->load();
 
 		$this->app["session_mins"]=getenv('SESSION_MINS');
