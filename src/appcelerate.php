@@ -6,6 +6,8 @@
  * with this source code in the file LICENSE.
  */
 
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+
 /**
  * Class APPcelerate
  */
@@ -251,7 +253,7 @@ class APPcelerate {
 		$this->sqlError($rs,$sql);
 
 
-		$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+		$reader = new Xlsx();
 		$reader->setReadDataOnly(true);
 		$reader->setLoadSheetsOnly(["OSPITI"]);
 
@@ -655,17 +657,17 @@ class APPcelerate {
 					$c='
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/jquery-migrate-3.0.0.min.js"></script>
-		<script type="text/javascript" src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-		<script type="text/javascript" src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>';
+		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/jquery-migrate-3.0.0.min.js"></script>';
 					if ($this->app["bootstrap"]==3) {
 						$c.='
+		<script type="text/javascript" src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+		<script type="text/javascript" src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 						';
 					}
 					if ($this->app["bootstrap"]==4) {
 						$c.='
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 						';
 					}
 					$c.='
