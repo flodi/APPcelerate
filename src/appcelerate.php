@@ -1510,19 +1510,6 @@ class APPcelerate {
 
 		// Read app.config
 
-		$adapters = [
-			new EnvConstAdapter(),
-			new ServerConstAdapter(),
-		];
-
-		$repository = RepositoryBuilder::create()
-		                               ->withReaders($adapters)
-		                               ->withWriters($adapters)
-		                               ->immutable()
-		                               ->make();
-
-		Dotenv::create($repository, $path, null)->load();
-
 		$dotenv = Dotenv\Dotenv::createImmutable($this->app["base_path"], 'app.config');
 		$dotenv->load();
 
