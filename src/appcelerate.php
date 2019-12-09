@@ -691,6 +691,16 @@ class APPcelerate {
 		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/jquery.fixedheadertable.min.js"></script>
 		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/xepOnline.jqPlugin.js"></script>
 		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/appcelerate.js"></script>
+		<script>
+			$(document).ready(function(){
+				$(\'[data-toggle="tooltip"]\').tooltip();
+			});
+
+			$(function () {
+				$(\'[data-toggle="popover"]\').popover()
+			})
+		</script>
+
 					';
 					break;
 				case "css":
