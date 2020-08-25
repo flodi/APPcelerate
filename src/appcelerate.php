@@ -1534,7 +1534,7 @@ class APPcelerate {
 
 		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
 
-		$loglevel=getenv('LOGLEVEL');
+		$loglevel=$_ENV['LOGLEVEL'];
 		echo "<hr>".$this->app["base_url"]."<hr>$loglevel<hr>";
 		$this->app["loglevel"]=constant("APPcelerate::L_".strtoupper($loglevel));
 
