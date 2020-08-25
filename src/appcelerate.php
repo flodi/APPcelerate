@@ -1535,7 +1535,6 @@ class APPcelerate {
 		$this->app["locale"]=$_ENV['DEFAULT_LANGUAGE'];
 
 		$loglevel=$_ENV['LOGLEVEL'];
-		echo "<hr>$loglevel<hr>";
 		$this->app["loglevel"]=constant("APPcelerate::L_".strtoupper($loglevel));
 
 		$this->app["aws_key"]=$_ENV['AWS_KEY'];
@@ -1546,8 +1545,10 @@ class APPcelerate {
 		$this->app["bootstrap"]=$_ENV['BOOTSTRAP_VERSION'];
 		$this->app["fontawesome"]=$_ENV['FONTAWESOME_VERSION'];
 
-		$this->app["envlevel"]=$_ENV['ENVLEVEL'];
-		if (empty($this->app["envlevel"])) {
+		if (array_key_exists('ENVLEVEL',$_ENV)) {
+			$this->app["envlevel"]=$_ENV['ENVLEVEL'];
+		}
+		else {
 			$this->app["envlevel"]="DEVELOPMENT";
 		}
 
