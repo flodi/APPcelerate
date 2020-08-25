@@ -1529,7 +1529,7 @@ class APPcelerate {
 			$this->app["complete_url"]=$this->app["base_url"];
 		}
 
-		$this->app["apps"]=explode("|",$_ENV['APPS')]
+		$this->app["apps"]=explode("|",$_ENV['APPS']);
 		$this->app["default_app"]=$_ENV['DEFAULT_APP'];
 
 		$this->app["locale"]=$_ENV['DEFAULT_LANGUAGE'];
