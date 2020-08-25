@@ -1509,7 +1509,7 @@ class APPcelerate {
 		$dotenv = Dotenv\Dotenv::createImmutable($this->app["base_path"], 'app.config');
 		$dotenv->load();
 
-		$this->app["session_mins"]=getenv('SESSION_MINS');
+		$this->app["session_mins"]=$_ENV['SESSION_MINS'];
 		$duration=60*$this->app["session_mins"];
 		ini_set("session.gc_maxlifetime", $duration);
 		ini_set("session.cache_expire", $duration);
@@ -1520,8 +1520,8 @@ class APPcelerate {
 			              "save_path" => $_SERVER["DOCUMENT_ROOT"]."/session",
 		              ]);
 
-		$this->app["base_url"]=getenv('BASE_URL');
-		$this->app["base_app"]=getenv('BASE_APP');
+		$this->app["base_url"]=$_ENV['BASE_URL'];
+		$this->app["base_app"]=$_ENV['BASE_APP'];
 		if (strlen($this->app["base_app"])>0) {
 			$this->app["complete_url"]=$this->app["base_url"]."/".$this->app["base_app"];
 		}
@@ -1529,24 +1529,23 @@ class APPcelerate {
 			$this->app["complete_url"]=$this->app["base_url"];
 		}
 
-		$this->app["apps"]=explode("|",getenv('APPS'));
-		$this->app["default_app"]=getenv('DEFAULT_APP');
+		$this->app["apps"]=explode("|",$_ENV['APPS')]
+		$this->app["default_app"]=$_ENV['DEFAULT_APP'];
 
-		$this->app["locale"]=getenv('DEFAULT_LANGUAGE');
+		$this->app["locale"]=$_ENV['DEFAULT_LANGUAGE'];
 
 		$loglevel=$_ENV['LOGLEVEL'];
-		echo "<hr>".$this->app["base_url"]."<hr>$loglevel<hr>";
 		$this->app["loglevel"]=constant("APPcelerate::L_".strtoupper($loglevel));
 
-		$this->app["aws_key"]=getenv('AWS_KEY');
-		$this->app["aws_code"]=getenv('AWS_CODE');
+		$this->app["aws_key"]=$_ENV['AWS_KEY'];
+		$this->app["aws_code"]=$_ENV['AWS_CODE'];
 
-		$this->app["from_email"]=getenv('FROM_EMAIL');
+		$this->app["from_email"]=$_ENV['FROM_EMAIL'];
 
-		$this->app["bootstrap"]=getenv('BOOTSTRAP_VERSION');
-		$this->app["fontawesome"]=getenv('FONTAWESOME_VERSION');
+		$this->app["bootstrap"]=$_ENV['BOOTSTRAP_VERSION'];
+		$this->app["fontawesome"]=$_ENV['FONTAWESOME_VERSION'];
 
-		$this->app["envlevel"]=getenv('ENVLEVEL');
+		$this->app["envlevel"]=$_ENV['ENVLEVEL'];
 		if (empty($this->app["envlevel"])) {
 			$this->app["envlevel"]="DEVELOPMENT";
 		}
@@ -1563,7 +1562,7 @@ class APPcelerate {
 
 		# Define Additional templates
 		foreach ($this->app["apps"] as $app_name) {
-			$add_tpl=getenv('ADD_TPL_'.$app_name);
+			$add_tpl=$_ENV['ADD_TPL_'.$app_name];
 			if ($add_tpl==="Y") {
 				$this->app["addtemplates"][$app_name]=$app_name."_additional_template.htm";
 			}
@@ -1571,7 +1570,7 @@ class APPcelerate {
 
 		# Define Accounts exception
 		foreach ($this->app["apps"] as $app_name) {
-			$add_tpl=getenv('ACCOUNT_'.$app_name);
+			$add_tpl=$_ENV['ACCOUNT_'.$app_name];
 			if ($add_tpl==="N") {
 				$this->app["accounts"][$app_name]=false;
 				$this->app["secredir"][$app_name]=true;
@@ -1619,12 +1618,12 @@ class APPcelerate {
 		//
 		// DB Connection Init
 		//
-		$db_address=getenv('DB_ADDRESS');
-		$db_user=getenv('DB_USER');
-		$db_password=getenv('DB_PASSWORD');
+		$db_address=$_ENV['DB_ADDRESS'];
+		$db_user=$_ENV['DB_USER'];
+		$db_password=$_ENV['DB_PASSWORD'];
 
 		foreach ($this->app["apps"] as $app_name) {
-			$db_name=getenv('DB_NAME_'.$app_name);
+			$db_name=$_ENV['DB_NAME_'.$app_name];
 			$this->app[$app_name."_hash_base"]=hash("crc32",$db_address.$db_user.$db_password.$db_name);
 			$this->app["db_".$app_name] = new mysqli($db_address, $db_user, $db_password, $db_name);
 			if ($this->app["db_".$app_name]->connect_error) {
