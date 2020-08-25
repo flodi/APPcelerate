@@ -1535,6 +1535,7 @@ class APPcelerate {
 		$this->app["locale"]=$_ENV['DEFAULT_LANGUAGE'];
 
 		$loglevel=$_ENV['LOGLEVEL'];
+		echo "<hr>$loglevel<hr>";
 		$this->app["loglevel"]=constant("APPcelerate::L_".strtoupper($loglevel));
 
 		$this->app["aws_key"]=$_ENV['AWS_KEY'];
