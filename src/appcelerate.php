@@ -1472,13 +1472,13 @@ class APPcelerate {
 		// Errors on
 		ini_set('display_errors', 1);
 		ini_set('display_startup_errors', 1);
-		error_reporting(E_ALL);
+		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 
 		// Intercept crashes
 		register_shutdown_function(function() {
 			$e=error_get_last();
 
-			if ($e['type']) {
+			if (!is_null($e) and $e['type']) {
 				$msg=sprintf("Type %u File %s Line %u Message %s",$e["type"],$e["file"],$e["line"],$e["message"]);
 				$this->doLog($msg);
 			}
