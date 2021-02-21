@@ -670,8 +670,13 @@ class APPcelerate {
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.js"></script>
 						';
 					}
+					if ($this->app["bootstrap"]==5) {
+						$c.='
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+						';
+					}
 					$c.='
-		<script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.2.0/dist/js/tabulator.min.js"></script>
+		<script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
 		<script type="text/javascript" src="'.$b.'/vendor/flodi/appcelerate/src/include/js/jquery_wrapper.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.1/xlsx.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.8/xlsx.core.min.js"></script>
@@ -708,6 +713,12 @@ class APPcelerate {
 						$c.='
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 		<link href="'.$b.'/vendor/flodi/appcelerate/src/include/css/tabulator_bootstrap4.min.css" rel="stylesheet">
+						';
+					}
+					if ($this->app["bootstrap"]==5) {
+						$c.='
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+		<link href="https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator.min.css" rel="stylesheet">
 						';
 					}
 					$c.='
