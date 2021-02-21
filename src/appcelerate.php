@@ -678,7 +678,6 @@ class APPcelerate {
 		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/i18n/it.js"></script>
 		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/jquery.form.js"></script>
 		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/select2.full.min.js"></script>
-		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/typeaheadjs.js"></script>
 		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/garlic.min.js"></script>
 		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/jquery.fixedheadertable.min.js"></script>
 		<script src="'.$b.'/vendor/flodi/appcelerate/src/include/js/xepOnline.jqPlugin.js"></script>
@@ -708,7 +707,6 @@ class APPcelerate {
 		<link rel="stylesheet" href="'.$b.'/vendor/flodi/appcelerate/src/include/css/jquery.treetable.css">
 		<link rel="stylesheet" href="'.$b.'/vendor/flodi/appcelerate/src/include/css/jquery.treetable.theme.default.css">
 		<link rel="stylesheet" href="'.$b.'/vendor/flodi/appcelerate/src/include/css/select2-bootstrap.min.css">
-		<link rel="stylesheet" href="'.$b.'/vendor/flodi/appcelerate/src/include/css/typeahead.js-bootstrap.css">
 					';
 					if($this->app["fontawesome"]==5) {
 						$c.='
