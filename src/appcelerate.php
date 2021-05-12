@@ -807,9 +807,15 @@ class APPcelerate {
 		    $m->addAttachmentFromFile("$name",$path,'application/octet-stream', "<$name>" , 'inline');
 		}
 
-		$m->addTo($to);
-		$m->addCC($cc);
-		$m->addBCC($bcc);
+		if (!is_null($to)) {
+			$m->addTo($to);
+		}
+		if (!is_null($cc)) {
+			$m->addCC($cc);
+		}
+		if (!is_null($to)) {
+			$m->addBCC($bcc);
+		}
 		$m->setSubject($subject);
 		$m->setMessageFromString(strip_tags($body), $body);
 		$ses = new SimpleEmailService($this->app["aws_key"], $this->app["aws_code"], 'email.eu-west-1.amazonaws.com', true);
