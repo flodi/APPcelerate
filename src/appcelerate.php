@@ -822,8 +822,8 @@ class APPcelerate {
 		$result = $ses->sendEmail($m);
 		$ses_messageid = $result['MessageId'];
 		$ses_requestid = $result['RequestId'];
-
-		if (is_null($m) or empty(json_encode($m)) or json_encode($m)="") {
+		$jm=json_encode($m);
+		if (is_null($m) or empty($jm) or $jm="") {
 			$this->doLog("Cannot send mail - to=".json_encode($to)." - cc=".json_encode($cc)." - bcc=".json_encode($bcc)." - file=".json_encode($files),APPcelerate::L_ERROR);
 		}
 
