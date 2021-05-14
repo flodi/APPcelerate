@@ -823,6 +823,10 @@ class APPcelerate {
 		$ses_messageid = $result['MessageId'];
 		$ses_requestid = $result['RequestId'];
 
+		if (is_null($m) or empty(json_encode($m)) or json_encode($m)="") {
+			$this->doLog("Cannot send mail - to=".json_encode($to)." - cc=".json_encode($cc)." - bcc=".json_encode($bcc)." - file=".json_encode($files),APPcelerate::L_ERROR);
+		}
+
 		$sql = "insert into ses_log (messageid, requestid, object) value ('$ses_messageid','$ses_requestid','".addslashes(json_encode($m))."')";
 		$rs = $this->app["db_".$this->app["name"]]->query($sql);
 		$this->sqlError($rs, $sql);
