@@ -806,7 +806,7 @@ class APPcelerate {
 			$bcc=array($cc);
 			$m->addCC($cc);
 		}
-		else if (is_array($cc){
+		else if (is_array($cc)){
 		         $m->addCC($cc);
 		}
 
@@ -814,7 +814,7 @@ class APPcelerate {
 			$bcc=array($bcc);
 			$m->addBCC($bcc);
 		}
-		else if (is_array($bcc){
+		else if (is_array($bcc)){
 			$m->addBCC($bcc);
 		}
 
