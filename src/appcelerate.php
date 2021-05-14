@@ -790,7 +790,9 @@ class APPcelerate {
 	 */
 	public function  sendEmail($body, $subject, $from, $to, $cc=array(), $bcc=array(), $files=array()) {
 
-		if (!is_array($to) and !is_null($to)) {
+		$this->doLog("send email to=".json_encode($to)." - cc=".json_encode($cc)." - bcc=".json_encode($bcc)." - file=".json_encode($files),APPcelerate::L_INFO);
+
+		if (!is_array($to)) {
 			$to=array($to);
 		}
 
@@ -823,6 +825,7 @@ class APPcelerate {
 		$ses_messageid = $result['MessageId'];
 		$ses_requestid = $result['RequestId'];
 		$jm=json_encode($m);
+
 		if (is_null($m) or empty($jm) or $jm="") {
 			$this->doLog("Cannot send mail - to=".json_encode($to)." - cc=".json_encode($cc)." - bcc=".json_encode($bcc)." - file=".json_encode($files),APPcelerate::L_ERROR);
 		}
