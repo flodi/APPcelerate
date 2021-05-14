@@ -790,11 +790,11 @@ class APPcelerate {
 	 */
 	public function  sendEmail($body, $subject, $from, $to, $cc=array(), $bcc=array(), $files=array()) {
 
-		if (!is_array($to)) {
+		if (!is_array($to) and !is_null($to)) {
 			$to=array($to);
 		}
 
-		if (!is_array($bcc)) {
+		if (!is_array($bcc) and !is_null($bcc)) {
 			$bcc=array($bcc);
 		}
 
