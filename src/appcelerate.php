@@ -795,9 +795,22 @@ class APPcelerate {
 		if (!is_array($to)) {
 			$to=array($to);
 		}
+		$m->addTo($to);
+
+		if (!is_array($cc) and !is_null($cc)) {
+			$bcc=array($cc);
+			$m->addCC($cc);
+		}
+		else if (is_array($cc){
+		         $m->addCC($cc);
+		}
 
 		if (!is_array($bcc) and !is_null($bcc)) {
 			$bcc=array($bcc);
+			$m->addBCC($bcc);
+		}
+		else if (is_array($bcc){
+			$m->addBCC($bcc);
 		}
 
 		$m = new SimpleEmailServiceMessage();
@@ -806,20 +819,13 @@ class APPcelerate {
 		$m->setReturnPath($from);
 
 		foreach ($files as $name => $path) {
+			$this->doLog("Adding file $name - $path",APPcelerate::L_DEBUG);
 		    $m->addAttachmentFromFile("$name",$path,'application/octet-stream', "<$name>" , 'inline');
 		}
 
-		if (!is_null($to)) {
-			$m->addTo($to);
-		}
-		if (!is_null($cc)) {
-			$m->addCC($cc);
-		}
-		if (!is_null($to)) {
-			$m->addBCC($bcc);
-		}
 		$m->setSubject($subject);
 		$m->setMessageFromString(strip_tags($body), $body);
+
 		$ses = new SimpleEmailService($this->app["aws_key"], $this->app["aws_code"], 'email.eu-west-1.amazonaws.com', true);
 		$result = $ses->sendEmail($m);
 		$ses_messageid = $result['MessageId'];
