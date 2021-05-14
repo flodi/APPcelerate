@@ -826,15 +826,12 @@ class APPcelerate {
 		$m->setSubject($subject);
 		$m->setMessageFromString(strip_tags($body), $body);
 
+		$jm=json_encode($m);
+
 		$ses = new SimpleEmailService($this->app["aws_key"], $this->app["aws_code"], 'email.eu-west-1.amazonaws.com', true);
 		$result = $ses->sendEmail($m);
 		$ses_messageid = $result['MessageId'];
 		$ses_requestid = $result['RequestId'];
-		$jm=json_encode($m);
-
-		if (is_null($m) or empty($jm) or $jm="") {
-			$this->doLog("Cannot send mail - to=".json_encode($to)." - cc=".json_encode($cc)." - bcc=".json_encode($bcc)." - file=".json_encode($files),APPcelerate::L_ERROR);
-		}
 
 		$sql = "insert into ses_log (messageid, requestid, object) value ('$ses_messageid','$ses_requestid','".addslashes(json_encode($m))."')";
 		$rs = $this->app["db_".$this->app["name"]]->query($sql);
