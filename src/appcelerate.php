@@ -792,6 +792,11 @@ class APPcelerate {
 
 		$this->doLog("send email to=".json_encode($to)." - cc=".json_encode($cc)." - bcc=".json_encode($bcc)." - file=".json_encode($files),APPcelerate::L_INFO);
 
+		$m = new SimpleEmailServiceMessage();
+		$m->setFrom($from);
+		$m->addReplyTo($from);
+		$m->setReturnPath($from);
+
 		if (!is_array($to)) {
 			$to=array($to);
 		}
@@ -812,11 +817,6 @@ class APPcelerate {
 		else if (is_array($bcc){
 			$m->addBCC($bcc);
 		}
-
-		$m = new SimpleEmailServiceMessage();
-		$m->setFrom($from);
-		$m->addReplyTo($from);
-		$m->setReturnPath($from);
 
 		foreach ($files as $name => $path) {
 			$this->doLog("Adding file $name - $path",APPcelerate::L_DEBUG);
