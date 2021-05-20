@@ -833,7 +833,7 @@ class APPcelerate {
 		$ses_messageid = $result['MessageId'];
 		$ses_requestid = $result['RequestId'];
 
-		$sql = "insert into ses_log (messageid, requestid, object) value ('$ses_messageid','$ses_requestid','".addslashes(json_encode($m))."')";
+		$sql = "insert into ses_log (messageid, requestid, object) value ('$ses_messageid','$ses_requestid','".addslashes($jm)."')";
 		$rs = $this->app["db_".$this->app["name"]]->query($sql);
 		$this->sqlError($rs, $sql);
 	}
