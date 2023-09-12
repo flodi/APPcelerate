@@ -955,13 +955,18 @@ class APPcelerate {
 	public function doSecurity() {
 
 		$secredir=$this->app["secredir"][$this->app["name"]];
+		$pf=$this->app['PF_'.$this->app["name"]];
+		$pc=$this->app['PC_'.$this->app["name"]];
+		if ($pc==="Y") {
+			$pca=$this->app['PCA_'.$this->app["name"]];
+		}
 
 		if (!empty($_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
 			$this->app['uid']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"];
 			$this->app['uname']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"];
 
-			$sql="select pwd from users where id=".$this->app['uid'];
+			$sql="select $pf from users where id=".$this->app['uid'];
 			$rs=$this->app["db_".$this->app["name"]]->query($sql);
 			$this->sqlError($rs,$sql);
 
@@ -980,9 +985,15 @@ class APPcelerate {
 				$_REQUEST["login"]=$login;
 				$_REQUEST["password"]=$password;
 			}
+			if ($pc==="Y") {
+				$pwd=password_hash($_REQUEST["password"],$pca);
+			}
+			else {
+				$pwd=$_REQUEST["password"];
+			}
 			if (!empty($_REQUEST["login"]) and !empty($_REQUEST["password"])) {
 				$this->doLog("Requested login for ".$_REQUEST["login"]." / ".$_REQUEST["password"]);
-				$sql="select id from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "' and pwd='" . $_REQUEST["password"] . "'";
+				$sql="select id from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "' and $pf='$pwd'";
 				$rs=$this->app["db_".$this->app["name"]]->query($sql);
 				$this->sqlError($rs,$sql);
 				switch ($rs->num_rows) {
@@ -1580,6 +1591,14 @@ class APPcelerate {
 				$this->app["secredir"][$app_name]=true;
 			}
 			else if ($add_tpl==="Y") {
+				$db_pwd_field=$_ENV['PWDFIELD_'.$app_name];
+				$this->app["pf_".$app_name]->set_charset("utf8");
+				$db_pwd_crypt=$_ENV['CRYPTPWD_'.$app_name];
+				$this->app["pc_".$app_name]->set_charset("utf8");
+				if ($db_pwd_crypt==="Y") {
+					$db_pwd_calg=$_ENV['CRYPTALG_'.$app_name];
+					$this->app["pca_".$app_name]->set_charset("utf8");
+				}
 				$this->app["accounts"][$app_name]=true;
 				$this->app["secredir"][$app_name]=true;
 			}
