@@ -1178,6 +1178,8 @@ class APPcelerate {
 
 			$exception=false;
 
+die("ok");
+
 			//
 			// Init site (if exists)
 			//
