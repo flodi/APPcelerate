@@ -1610,8 +1610,6 @@ class APPcelerate {
 				$this->app["secredir"][$app_name]=false;
 			}
 		}
-		
-		echo "<pre>";print_r($this->app);echo "</pre>";die();
 
 		//
 		// Init Log
