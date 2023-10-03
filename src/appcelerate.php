@@ -1611,7 +1611,7 @@ class APPcelerate {
 			}
 		}
 		
-		print_r($this->app); die();
+		echo "<pre>";print_r($this->app);echo "</pre>";die();
 
 		//
 		// Init Log
