@@ -953,6 +953,8 @@ class APPcelerate {
 	 * @return void
 	 */
 	public function doSecurity() {
+		
+		die("dosec");
 
 		$secredir=$this->app["secredir"][$this->app["name"]];
 		$pf=$this->app['pf'][$this->app["name"]];
