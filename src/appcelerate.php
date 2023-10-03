@@ -1583,14 +1583,11 @@ class APPcelerate {
 			}
 		}
 
+
 		# Define Accounts exception
 		foreach ($this->app["apps"] as $app_name) {
-			$add_tpl=$_ENV['ACCOUNT_'.$app_name];
-			if ($add_tpl==="N") {
-				$this->app["accounts"][$app_name]=false;
-				$this->app["secredir"][$app_name]=true;
-			}
-			else if ($add_tpl==="Y") {
+			$reqacc=$_ENV['ACCOUNT_'.$app_name];
+			if ($reqacc==="Y") {
 				$db_pwd_field=$_ENV['PWDFIELD_'.$app_name];
 				$this->app["pf_".$app_name]->set_charset("utf8");
 				$db_pwd_crypt=$_ENV['CRYPTPWD_'.$app_name];
@@ -1599,6 +1596,12 @@ class APPcelerate {
 					$db_pwd_calg=$_ENV['CRYPTALG_'.$app_name];
 					$this->app["pca_".$app_name]->set_charset("utf8");
 				}
+			}
+			if ($add_tpl==="N") {
+				$this->app["accounts"][$app_name]=false;
+				$this->app["secredir"][$app_name]=true;
+			}
+			else if ($add_tpl==="Y") {
 				$this->app["accounts"][$app_name]=true;
 				$this->app["secredir"][$app_name]=true;
 			}
