@@ -954,8 +954,6 @@ class APPcelerate {
 	 */
 	public function doSecurity() {
 		
-		die("dosec");
-
 		$secredir=$this->app["secredir"][$this->app["name"]];
 		$pf=$this->app['pf'][$this->app["name"]];
 		$pc=$this->app['pc'][$this->app["name"]];
