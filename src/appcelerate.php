@@ -1219,7 +1219,6 @@ class APPcelerate {
 			else {
 				$this->doLog("Accounts Not Active");
 			}
-echo "<pre>";print_r($this->app);echo "</pre>";die();
 
 			//
 			// Init site after security (if exists)
@@ -1293,6 +1292,7 @@ echo "<pre>";print_r($this->app);echo "</pre>";die();
 				else {
 					$this->doLog("HEAD template not found for site",$this::L_INFO);
 				}
+echo "<pre>";print_r($this->app);echo "</pre>";die();
 
 				//
 				// Include app header template (if exists)
