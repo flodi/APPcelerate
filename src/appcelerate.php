@@ -1189,7 +1189,6 @@ class APPcelerate {
 					$exception=true;
 				}
 			}
-echo "<pre>";print_r($this->app);echo "</pre>";die();
 
 			//
 			// Init section (if exists)
@@ -1209,6 +1208,7 @@ echo "<pre>";print_r($this->app);echo "</pre>";die();
 					$exception=true;
 				}
 			}
+echo "<pre>";print_r($this->app);echo "</pre>";die();
 
 			//
 			// Security
