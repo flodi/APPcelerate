@@ -939,7 +939,7 @@ class APPcelerate {
 
 		$secredir=$this->app["secredir"][$this->app["name"]];
 		
-		$pf=$this->app[][$this->app["name"]];
+		$pf=$this->app['PWDFIELD'][$this->app["name"]];
 
 		if (!empty($_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
@@ -1561,9 +1561,9 @@ class APPcelerate {
 		foreach ($this->app["apps"] as $app_name) {
 			$reqacc=$_ENV['ACCOUNT_'.$app_name];
 			if ($reqacc==="Y") {
-				$db_pwd_field=$_ENV['PWDFIELD_'.$app_name];
+				$db_pwd_field=$_ENV['PWDFIELD'][$app_name];
 				$this->app["pf"][$app_name]=$db_pwd_field;
-				$db_pwd_crypt=$_ENV['CRYPTPWD_'.$app_name];
+				$db_pwd_crypt=$_ENV['CRYPTPWD'][$app_name];
 				$this->app["pc"][$app_name]=$db_pwd_crypt;
 				if ($db_pwd_crypt==="Y") {
 					$db_pwd_calg=$_ENV['CRYPTALG_'.$app_name];
