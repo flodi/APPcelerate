@@ -939,13 +939,14 @@ class APPcelerate {
 		$secredir=$this->app["secredir"][$this->app["name"]];
 		
 		$pf=$this->app['PWDFIELD'][$this->app["name"]];
+		$pc=$this->app['CRYPTPWD'][$this->app["name"]];
 
 		if (!empty($_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
 			$this->app['uid']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"];
 			$this->app['uname']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"];
 
-			$sql="select $pf from users where id=".$this->app['uid'];
+			$sql="select $pf from users where id=".$this->app['uid'];			
 			$rs=$this->app["db_".$this->app["name"]]->query($sql);
 			$this->sqlError($rs,$sql);
 
@@ -965,8 +966,18 @@ class APPcelerate {
 				$_REQUEST["password"]=$password;
 			}
 			if (!empty($_REQUEST["login"]) and !empty($_REQUEST["password"])) {
+				
+				
+				if($pc==="Y") {
+					$pca=$this->app['CRYPTALG'][$this->app["name"]];
+					$pwd=password_hash("$_REQUEST["password"],constant($pca));
+				}
+				else {
+					$pwd=$_REQUEST["password"];
+				}
+				
 				$this->doLog("Requested login for ".$_REQUEST["login"]." / ".$_REQUEST["password"]);
-				$sql="select id from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "' and pwd='" . $_REQUEST["password"] . "'";
+				$sql="select id from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "' and $pf='" . $pwd . "'";
 				$rs=$this->app["db_".$this->app["name"]]->query($sql);
 				$this->sqlError($rs,$sql);
 				switch ($rs->num_rows) {
@@ -1356,7 +1367,6 @@ class APPcelerate {
 			else {
 				$this->doLog("Section main.php for ".$this->app["name"]."/".$this->app["section"]." not found",$this::L_INFO);
 			}
-echo "<pre>";print_r($this->app);echo "</pre>";die();
 
 			if (!$this->app["skipui"]) {
 
@@ -1566,7 +1576,7 @@ echo "<pre>";print_r($this->app);echo "</pre>";die();
 				$db_pwd_crypt=$_ENV['CRYPTPWD'][$app_name];
 				$this->app["pc"][$app_name]=$db_pwd_crypt;
 				if ($db_pwd_crypt==="Y") {
-					$db_pwd_calg=$_ENV['CRYPTALG_'.$app_name];
+					$db_pwd_calg=$_ENV['CRYPTALG'][$app_name];
 					$this->app["pca"][$app_name]=$db_pwd_calg;
 				}
 			}
