@@ -1292,7 +1292,6 @@ class APPcelerate {
 				else {
 					$this->doLog("HEAD template not found for site",$this::L_INFO);
 				}
-echo "<pre>";print_r($this->app);echo "</pre>";die();
 
 				//
 				// Include app header template (if exists)
@@ -1357,6 +1356,7 @@ echo "<pre>";print_r($this->app);echo "</pre>";die();
 			else {
 				$this->doLog("Section main.php for ".$this->app["name"]."/".$this->app["section"]." not found",$this::L_INFO);
 			}
+echo "<pre>";print_r($this->app);echo "</pre>";die();
 
 			if (!$this->app["skipui"]) {
 
