@@ -1108,7 +1108,7 @@ class APPcelerate {
 			$this->doLog("=====> Routing for  ".json_encode($match),$this::L_INFO);
 			$this->doLog("=====> Starting ".$this->app["name"]."/".$this->app["section"]." (".json_encode($this->app["params"]).")",$this::L_INFO);
 
-echo "<pre>";print_r($this->app);echo "</pre>";die();
+//echo "<pre>";print_r($this->app);echo "</pre>";die();
 
 			//
 			// If no App specified, go to default one
