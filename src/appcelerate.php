@@ -936,8 +936,6 @@ class APPcelerate {
 	 * @return void
 	 */
 	public function doSecurity() {
-echo "<pre>";print_r($this->app);echo "</pre>";die();
-
 		$secredir=$this->app["secredir"][$this->app["name"]];
 		
 		$pf=$this->app['PWDFIELD'][$this->app["name"]];
@@ -1221,6 +1219,7 @@ echo "<pre>";print_r($this->app);echo "</pre>";die();
 			else {
 				$this->doLog("Accounts Not Active");
 			}
+echo "<pre>";print_r($this->app);echo "</pre>";die();
 
 			//
 			// Init site after security (if exists)
