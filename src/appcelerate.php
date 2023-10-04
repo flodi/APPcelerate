@@ -938,13 +938,15 @@ class APPcelerate {
 	public function doSecurity() {
 
 		$secredir=$this->app["secredir"][$this->app["name"]];
+		
+		$pf=$this->app[][$this->app["name"]];
 
 		if (!empty($_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
 			$this->app['uid']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"];
 			$this->app['uname']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"];
 
-			$sql="select pwd from users where id=".$this->app['uid'];
+			$sql="select $pf from users where id=".$this->app['uid'];
 			$rs=$this->app["db_".$this->app["name"]]->query($sql);
 			$this->sqlError($rs,$sql);
 
