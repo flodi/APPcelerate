@@ -936,6 +936,7 @@ class APPcelerate {
 	 * @return void
 	 */
 	public function doSecurity() {
+echo "<pre>";print_r($this->app);echo "</pre>";die();
 
 		$secredir=$this->app["secredir"][$this->app["name"]];
 		
@@ -1208,7 +1209,6 @@ class APPcelerate {
 					$exception=true;
 				}
 			}
-echo "<pre>";print_r($this->app);echo "</pre>";die();
 
 			//
 			// Security
