@@ -1576,9 +1576,7 @@ class APPcelerate {
 			
 			if ($reqacc==="Y") {
 				$this->app["accounts"][$app_name]=true;
-				
-				print_r($_ENV);exit();
-				
+							
 				$db_pwd_field=$_ENV['PWDFIELD_'][$app_name];
 				$this->app["pf"][$app_name]=$db_pwd_field;
 				
