@@ -1572,6 +1572,9 @@ class APPcelerate {
 		# Define Accounts exception
 		foreach ($this->app["apps"] as $app_name) {
 			$reqacc=$_ENV['ACCOUNT_'.$app_name];
+			
+			echo $app_name." - ".$reqacc;
+			
 			if ($reqacc==="Y") {
 				$this->app["accounts"][$app_name]=true;
 				$db_pwd_field=$_ENV['PWDFIELD_'][$app_name];
