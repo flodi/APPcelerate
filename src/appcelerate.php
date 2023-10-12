@@ -1218,7 +1218,7 @@ class APPcelerate {
 			}
 			
 			echo $this->app["accounts"][$this->app["name"]]. " - ".$this->app["skipsec"];
-			//exit(0);
+			exit(0);
 
 			//
 			// Security
