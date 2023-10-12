@@ -937,10 +937,6 @@ class APPcelerate {
 	 */
 	public function doSecurity() {
 		
-		echo $this->app["accounts"][$this->app["name"]]. " - ".$this->app["skipsec"];
-		exit(0);
-
-		
 		$secredir=$this->app["secredir"][$this->app["name"]];
 		
 		$pf=$this->app['PWDFIELD'][$this->app["name"]];
@@ -1220,6 +1216,11 @@ class APPcelerate {
 					}
 					$exception=true;
 				}
+			}
+
+			if ($this->app["name"]==="btb") {		
+				echo $this->app["accounts"][$this->app["name"]]. " - ".$this->app["skipsec"];
+				exit(0);
 			}
 			
 			//
