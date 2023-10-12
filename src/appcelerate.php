@@ -940,6 +940,8 @@ class APPcelerate {
 		
 		$pf=$this->app['PWDFIELD'][$this->app["name"]];
 		$pc=$this->app['CRYPTPWD'][$this->app["name"]];
+		
+		echo "do";die();
 
 		if (!empty($_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
@@ -966,9 +968,6 @@ class APPcelerate {
 				$_REQUEST["password"]=$password;
 			}
 			if (!empty($_REQUEST["login"]) and !empty($_REQUEST["password"])) {
-				
-				echo $_REQUEST["password"]." - ".$pca; die();
-
 				
 				if($pc==="Y") {
 					$pca=$this->app['CRYPTALG'][$this->app["name"]];
