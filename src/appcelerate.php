@@ -1217,11 +1217,6 @@ class APPcelerate {
 					$exception=true;
 				}
 			}
-
-			if ($this->app["name"]==="btb") {		
-				echo $this->app["accounts"][$this->app["name"]]. " - ".$this->app["skipsec"];
-				exit(0);
-			}
 			
 			//
 			// Security
@@ -1575,6 +1570,7 @@ class APPcelerate {
 		foreach ($this->app["apps"] as $app_name) {
 			$reqacc=$_ENV['ACCOUNT_'.$app_name];
 			if ($reqacc==="Y") {
+				$this->app["accounts"][$app_name]=true;
 				$db_pwd_field=$_ENV['PWDFIELD_'][$app_name];
 				$this->app["pf"][$app_name]=$db_pwd_field;
 				$db_pwd_crypt=$_ENV['CRYPTPWD_'][$app_name];
@@ -1584,7 +1580,8 @@ class APPcelerate {
 					$this->app["pca"][$app_name]=$db_pwd_calg;
 				}
 			}
-			if ($add_tpl==="N") {
+			$this->app["secredir"][$app_name]=false;
+/*			if ($add_tpl==="N") {
 				$this->app["accounts"][$app_name]=false;
 				$this->app["secredir"][$app_name]=true;
 			}
@@ -1596,7 +1593,7 @@ class APPcelerate {
 				$this->app["accounts"][$app_name]=true;
 				$this->app["secredir"][$app_name]=false;
 			}
-		}
+*/		}
 
 		//
 		// Init Log
