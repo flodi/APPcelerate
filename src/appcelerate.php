@@ -939,8 +939,8 @@ class APPcelerate {
 				
 		$secredir=$this->app["secredir"][$this->app["name"]];
 		
-		$pf=$this->app['PWDFIELD'][$this->app["name"]];
-		$pc=$this->app['CRYPTPWD'][$this->app["name"]];
+		$pf=$this->app['PWDFIELD_'][$this->app["name"]];
+		$pc=$this->app['CRYPTPWD_'][$this->app["name"]];
 		
 		echo $pf." - ".$pc; exit();
 		
