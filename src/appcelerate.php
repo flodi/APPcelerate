@@ -972,7 +972,6 @@ class APPcelerate {
 					$pca=$this->app['pca'][$this->app["name"]];					
 					$pwd=password_hash($_REQUEST["password"],constant($pca));
 					//echo $pc." - ".$this->app['pca'][$this->app["name"]]." - ".$pwd; exit();
-
 				}
 				else {
 					$pwd=$_REQUEST["password"];
@@ -980,6 +979,7 @@ class APPcelerate {
 				
 				$this->doLog("Requested login for ".$_REQUEST["login"]." / ".$_REQUEST["password"]);
 				$sql="select id from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "' and $pf='" . $pwd . "'";
+				echo $sql; exit();
 				$rs=$this->app["db_".$this->app["name"]]->query($sql);
 				$this->sqlError($rs,$sql);
 				switch ($rs->num_rows) {
