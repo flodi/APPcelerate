@@ -936,9 +936,6 @@ class APPcelerate {
 	 * @return void
 	 */
 	public function doSecurity() {
-		
-		echo "sec"; die();
-		
 		$secredir=$this->app["secredir"][$this->app["name"]];
 		
 		$pf=$this->app['PWDFIELD'][$this->app["name"]];
@@ -1219,6 +1216,9 @@ class APPcelerate {
 					$exception=true;
 				}
 			}
+			
+			echo $this->app["accounts"][$this->app["name"]]. " - ".$this->app["skipsec"];
+			
 
 			//
 			// Security
