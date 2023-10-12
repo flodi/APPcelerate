@@ -937,6 +937,8 @@ class APPcelerate {
 	 */
 	public function doSecurity() {
 		
+		echo "io"; exit();
+		
 		$secredir=$this->app["secredir"][$this->app["name"]];
 		
 		$pf=$this->app['PWDFIELD'][$this->app["name"]];
