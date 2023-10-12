@@ -1577,10 +1577,10 @@ class APPcelerate {
 			if ($reqacc==="Y") {
 				$this->app["accounts"][$app_name]=true;
 							
-				$db_pwd_field=$_ENV['PWDFIELD_'][$app_name];
+				$db_pwd_field=$_ENV['PWDFIELD_'.$app_name];				
 				$this->app["pf"][$app_name]=$db_pwd_field;
 				
-				$db_pwd_crypt=$_ENV['CRYPTPWD_'][$app_name];
+				$db_pwd_crypt=$_ENV['CRYPTPWD_'.$app_name];
 				$this->app["pc"][$app_name]=$db_pwd_crypt;
 				
 				if ($db_pwd_crypt==="Y") {
