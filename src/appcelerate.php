@@ -941,9 +941,7 @@ class APPcelerate {
 		
 		$pf=$this->app['pf'][$this->app["name"]];
 		$pc=$this->app['pc'][$this->app["name"]];
-		
-		echo "<pre>"; print_r($this->app); echo "</pre>"; exit();
-		
+				
 		if (!empty($_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
 			$this->app['uid']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"];
@@ -1572,7 +1570,6 @@ class APPcelerate {
 		# Define Accounts exception
 		foreach ($this->app["apps"] as $app_name) {
 			$reqacc=$_ENV['ACCOUNT_'.$app_name];
-			
 			
 			if ($reqacc==="Y") {
 				$this->app["accounts"][$app_name]=true;
