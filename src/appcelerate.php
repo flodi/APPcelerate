@@ -1573,9 +1573,10 @@ class APPcelerate {
 		foreach ($this->app["apps"] as $app_name) {
 			$reqacc=$_ENV['ACCOUNT_'.$app_name];
 			
-			echo $app_name." - ".$reqacc;
 			
 			if ($reqacc==="Y") {
+				echo $app_name." - ".$reqacc;
+
 				$this->app["accounts"][$app_name]=true;
 				$db_pwd_field=$_ENV['PWDFIELD_'][$app_name];
 				$this->app["pf"][$app_name]=$db_pwd_field;
