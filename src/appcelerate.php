@@ -970,6 +970,9 @@ class APPcelerate {
 				
 				if($pc==="Y") {
 					$pca=$this->app['pca'][$this->app["name"]];
+					
+					echo $pc." - ".$this->app['pca'][$this->app["name"]]; exit();
+					
 					$pwd=password_hash($_REQUEST["password"],constant($pca));
 				}
 				else {
