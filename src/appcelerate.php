@@ -942,7 +942,7 @@ class APPcelerate {
 		$pf=$this->app['PWDFIELD_'][$this->app["name"]];
 		$pc=$this->app['CRYPTPWD_'][$this->app["name"]];
 		
-		echo $pf." - ".$pc; exit();
+		echo "<pre>"; print_r($this->app); echo "</pre>"; exit();
 		
 		if (!empty($_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
