@@ -939,8 +939,8 @@ class APPcelerate {
 				
 		$secredir=$this->app["secredir"][$this->app["name"]];
 		
-		$pf=$this->app['PWDFIELD_'][$this->app["name"]];
-		$pc=$this->app['CRYPTPWD_'][$this->app["name"]];
+		$pf=$this->app['pf_'][$this->app["name"]];
+		$pc=$this->app['pc_'][$this->app["name"]];
 		
 		echo "<pre>"; print_r($this->app); echo "</pre>"; exit();
 		
@@ -971,7 +971,7 @@ class APPcelerate {
 			if (!empty($_REQUEST["login"]) and !empty($_REQUEST["password"])) {
 				
 				if($pc==="Y") {
-					$pca=$this->app['CRYPTALG'][$this->app["name"]];
+					$pca=$this->app['pca_'][$this->app["name"]];
 					$pwd=password_hash($_REQUEST["password"],constant($pca));
 				}
 				else {
@@ -1575,16 +1575,17 @@ class APPcelerate {
 			
 			
 			if ($reqacc==="Y") {
-				echo $app_name." - ".$reqacc;
-
 				$this->app["accounts"][$app_name]=true;
+				
 				$db_pwd_field=$_ENV['PWDFIELD_'][$app_name];
-				$this->app["pf"][$app_name]=$db_pwd_field;
+				$this->app["pf_"][$app_name]=$db_pwd_field;
+				
 				$db_pwd_crypt=$_ENV['CRYPTPWD_'][$app_name];
-				$this->app["pc"][$app_name]=$db_pwd_crypt;
+				$this->app["pc_"][$app_name]=$db_pwd_crypt;
+				
 				if ($db_pwd_crypt==="Y") {
 					$db_pwd_calg=$_ENV['CRYPTALG_'][$app_name];
-					$this->app["pca"][$app_name]=$db_pwd_calg;
+					$this->app["pca_"][$app_name]=$db_pwd_calg;
 				}
 			}
 			$this->app["secredir"][$app_name]=false;
