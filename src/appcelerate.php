@@ -936,13 +936,14 @@ class APPcelerate {
 	 * @return void
 	 */
 	public function doSecurity() {
-		
-		echo "io"; exit();
-		
+				
 		$secredir=$this->app["secredir"][$this->app["name"]];
 		
 		$pf=$this->app['PWDFIELD'][$this->app["name"]];
 		$pc=$this->app['CRYPTPWD'][$this->app["name"]];
+		
+		echo $pf." - ".$pc; exit();
+		
 		if (!empty($_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"])) {
 			$this->doLog("Session uid not empty");
 			$this->app['uid']=$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"];
