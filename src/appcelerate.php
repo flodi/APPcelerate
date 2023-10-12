@@ -970,7 +970,7 @@ class APPcelerate {
 				
 				if($pc==="Y") {
 					$pca=$this->app['CRYPTALG'][$this->app["name"]];
-					$pwd=password_hash("$_REQUEST["password"],constant($pca));
+					$pwd=password_hash($_REQUEST["password"],constant($pca));
 				}
 				else {
 					$pwd=$_REQUEST["password"];
