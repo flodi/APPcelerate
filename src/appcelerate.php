@@ -1584,7 +1584,7 @@ class APPcelerate {
 				$this->app["pc"][$app_name]=$db_pwd_crypt;
 				
 				if ($db_pwd_crypt==="Y") {
-					$db_pwd_calg=$_ENV['CRYPTALG_'][$app_name];
+					$db_pwd_calg=$_ENV['CRYPTALG_'.$app_name];
 					$this->app["pca"][$app_name]=$db_pwd_calg;
 				}
 			}
