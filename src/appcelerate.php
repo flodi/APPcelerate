@@ -993,47 +993,55 @@ class APPcelerate {
 					}
 					$pca=$this->app['pca'][$this->app["name"]];					
 					$pwdok=password_verify($hash,constant($pca));
+					
+					if (!$pwdok) {
+						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
+						die();
+					}
 				}
 				else {
 					$pwd=$_REQUEST["password"];
 				}
 				
 				$this->doLog("Requested login for ".$_REQUEST["login"]." / ".$_REQUEST["password"]);
-				$sql="select id from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "' and $pf='" . $pwd . "'";
-				$rs=$this->app["db_".$this->app["name"]]->query($sql);
-				$this->sqlError($rs,$sql);
-				switch ($rs->num_rows) {
-					case 1:
-						$this->doLog("[SECURITY OK] Found user");
-						$row=$rs->fetch_row();
-						$this->app['uid']=$row[0];
-						$this->app['uname']=$_REQUEST["login"];
-						$this->app['upwd']=$_REQUEST["password"];
-						$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"]=$this->app['uid'];
-						$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"]=$this->app['uname'];
-						$sql="select locale from languages where id=(select id_language from users where id=".$this->app["uid"].")";
-						$rs1=$this->app["db_".$this->app["name"]]->query($sql);
-						$this->sqlError($rs1,$sql);
-						if ($rs1->num_rows!=0) {
-							$this->app["locale"]=$rs1->fetch_row()[0];
-							$_SESSION[$this->app["name"]."_ap_locale"]=$this->app['locale'];
-						}
-						$this->doLog("[SECURITY OK] Continuing");
-						break;
-					case 0:
-						$this->doLog("[SECURITY KO] redirecting to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
-						if ($secredir==true) {
-							header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
-							die();
-						}
-						break;
-
-					default:
-						$this->doLog("[SECURITY MULTI] redirecting to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
-						if ($secredir) {
-							header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?multi");
-							die();
-						}
+				
+				if (!$pwdok) {
+					$sql="select id from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "' and $pf='" . $pwd . "'";
+					$rs=$this->app["db_".$this->app["name"]]->query($sql);
+					$this->sqlError($rs,$sql);
+					switch ($rs->num_rows) {
+						case 1:
+							$this->doLog("[SECURITY OK] Found user");
+							$row=$rs->fetch_row();
+							$this->app['uid']=$row[0];
+							$this->app['uname']=$_REQUEST["login"];
+							$this->app['upwd']=$_REQUEST["password"];
+							$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"]=$this->app['uid'];
+							$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"]=$this->app['uname'];
+							$sql="select locale from languages where id=(select id_language from users where id=".$this->app["uid"].")";
+							$rs1=$this->app["db_".$this->app["name"]]->query($sql);
+							$this->sqlError($rs1,$sql);
+							if ($rs1->num_rows!=0) {
+								$this->app["locale"]=$rs1->fetch_row()[0];
+								$_SESSION[$this->app["name"]."_ap_locale"]=$this->app['locale'];
+							}
+							$this->doLog("[SECURITY OK] Continuing");
+							break;
+						case 0:
+							$this->doLog("[SECURITY KO] redirecting to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
+							if ($secredir==true) {
+								header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
+								die();
+							}
+							break;
+	
+						default:
+							$this->doLog("[SECURITY MULTI] redirecting to ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
+							if ($secredir) {
+								header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?multi");
+								die();
+							}
+					}
 				}
 			}
 			else {
