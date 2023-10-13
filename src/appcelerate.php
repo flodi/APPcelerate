@@ -968,23 +968,31 @@ class APPcelerate {
 			}
 			if (!empty($_REQUEST["login"]) and !empty($_REQUEST["password"])) {
 				
+				$pwdok=false;
+				
 				if($pc==="Y") {
 					$pwd=$_REQUEST["password"];
+					$sql="select $pf from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "'";
+					$nr=1;
 					if(!empty($this->app['psf'][$this->app["name"]])) {
-						$sql="select ".$this->app['psf'][$this->app["name"]]." from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "'";
-						$rs=$this->app["db_".$this->app["name"]]->query($sql);
-						$this->sqlError($rs,$sql);
-						if ($rs->num_rows==1) {
+						$sql="select $pf,".$this->app['psf'][$this->app["name"]]." from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "'";
+						$nr=2;
+					}
+					$rs=$this->app["db_".$this->app["name"]]->query($sql);
+					$this->sqlError($rs,$sql);
+					if ($rs->num_rows==1) {
+						$hash=$rs->fetch_row()[0];
+						if ($nr==2) {
 							$ps=$rs->fetch_row()[0];
-							$pqd.=$ps;
-						}
-						else {
-							header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
-							die();
+							$pwd.=$ps;
 						}
 					}
+					else {
+						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
+						die();
+					}
 					$pca=$this->app['pca'][$this->app["name"]];					
-					$pwd=password_hash($pwd,constant($pca));
+					$pwdok=password_verify($hash,constant($pca));
 				}
 				else {
 					$pwd=$_REQUEST["password"];
