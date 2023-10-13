@@ -969,9 +969,22 @@ class APPcelerate {
 			if (!empty($_REQUEST["login"]) and !empty($_REQUEST["password"])) {
 				
 				if($pc==="Y") {
+					$pwd=$_REQUEST["password"];
+					if(!empty($this->app['psf'][$this->app["name"]])) {
+						$sql="select ".$this->app['psf'][$this->app["name"]]." from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "'";
+						$rs=$this->app["db_".$this->app["name"]]->query($sql);
+						$this->sqlError($rs,$sql);
+						if ($rs->num_rows==1) {
+							$ps=$rs->fetch_row()[0];
+							$pqd.=$ps;
+						}
+						else {
+							header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong");
+							die();
+						}
+					}
 					$pca=$this->app['pca'][$this->app["name"]];					
-					$pwd=password_hash($_REQUEST["password"],constant($pca));
-					//echo $pc." - ".$this->app['pca'][$this->app["name"]]." - ".$pwd; exit();
+					$pwd=password_hash($pwd,constant($pca));
 				}
 				else {
 					$pwd=$_REQUEST["password"];
@@ -979,7 +992,6 @@ class APPcelerate {
 				
 				$this->doLog("Requested login for ".$_REQUEST["login"]." / ".$_REQUEST["password"]);
 				$sql="select id from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "' and $pf='" . $pwd . "'";
-				echo $sql; exit();
 				$rs=$this->app["db_".$this->app["name"]]->query($sql);
 				$this->sqlError($rs,$sql);
 				switch ($rs->num_rows) {
