@@ -984,7 +984,14 @@ class APPcelerate {
 						$hash=$rs->fetch_row()[0];
 						if ($nr==2) {
 							$ps=$rs->fetch_row()[0];
-							$pwd.=$ps;
+							
+							$pso=$this->app["pso"][$this->app["name"]];
+							
+							switch($pso) {
+								case "conc":
+								default:
+									$pwd.=$ps;
+							}
 						}
 					}
 					else {
