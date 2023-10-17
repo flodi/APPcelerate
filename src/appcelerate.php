@@ -987,9 +987,7 @@ class APPcelerate {
 					$rs=$this->app["db_".$this->app["name"]]->query($sql);
 					$this->sqlError($rs,$sql);
 					$r=$rs->fetch_row();
-					
-					echo "<pre>";print_r($r);echo "</pre>";exit();
-					
+										
 					if ($rs->num_rows==1) {
 						$this->app['uid']=$r[0];
 						$hash=$r[1];
@@ -1009,6 +1007,7 @@ class APPcelerate {
 						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong&toomany");
 						die();
 					}
+					echo $pwd." - ".$hash;exit();
 					$pwdok=password_verify($pwd,$hash);
 					
 					if (!$pwdok) {
