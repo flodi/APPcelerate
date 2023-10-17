@@ -970,6 +970,7 @@ class APPcelerate {
 				
 				$pwdok=false;
 				
+				// Richiesta password criptata
 				if($pc==="Y") {
 					$pwd=$_REQUEST["password"];
 					$sql="select $pf from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "'";
@@ -983,14 +984,14 @@ class APPcelerate {
 					if ($rs->num_rows==1) {
 						$hash=$rs->fetch_row()[0];
 						if ($nr==2) {
-							$ps=$rs->fetch_row()[0];
+							$ps=$rs->fetch_row()[1];
 							
 							$pso=$this->app["pso"][$this->app["name"]];
 							
 							switch($pso) {
 								case "conc":
 								default:
-									$pwd.=$ps;
+									$pwd=$pwd.$ps;
 							}
 						}
 					}
