@@ -1000,10 +1000,10 @@ class APPcelerate {
 						die();
 					}
 					$pca=$this->app['pca'][$this->app["name"]];					
-					$pwdok=password_verify($hash,constant($pca));
+					$pwdok=password_verify($hash,PASSWORD_DEFAULT);
 					
 					if (!$pwdok) {
-						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong&notok&".$sql);
+						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong&notok");
 						die();
 					}
 				}
