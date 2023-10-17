@@ -999,8 +999,7 @@ class APPcelerate {
 						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong&toomany");
 						die();
 					}
-					$pca=$this->app['pca'][$this->app["name"]];					
-					$pwdok=password_verify($hash,PASSWORD_DEFAULT);
+					$pwdok=password_verify($pwd,$hash);
 					
 					if (!$pwdok) {
 						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong&notok");
@@ -1619,9 +1618,6 @@ class APPcelerate {
 				$this->app["pc"][$app_name]=$db_pwd_crypt;
 				
 				if ($db_pwd_crypt==="Y") {
-					$db_pwd_calg=$_ENV['CRYPTALG_'.$app_name];
-					$this->app["pca"][$app_name]=$db_pwd_calg;
-					
 					$db_pwd_salt_field=$_ENV['CRYPTSALTFIELD_'.$app_name];
 					$this->app["psf"][$app_name]=$db_pwd_salt_field;
 
