@@ -968,23 +968,30 @@ class APPcelerate {
 			}
 			if (!empty($_REQUEST["login"]) and !empty($_REQUEST["password"])) {
 				
+				$this->doLog("Requested login for ".$_REQUEST["login"]." / ".$_REQUEST["password"]);
+
 				$pwdok=false;
 				
+				$this->app['uname']=$_REQUEST["login"];
+				$this->app['upwd']=$_REQUEST["password"];
+
 				// Richiesta password criptata
 				if($pc==="Y") {
 					$pwd=$_REQUEST["password"];
-					$sql="select $pf from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "'";
+					$sql="select id,$pf from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "'";
 					$nr=1;
 					if(!empty($this->app['psf'][$this->app["name"]])) {
-						$sql="select $pf,".$this->app['psf'][$this->app["name"]]." from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "'";
+						$sql="select id,$pf,".$this->app['psf'][$this->app["name"]]." from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "'";
 						$nr=2;
 					}
 					$rs=$this->app["db_".$this->app["name"]]->query($sql);
 					$this->sqlError($rs,$sql);
+					$r=$rs->fetch_row();
 					if ($rs->num_rows==1) {
-						$hash=$rs->fetch_row()[0];
+						$this->app['uid']=$r[0];
+						$hash=$r[1];
 						if ($nr==2) {
-							$ps=$rs->fetch_row()[1];
+							$ps=$r[2];
 							
 							$pso=$this->app["pso"][$this->app["name"]];
 							
@@ -1005,14 +1012,22 @@ class APPcelerate {
 						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong&notok");
 						die();
 					}
-					echo "ok";exit();
+
+					$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"]=$this->app['uid'];
+					$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"]=$this->app['uname'];
+					$sql="select locale from languages where id=(select id_language from users where id=".$this->app["uid"].")";
+					$rs1=$this->app["db_".$this->app["name"]]->query($sql);
+					$this->sqlError($rs1,$sql);
+					if ($rs1->num_rows!=0) {
+						$this->app["locale"]=$rs1->fetch_row()[0];
+						$_SESSION[$this->app["name"]."_ap_locale"]=$this->app['locale'];
+					}
+
 				}
 				else {
 					$pwd=$_REQUEST["password"];
 				}
-				
-				$this->doLog("Requested login for ".$_REQUEST["login"]." / ".$_REQUEST["password"]);
-				
+								
 				if (!$pwdok) {
 					$sql="select id from users where app like '%|". $this->app["name"] ."|%' and login='" . $_REQUEST["login"] . "' and $pf='" . $pwd . "'";
 					$rs=$this->app["db_".$this->app["name"]]->query($sql);
@@ -1022,8 +1037,6 @@ class APPcelerate {
 							$this->doLog("[SECURITY OK] Found user");
 							$row=$rs->fetch_row();
 							$this->app['uid']=$row[0];
-							$this->app['uname']=$_REQUEST["login"];
-							$this->app['upwd']=$_REQUEST["password"];
 							$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uid"]=$this->app['uid'];
 							$_SESSION[$this->app[$this->app["name"]."_hash_base"]."_ap_uname"]=$this->app['uname'];
 							$sql="select locale from languages where id=(select id_language from users where id=".$this->app["uid"].")";
