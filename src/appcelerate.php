@@ -1005,6 +1005,7 @@ class APPcelerate {
 						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong&notok");
 						die();
 					}
+					echo "ok";exit();
 				}
 				else {
 					$pwd=$_REQUEST["password"];
