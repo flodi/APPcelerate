@@ -1623,7 +1623,7 @@ class APPcelerate {
 					$this->app["pca"][$app_name]=$db_pwd_calg;
 					
 					$db_pwd_salt_field=$_ENV['CRYPTSALTFIELD_'.$app_name];
-					$this->app["ps"][$app_name]=$db_pwd_salt_field;
+					$this->app["psf"][$app_name]=$db_pwd_salt_field;
 
 					$db_pwd_salt_op=$_ENV['CRYPTSALTOP_'.$app_name];
 					$this->app["pso"][$app_name]=$db_pwd_salt_op;
