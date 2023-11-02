@@ -1007,7 +1007,7 @@ class APPcelerate {
 						header("Location: ".$this->app["base_url"]."/".$this->app["name"]."/login/?wrong&toomany");
 						die();
 					}
-					echo $pwd." - ".$hash;exit();
+
 					$pwdok=password_verify($pwd,$hash);
 					
 					if (!$pwdok) {
