@@ -1623,6 +1623,7 @@ class APPcelerate {
 		# Define Accounts exception
 		foreach ($this->app["apps"] as $app_name) {
 			$reqacc=$_ENV['ACCOUNT_'.$app_name];
+			$this->app["accounts"][$app_name]=false;
 			
 			if ($reqacc==="Y") {
 				$this->app["accounts"][$app_name]=true;
