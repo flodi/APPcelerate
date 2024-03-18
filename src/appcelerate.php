@@ -1561,14 +1561,25 @@ class APPcelerate {
 
 		$this->app["session_mins"]=$_ENV['SESSION_MINS'];
 		$duration=60*$this->app["session_mins"];
+		$cookiel=$_ENV["COOKIE_LIFETIME"];
+		$defsavepath=$_ENV["SAVE_PATH_DEF"];
 		ini_set("session.gc_maxlifetime", $duration);
 		ini_set("session.cache_expire", $duration);
-		session_start([
+		if ($defsavepath==="Y") {
+			session_start([
 			              "gc_maxlifetime" =>$duration,
-			              "cookie_lifetime" => time() + (10 * 365 * 24 * 60 * 60),
+			              "cookie_lifetime" => $cookiel,
 			              "gc_divisor" => 1000000,
 			              "save_path" => $_SERVER["DOCUMENT_ROOT"]."/session",
 		              ]);
+		}
+		else {
+			session_start([
+			  "gc_maxlifetime" =>$duration,
+			  "cookie_lifetime" => $cookiel,
+			  "gc_divisor" => 1000000,
+		  ]);
+		}
 
 		$this->app["base_url"]=$_ENV['BASE_URL'];
 		$this->app["base_app"]=$_ENV['BASE_APP'];
