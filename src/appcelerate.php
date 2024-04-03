@@ -1712,7 +1712,7 @@ class APPcelerate {
 			if ($this->app["db_".$app_name]->connect_error) {
 				die("Failed to connect to MySQL: doing new mysqli($db_address, $db_user, $db_password, $db_name) (".$this->app["db_".$app_name]->connect_errno.") ".$this->app["db_".$app_name]->connect_error);
 			}
-			$this->app["db_".$app_name]->set_charset("utf8");
+			$this->app["db_".$app_name]->set_charset("utf8mb4");
 		}
 
 		$protocol="http://";
